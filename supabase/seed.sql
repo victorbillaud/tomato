@@ -27,7 +27,7 @@ INSERT INTO
             'authenticated',
             'authenticated',
             'user' || (ROW_NUMBER() OVER ()) || '@example.com',
-            crypt ('password123', gen_salt ('bf')),
+            crypt ('password', gen_salt ('bf')),
             current_timestamp,
             current_timestamp,
             current_timestamp,
