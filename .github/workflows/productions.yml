@@ -1,7 +1,7 @@
 name: Deploy Migrations to Production
 
 on:
-  push:
+  pull_request:
     branches:
       - main
   workflow_dispatch:
