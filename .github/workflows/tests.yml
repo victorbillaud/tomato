@@ -15,7 +15,7 @@ jobs:
       run:
         working-directory: ./utils
     steps:
-      - uses: actions/checkout@v2  # This step checks out your code repository.
+      - uses: pnpm/action-setup@v2
       - name: Run Tests
         run: |
           pnpm install
