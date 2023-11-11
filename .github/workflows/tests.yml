@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: pnpm/action-setup@v2
-      - working-directory: ./utils
       - name: Run Tests
+        working-directory: ./utils
         run: |
           pnpm install
           pnpm test
