@@ -11,11 +11,12 @@ on:
 jobs:
   Jest:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./utils
     steps:
       - uses: actions/checkout@v2  # This step checks out your code repository.
       - name: Run Tests
-        working-directory: ./utils
         run: |
-          cd ./utils  # Change to the 'utils' directory
           pnpm install
           pnpm test
