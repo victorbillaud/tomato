@@ -1,4 +1,4 @@
-name: Deploy Migrations to Production
+name: supabase migrations to productions
 
 on:
   pull_request:

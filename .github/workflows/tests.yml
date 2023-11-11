@@ -1,0 +1,19 @@
+name: jest unit tests
+
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  Jest:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./utils
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run Tests
+        run: |
+          npm install
+          npm test

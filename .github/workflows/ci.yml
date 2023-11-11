@@ -1,4 +1,4 @@
-name: CI
+name: supabase types check
 
 on:
   pull_request:
