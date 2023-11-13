@@ -7,11 +7,23 @@ import { Button } from './common/button';
 export default function AuthProviders() {
   const supabase = createClient();
 
+  const getURL = () => {
+    let url =
+      process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+      process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+      'http://localhost:3000/';
+    // Make sure to include `https://` when not localhost.
+    url = url.includes('http') ? url : `https://${url}`;
+    // Make sure to include /auth/callback at the end.
+    url = url.endsWith('/') ? `${url}auth/callback` : `${url}/auth/callback`;
+    return url;
+  };
+
   const handleProviderSignIn = async (provider: Provider) => {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        redirectTo: getURL(),
       },
     });
   };
