@@ -5,6 +5,7 @@ import { IconNames } from '../icon';
 export type TButtonVariant =
     | 'primary'
     | 'secondary'
+    | 'tertiary'
 
 export type TButtonSize = 'small' | 'medium' | 'large';
 

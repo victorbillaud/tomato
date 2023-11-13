@@ -33,6 +33,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
   const iconColor = {
     primary: 'white',
     secondary: 'gray',
+    tertiary: 'gray',
   };
 
   const buttonClassName = classNames(
@@ -43,6 +44,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
       ? `flex items-center justify-center ${!isLoader ? 'py-0 pl-1' : 'py-0'}`
       : '',
     heightDict[size],
+    'transition-all',
     className
   );
 
@@ -65,7 +67,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
       ) : (
         <>
           {icon && (
-            <div className='pr-1'>
+            <div className='pr-2'>
               <Icon
                 name={icon}
                 size={iconSize[size]}
@@ -88,8 +90,10 @@ export const Button: FunctionComponent<IButtonProps> = ({
 const getButtonClass = (style: TButtonVariant) => {
   switch (style) {
     case 'primary':
-      return 'rounded-md border border-transparent bg-primary-600 font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2';
+      return 'rounded-md border border-transparent bg-primary-500 font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2';
     case 'secondary':
       return 'rounded-md border border-gray-300 bg-gray-200 font-medium text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2';
+    case 'tertiary':
+      return 'rounded-md border border-transparent bg-transparent font-medium text-gray-700 hover:text-gray-400 focus:outline-none';
   }
 };

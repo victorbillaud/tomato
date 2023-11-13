@@ -15,13 +15,13 @@ export const InputText = React.forwardRef<HTMLInputElement, IProps>(
       'group flex items-stretch gap-2 border shadow-sm',
       error
         ? 'animate-shake border border-red-500 bg-red-700/10'
-        : 'border-stone-300 dark:border-stone-600 dark:bg-dark-200 bg-white-200',
+        : 'border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 bg-zinc-100',
       'text-s text-black-100 dark:text-white-100 w-full px-2 py-2 outline-none transition-all lg:text-sm xl:text-base',
       children ? 'rounded-r-md' : 'rounded-md'
     );
 
     return (
-      <div className='flex w-full flex-col'>
+      <div className='flex w-full flex-col gap-1'>
         {labelText && (
           <div className='flex flex-row items-center justify-between gap-3'>
             <label className='text-left' htmlFor='txt'>
@@ -45,7 +45,7 @@ export const InputText = React.forwardRef<HTMLInputElement, IProps>(
           <input
             id='txt'
             autoComplete='off'
-            className='group-focus:ring-brand-300/10 w-full border-none bg-transparent text-stone-900 outline-none group-focus:border-transparent group-focus:outline-none group-focus:ring-2 dark:text-stone-200'
+            className='group-focus:ring-brand-300/10 w-full border-none bg-transparent text-stone-900 outline-none placeholder:opacity-20 group-focus:border-transparent group-focus:outline-none group-focus:ring-2 dark:text-stone-200'
             {...props}
             ref={ref}
             type={type}

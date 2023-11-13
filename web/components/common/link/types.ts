@@ -1,6 +1,6 @@
 import { LinkProps } from "next/link";
 
-export type LinkVariant = "primary" | "secondary";
+export type LinkVariant = "primary" | "secondary" | "tertiary";
 
 export interface ILinkProps extends LinkProps {
     text: string;

@@ -37,7 +37,7 @@ export default function Login({
     <form
       action={signIn}
       method='post'
-      className='my-10 flex flex-col items-center justify-between'
+      className='my-5 flex flex-col items-center justify-between'
     >
       <div className='w-full max-w-lg space-y-6 rounded-lg'>
         <InputText

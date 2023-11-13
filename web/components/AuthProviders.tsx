@@ -17,18 +17,20 @@ export default function AuthProviders() {
   };
 
   return (
-    <div className='my-10 flex w-full flex-col items-center justify-between gap-4'>
+    <div className='my-5 flex w-full flex-col items-center justify-between gap-4'>
       <Button
         onClick={() => handleProviderSignIn('google')}
         text='Sign with Google'
         variant='secondary'
         className='w-full'
+        icon='google'
       />
       <Button
         onClick={() => handleProviderSignIn('discord')}
         text='Sign with Discord'
         variant='secondary'
         className='w-full'
+        icon='discord'
       />
     </div>
   );

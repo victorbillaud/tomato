@@ -31,7 +31,8 @@ export default async function AuthButton() {
       <form action={signOut}>
         <Button
           text='Logout'
-          variant='secondary'
+          variant='tertiary'
+          color='red'
           type='submit'
           title='Logout'
         />
@@ -46,7 +47,7 @@ export default async function AuthButton() {
       </Link>
       <div className='flex w-full items-center justify-end gap-1'>
         <StyledLink href='/auth/login' text='Login' />
-        <StyledLink href='/auth/register' text='Register' variant='secondary' />
+        <StyledLink href='/auth/register' text='Register' variant='tertiary' />
       </div>
     </div>
   );

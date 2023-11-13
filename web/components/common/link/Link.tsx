@@ -9,7 +9,8 @@ export const StyledLink: FunctionComponent<ILinkProps> = ({
 }) => {
   const linkClassName = classNames(
     getLinkClass(variant),
-    'flex items-center justify-center h-10 py-1 m-1 px-4'
+    'flex items-center justify-center h-10 py-1 m-1 px-4',
+    'transition-all'
   );
   return (
     <Link passHref {...props} className={linkClassName}>
@@ -21,8 +22,10 @@ export const StyledLink: FunctionComponent<ILinkProps> = ({
 const getLinkClass = (style: LinkVariant) => {
   switch (style) {
     case 'primary':
-      return 'rounded-md border border-transparent bg-primary-600 font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2';
+      return 'rounded-md border border-transparent bg-primary-500 font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none';
     case 'secondary':
-      return 'rounded-md border border-gray-300 bg-gray-200 font-medium text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2';
+      return 'rounded-md border border-gray-300 bg-gray-200 font-medium text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none';
+    case 'tertiary':
+      return 'rounded-md border border-transparent bg-transparent font-medium text-gray-700 hover:text-gray-400 focus:outline-none';
   }
 };
