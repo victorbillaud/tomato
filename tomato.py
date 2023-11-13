@@ -28,7 +28,7 @@ def parse_command(commands):
 
 def generate_supabase_types():
     project_id = os.environ.get("SUPABASE_PROJECT_ID")
-    f = open("supabase_types.ts", "w")
+    f = open("./utils/supabase_types.ts", "w")
     if not project_id:
         print("Error: SUPABASE_PROJECT_ID environment variable not set.")
         return
@@ -55,6 +55,13 @@ COMMANDS = {
 
 
 def main():
+    # Determine the absolute path to the directory where tomato.py is located
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Change the current working directory to the script directory
+    os.chdir(script_dir)
+
+    # Rest of your main function follows
     args = parse_command(COMMANDS)
     command = args["command"]
     command_args = args["command_args"]
