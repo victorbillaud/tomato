@@ -5,32 +5,41 @@
 
 **DON'T FORGET TO FILL ALL .ENV**
 
-# Tomato helper
+# Run the web app
 
-This `tomato.py` file is a custom CLI for repetitive tasks. 
-To use it you need to follow this steps:
+## Install dependencies
 
-1. Install python requirements: `pip install -r requirements.txt`
+`pnpm install`
 
-2. Create a `.env` file with the following variables:
+## Fill .env file
 
-```
-SUPABASE_PROJECT_ID=
-```
+You need to create a `.env.local` file with the following the `.env.example` file. If you haven't start supabase locally, go to the [Run supabase locally](#run-supabase-locally) section.
 
-3. Run the script with `python tomato.py` or create an alias in your `.bashrc` (or `.zshrc`) file:
+## Run the app
 
-```
-alias tomato="python /path/to/tomato.py"
-```
-
-4. Now you can use the CLI with `tomato` command
-
-### Available commands
-
-- `tomato db_types` : Generate typescript types for supabase tables 
+`pnpm run dev`
 
 # How to use supabase
+
+## Run supabase locally
+
+### Install supabase CLI
+
+`npm install -g supabase-cli` or `brew install supabase-cli`
+
+### Run supabase
+
+Before running supabase you need to create a `.env` file with the following variables following the `.env.example` file.
+Because we are using env variable in the supabase config file, you need to first source the `.env` file with `source .env` (or `source .env.example` if you don't have a `.env` file).
+
+For example if you are at the root of the project you can run this command to source the `.env` file.
+
+`source ./supabase/.env`
+
+Then you can run supabase with
+
+`supabase start`
+
 
 ## Deployments
 
@@ -71,3 +80,27 @@ Apply the new migration to your **local database**:
 
 This command recreates your local database from scratch and applies all migration scripts under supabase/migrations directory. Now your local database is up to date.
 
+# Tomato helper
+
+This `tomato.py` file is a custom CLI for repetitive tasks. 
+To use it you need to follow this steps:
+
+1. Install python requirements: `pip install -r requirements.txt`
+
+2. Create a `.env` file with the following variables:
+
+```
+SUPABASE_PROJECT_ID=
+```
+
+3. Run the script with `python tomato.py` or create an alias in your `.bashrc` (or `.zshrc`) file:
+
+```
+alias tomato="python /path/to/tomato.py"
+```
+
+4. Now you can use the CLI with `tomato` command
+
+### Available commands
+
+- `tomato db_types` : Generate typescript types for supabase tables 
