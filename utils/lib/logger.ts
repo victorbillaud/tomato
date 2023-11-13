@@ -34,11 +34,6 @@ const format = winston.format.combine(
 
 const transports: Array<any> = [
     new winston.transports.Console(),
-    new winston.transports.File({
-        filename: logFileName,
-        level: 'error',
-    }),
-    new winston.transports.File({ filename: logFileName }),
 ];
 
 const Logger: winston.Logger = winston.createLogger({
