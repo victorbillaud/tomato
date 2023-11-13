@@ -3,6 +3,8 @@
 `main` branch for prod
 `dev` branch for dev
 
+**DON'T FORGET TO FILL ALL .ENV**
+
 # Tomato helper
 
 This `tomato.py` file is a custom CLI for repetitive tasks. 
