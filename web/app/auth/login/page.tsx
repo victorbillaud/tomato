@@ -35,9 +35,9 @@ export default function Login({
     <form
       action={signIn}
       method='post'
-      className='flex flex-col items-center justify-center bg-gray-50'
+      className='my-10 flex flex-col items-center justify-between bg-gray-50'
     >
-      <div className='w-full max-w-lg space-y-6 rounded-lg bg-white p-8 shadow-md'>
+      <div className='w-full max-w-lg space-y-6 rounded-lg'>
         <div>
           <label
             htmlFor='email'
