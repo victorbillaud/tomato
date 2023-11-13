@@ -16,6 +16,12 @@ export async function GET(request: Request) {
     if (!error) {
       return NextResponse.redirect(requestUrl.origin)
     }
+
+    const url = new URL(request.url)
+    url.pathname = '/auth/signin'
+    url.searchParams.set('error', error.message)
+
+    return NextResponse.redirect(url.toString(), { status: 302 })
   }
 
 

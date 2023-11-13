@@ -8,7 +8,7 @@ export default function AuthLayout({
   return (
     <main className='flex flex-1 flex-col items-center justify-center'>
       <AuthProviders />
-      <div className='w-2/3 rounded-lg border border-gray-300' />
+      <div className='my-5 h-0.5 w-2/3 rounded-full border border-gray-200 dark:border-gray-700'></div>
       {children}
     </main>
   );
