@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/client';
 import { Provider } from '@supabase/supabase-js';
+import { Button } from './common/button';
 
 export default function AuthProviders() {
   const supabase = createClient();
@@ -17,18 +18,18 @@ export default function AuthProviders() {
 
   return (
     <div className='my-10 flex w-full flex-col items-center justify-between gap-4'>
-      <button
+      <Button
         onClick={() => handleProviderSignIn('google')}
-        className='flex w-full justify-center rounded-md border border-gray-300 bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'
-      >
-        Sign with Google
-      </button>
-      <button
+        text='Sign with Google'
+        variant='secondary'
+        className='w-full'
+      />
+      <Button
         onClick={() => handleProviderSignIn('discord')}
-        className='flex w-full justify-center rounded-md border border-gray-300 bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'
-      >
-        Sign with Discord
-      </button>
+        text='Sign with Discord'
+        variant='secondary'
+        className='w-full'
+      />
     </div>
   );
 }

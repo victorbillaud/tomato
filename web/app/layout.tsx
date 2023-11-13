@@ -1,5 +1,7 @@
 import AuthButton from '@/components/AuthButton';
+import { Text } from '@/components/common/text';
 import { GeistSans } from 'geist/font';
+
 import './globals.css';
 
 const defaultUrl = process.env.VERCEL_URL
@@ -19,8 +21,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className={GeistSans.className}>
-      <body className='flex min-h-screen w-full flex-1 flex-col items-center justify-between gap-20 bg-background text-foreground'>
-        <nav className='flex h-16 w-full justify-center border-b border-b-foreground/10'>
+      <body className='flex min-h-screen w-full flex-1 flex-col items-center justify-between gap-20 bg-stone-100 dark:bg-stone-900'>
+        <nav className='flex h-16 w-full justify-center border-b border-b-stone-300 dark:border-b-stone-700'>
           <div className='flex w-full max-w-4xl items-center justify-between p-3 text-sm'>
             <AuthButton />
           </div>
@@ -30,10 +32,10 @@ export default function RootLayout({
           {children}
         </main>
 
-        <footer className='flex w-full justify-center border-t border-t-foreground/10 p-8 text-center text-xs'>
-          <p>
-            Powered by <strong>Tomato</strong>
-          </p>
+        <footer className='flex w-full justify-center border-t border-t-stone-300 p-8 text-center text-xs dark:border-t-stone-700'>
+          <Text variant={'caption'} className='text-center'>
+            powered by <strong>Tomato</strong>
+          </Text>
         </footer>
       </body>
     </html>
