@@ -38,8 +38,6 @@ The migration will be automatically applied when you merge on `main`.
 
 ## Migrations
 
-### Manual migrations
-
 ### Automatic migrations (Recommanded)
 
 Unlike manual migrations, auto schema diff creates a new migration script from changes already applied to your local database.
@@ -49,6 +47,8 @@ Create an employees table under the public schema using Studio UI, accessible at
 Next, generate a schema diff by running the following command:
 
 `supabase db diff -f new_employee`
+
+### Manual migrations
 
 #### Create a new migration script by running:
 
