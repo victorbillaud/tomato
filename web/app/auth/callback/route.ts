@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
-import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   // The `/auth/callback` route is required for the server-side auth flow implemented
@@ -12,8 +12,12 @@ export async function GET(request: Request) {
   if (code) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
-    await supabase.auth.exchangeCodeForSession(code)
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (!error) {
+      return NextResponse.redirect(requestUrl.origin)
+    }
   }
+
 
   // URL to redirect to after sign in process completes
   return NextResponse.redirect(requestUrl.origin)
