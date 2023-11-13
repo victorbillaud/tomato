@@ -30,15 +30,22 @@ You need to create a `.env.local` file with the following the `.env.example` fil
 ### Run supabase
 
 Before running supabase you need to create a `.env` file with the following variables following the `.env.example` file.
-Because we are using env variable in the supabase config file, you need to first source the `.env` file with `source .env` (or `source .env.example` if you don't have a `.env` file).
+
+Then you can start supabase with:
+
+`supabase start`
+
+### Errors
+
+1. `Error: Error evaluating "env(DISCORD_CLIENT)": environment variable DISCORD_CLIENT is unset.`
+
+Because we are using env variable in the supabase config file, you need to first source the `.env` file with `source .env`.
 
 For example if you are at the root of the project you can run this command to source the `.env` file.
 
 `source ./supabase/.env`
 
-Then you can run supabase with
-
-`supabase start`
+Then you can restart the supabase server.
 
 
 ## Deployments
