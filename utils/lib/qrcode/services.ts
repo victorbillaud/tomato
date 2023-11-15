@@ -1,15 +1,13 @@
+import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase_types";
 import { getEnvVariable } from "../../lib/common/envService";
-import { getSupabase } from "../../lib/supabase/services";
 
-export async function insertQRCode(qrCode: Database["public"]["Tables"]["qrcode"]["Insert"]) {
-    const supabase = getSupabase();
-
+export async function insertQRCode(supabaseInstance: SupabaseClient<Database>, qrCode: Database["public"]["Tables"]["qrcode"]["Insert"]) {
     const qrCodeObject: Database["public"]["Tables"]["qrcode"]["Insert"] = {
         user_id: qrCode.user_id,
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseInstance
         .from('qrcode')
         .insert(qrCodeObject)
         .select('*')
@@ -19,12 +17,10 @@ export async function insertQRCode(qrCode: Database["public"]["Tables"]["qrcode"
         throw error;
     }
 
-    return await createQrCodeImage(data);
+    return await createQrCodeImage(supabaseInstance, data);
 }
 
-async function createQrCodeImage(qrCode: Database["public"]["Tables"]["qrcode"]["Row"]) {
-
-    const supabase = getSupabase();
+async function createQrCodeImage(supabaseInstance: SupabaseClient<Database>, qrCode: Database["public"]["Tables"]["qrcode"]["Row"]) {
 
     const qrCodeURL = buildQRCodeURL(qrCode.id);
 
@@ -32,7 +28,7 @@ async function createQrCodeImage(qrCode: Database["public"]["Tables"]["qrcode"][
         barcode_data: qrCodeURL,
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseInstance
         .from('qrcode')
         .update(qrCodeObject)
         .eq('id', qrCode.id)
