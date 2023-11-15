@@ -24,8 +24,10 @@
 	"dependencies": {
 		"@supabase/supabase-js": "^2.38.4",
 		"dotenv": "^16.3.1",
+		"jimp": "^0.22.10",
 		"path": "^0.12.7",
 		"qrcode": "^1.5.3",
+		"qrcode-reader": "^1.0.4",
 		"ts-node": "^10.9.1",
 		"winston": "^3.11.0"
 	}
