@@ -45,6 +45,11 @@ export default async function AuthButton() {
           Tomato
         </Text>
       </Link>
+      <Link href='/dashboard'>
+        <Text variant={'caption'} className='text-center'>
+          Dashboard
+        </Text>
+      </Link>
       <div className='flex w-full items-center justify-end gap-1'>
         <StyledLink href='/auth/login' text='Login' />
         <StyledLink href='/auth/register' text='Register' variant='tertiary' />

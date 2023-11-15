@@ -43,7 +43,7 @@ export default async function Index() {
         <div key={qrCode.id} className='flex flex-col gap-2'>
           <Text variant='h2'>{qrCode.id}</Text>
           <Text variant='h3'>{qrCode.barcode_data}</Text>
-          <Text variant='h3'>{qrCode.created_at}</Text>
+          <Text variant='h3'>{qrCode.item_id}</Text>
         </div>
       ))}
     </div>

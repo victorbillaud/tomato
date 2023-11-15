@@ -36,6 +36,7 @@ export interface Database {
     Tables: {
       item: {
         Row: {
+          activated: boolean
           description: string | null
           found: boolean
           found_at: string | null
@@ -46,6 +47,7 @@ export interface Database {
           user_id: string | null
         }
         Insert: {
+          activated?: boolean
           description?: string | null
           found?: boolean
           found_at?: string | null
@@ -56,6 +58,7 @@ export interface Database {
           user_id?: string | null
         }
         Update: {
+          activated?: boolean
           description?: string | null
           found?: boolean
           found_at?: string | null
@@ -119,21 +122,30 @@ export interface Database {
           barcode_data: string | null
           created_at: string | null
           id: string
+          item_id: string | null
           user_id: string
         }
         Insert: {
           barcode_data?: string | null
           created_at?: string | null
           id?: string
+          item_id?: string | null
           user_id: string
         }
         Update: {
           barcode_data?: string | null
           created_at?: string | null
           id?: string
+          item_id?: string | null
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "qrcode_item_id_fkey"
+            columns: ["item_id"]
+            referencedRelation: "item"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "qrcode_user_id_fkey"
             columns: ["user_id"]
