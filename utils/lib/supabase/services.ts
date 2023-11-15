@@ -8,6 +8,8 @@ import { getEnvVariable } from '../common/envService'
 const supabaseUrl = getEnvVariable('SUPABASE_URL')
 const supabaseKey = getEnvVariable('SUPABASE_KEY')
 
+console.log(supabaseUrl, supabaseKey)
+
 const supabase = createClient<Database>(supabaseUrl, supabaseKey)
 
 export function getSupabase() {
