@@ -1,6 +1,7 @@
+
 import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "supabase_types";
 import { FAKE_USER_EMAIL, FAKE_USER_PASSWORD } from "../../lib/constant";
+import { Database } from "./supabase_types";
 
 export async function createFakeUser(
     supabaseInstance: SupabaseClient<Database>,

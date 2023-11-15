@@ -1,7 +1,8 @@
-import { createFakeUser, signInFakeUser } from "../lib/supabase/fake";
-import { getSupabase } from "../lib/supabase/services";
+import { createFakeUser, signInFakeUser } from "../supabase/fake";
+import { getSupabase } from "../supabase/services";
 
-module.exports = async function (globalConfig, projectConfig) {
+
+module.exports = async function () {
 
     const sp = getSupabase();
 

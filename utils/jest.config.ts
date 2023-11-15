@@ -8,8 +8,8 @@ const jestConfig: JestConfigWithTsJest = {
   roots: ['./'],
   modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
   // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
-  globalSetup: './jest/setup.ts',
-  globalTeardown: './jest/teardown.ts',
+  globalSetup: './lib/jest/setup.ts',
+  globalTeardown: './lib/jest/teardown.ts',
 }
 
 export default jestConfig

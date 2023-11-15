@@ -11,6 +11,6 @@ function loadEnvFile(relativePath: string) {
 loadEnvFile('utils/.env.local'); // Root directory .env.local
 loadEnvFile('web/.env.local'); // Web directory .env.local
 
-export function getEnvVariable(key: string): string | null {
-    return process.env[key] || null;
+export function getEnvVariable(key: string): string {
+    return process.env[key] ?? '';
 }

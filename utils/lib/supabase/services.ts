@@ -1,7 +1,7 @@
 
 import { createClient } from '@supabase/supabase-js'
-import { Database } from 'supabase_types'
 import { getEnvVariable } from '../common/envService'
+import { Database } from './supabase_types'
 
 // Create a single supabase client for interacting with your database and act as a singleton
 
