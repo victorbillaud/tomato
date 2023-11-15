@@ -9,7 +9,7 @@ export const StyledLink: FunctionComponent<ILinkProps> = ({
 }) => {
   const linkClassName = classNames(
     getLinkClass(variant),
-    'flex items-center justify-center h-10 py-1 m-1 px-4',
+    'flex min-w-max items-center justify-center h-10 py-1 m-1 px-4',
     'transition-all'
   );
   return (

@@ -48,8 +48,6 @@ export async function middleware(request: NextRequest) {
 const middlewareAfterLogin = (request: NextRequest) => {
   const redirectTo = request.nextUrl.searchParams.get('redirectTo')
 
-  console.log("redirectTo", redirectTo)
-
   if (redirectTo) {
     return NextResponse.redirect(buildRedirectUrl(request, redirectTo, {}))
   }
