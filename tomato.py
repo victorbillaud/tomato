@@ -33,6 +33,25 @@ def generate_supabase_types():
         print("Error: SUPABASE_PROJECT_ID environment variable not set.")
         return
 
+    # Ask user for locale or remote database
+    user_choice = input(
+        "Do you want to generate types for your local database? (y/n): "
+    )
+
+    if user_choice == "y":
+        subprocess.run(
+            [
+                "npx",
+                "supabase",
+                "gen",
+                "types",
+                "typescript",
+                "--local",
+            ],
+            stdout=f,
+        )
+        return
+
     subprocess.run(
         [
             "npx",
