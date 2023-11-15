@@ -31,11 +31,17 @@ export default async function DashboardLayout({
   return (
     <div className='flex w-full flex-1 flex-col items-center justify-start'>
       <div className='flex w-full flex-row items-center justify-between gap-3'>
-        <StyledLink
-          text='Add item'
-          href={`/dashboard/item/create/${qrCodes[0].id}`}
-          target='_self'
-        />
+        {qrCodes.length > 0 ? (
+          <StyledLink
+            text='Add item'
+            href={`/dashboard/item/create/${qrCodes[0].id}`}
+            target='_self'
+          />
+        ) : (
+          <Text variant='body' className='opacity-50'>
+            You have no QR Code left, please buy a new one
+          </Text>
+        )}
         <div className='flex w-full flex-row items-center justify-end gap-3'>
           <Text variant='body'>
             <strong>{qrCodes.length}</strong> left

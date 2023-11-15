@@ -25,6 +25,7 @@
 		"@supabase/supabase-js": "^2.38.4",
 		"dotenv": "^16.3.1",
 		"path": "^0.12.7",
+		"qrcode": "^1.5.3",
 		"ts-node": "^10.9.1",
 		"winston": "^3.11.0"
 	}

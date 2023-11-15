@@ -57,6 +57,20 @@ export async function listQRCode(supabaseInstance: SupabaseClient<Database>) {
     return data;
 }
 
+export async function getQRCode(supabaseInstance: SupabaseClient<Database>, qrCodeId: string) {
+    const { data, error } = await supabaseInstance
+        .from('qrcode')
+        .select('*')
+        .eq('id', qrCodeId)
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+}
+
 function buildQRCodeURL(qrCodeId: string): string {
     let baseURL =
         getEnvVariable('NEXT_PUBLIC_SITE_URL') ?? // Set this to your site URL in production env.
@@ -66,7 +80,7 @@ function buildQRCodeURL(qrCodeId: string): string {
     // Make sure to include `https://` when not localhost.
     baseURL = baseURL.includes('http') ? baseURL : `https://${baseURL}`;
 
-    const qrCodeURL = `${baseURL}/qrcode/${qrCodeId}`;
+    const qrCodeURL = `${baseURL}/scan/${qrCodeId}`;
 
     return qrCodeURL;
 }
