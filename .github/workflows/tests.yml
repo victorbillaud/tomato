@@ -1,5 +1,3 @@
-name: jest unit tests
-
 on:
   pull_request:
     branches: [dev, main]
@@ -10,10 +8,34 @@ jobs:
     defaults:
       run:
         working-directory: ./utils
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Set up Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Initialize Supabase
+        run: supabase init
+
+      - name: Start Supabase DB
+        run: supabase start
+
+      - name: Extract Supabase Details
+        id: extract-details
+        run: |
+          SUPABASE_URL=$(supabase status | grep 'API URL:' | awk '{print $NF}')
+          echo "SUPABASE_URL=$SUPABASE_URL" >> "$GITHUB_ENV"
+          SUPABASE_KEY=$(supabase status | grep 'service_role key:' | awk '{print $NF}')
+          echo "SUPABASE_KEY=$SUPABASE_KEY" >> "$GITHUB_ENV"
+          echo env
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Run Tests
         run: |
-          npm install
           npm test
