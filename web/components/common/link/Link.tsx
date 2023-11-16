@@ -7,8 +7,10 @@ export const StyledLink: FunctionComponent<ILinkProps> = ({
   variant = 'primary',
   ...props
 }) => {
+  const buttonClasses = getLinkClass(variant);
   const linkClassName = classNames(
-    getLinkClass(variant),
+    buttonClasses.base,
+    props.disabled ? 'opacity-50 cursor-default' : buttonClasses.interact,
     'flex min-w-max items-center justify-center h-10 py-1 m-1 px-4',
     'transition-all'
   );
@@ -22,10 +24,22 @@ export const StyledLink: FunctionComponent<ILinkProps> = ({
 const getLinkClass = (style: LinkVariant) => {
   switch (style) {
     case 'primary':
-      return 'rounded-md border border-transparent bg-primary-500 font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none';
+      return {
+        base: 'rounded-md border border-transparent bg-primary-900 font-medium text-gray-100 shadow-sm',
+        interact:
+          'hover:bg-primary-950 focus:outline-none focus:ring-2 focus:ring-primary-950 focus:ring-offset-2',
+      };
     case 'secondary':
-      return 'rounded-md border border-gray-300 bg-gray-200 font-medium text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none';
+      return {
+        base: 'rounded-md border dark:border-gray-100 bg-gray-100 dark:bg-transparent font-medium text-gray-700 dark:text-gray-100 shadow-sm',
+        interact:
+          'hover:bg-gray-200 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200',
+      };
     case 'tertiary':
-      return 'rounded-md border border-transparent bg-transparent font-medium text-gray-700 hover:text-gray-400 focus:outline-none';
+      return {
+        base: 'rounded-md border border-transparent bg-transparent font-medium text-gray-700 dark:text-gray-200',
+        interact:
+          'hover:text-gray-500 dark:hover:text-gray-500 focus:outline-none',
+      };
   }
 };
