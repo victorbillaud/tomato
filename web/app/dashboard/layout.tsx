@@ -53,7 +53,7 @@ export default async function DashboardLayout({
             You have no QR Code left, please buy a new one
           </Text>
         )}
-        <div className='flex w-full flex-row items-center justify-end gap-3'>
+        <div className='flex w-full flex-row items-center justify-end gap-3 p-1'>
           <Text variant='caption'>
             <strong>{qrCodes ? qrCodes.length : 0}</strong> left
           </Text>

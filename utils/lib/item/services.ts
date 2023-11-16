@@ -33,9 +33,20 @@ export async function insertItem(
     return { insertedItem, error: null };
 }
 
-// TODO: Write policies for item and qrcode links.
-//       - An item can only be linked to a qrcode once.
-//       - A qrcode can only be linked to an item once.
+export async function listItems(supabaseInstance: SupabaseClient<Database>) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .select(`
+            *,
+            qrcode!qrcode_item_id_fkey (
+                *
+            )
+        `);
+
+    return { data, error }
+}
+
+
 // TODO: Add a test ofr functions of qrcode and item.
 // TODO: Finish the frontend process of item creation.
 // TODO: Manage flow for item creations from QRCode.

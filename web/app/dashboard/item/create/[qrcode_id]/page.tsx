@@ -108,7 +108,7 @@ export default async function CreateItem({
   ) : (
     <div className='flex w-full flex-1 flex-col items-center justify-center gap-5'>
       <Text variant='h4' className='text-center opacity-50'>
-        This QR Code doesn't exist
+        {"This QR Code doesn't exist"}
       </Text>
       <Button
         text='Go back'
