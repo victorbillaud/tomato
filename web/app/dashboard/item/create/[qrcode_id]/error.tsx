@@ -26,14 +26,7 @@ export default function Error({
         >
           An error occurred while rendering this segment
         </Text>
-        <Button
-          variant='tertiary'
-          text='Try again'
-          onClick={
-            // Attempt to recover by trying to re-render the segment
-            () => reset()
-          }
-        />
+        <Button variant='tertiary' text='Try again' onClick={reset} />
       </div>
       <div>
         <span className='text-red-700'>{error.message}</span>
