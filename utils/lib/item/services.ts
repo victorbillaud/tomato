@@ -48,3 +48,6 @@ export async function listItems(supabaseInstance: SupabaseClient<Database>) {
 
 
 // TODO: Manage flow for item creations from QRCode.
+
+
+// TODO: Random name for qrcode
