@@ -11,10 +11,21 @@ async function createQRCode() {
 
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  const { data } = await supabase.auth.getUser();
-  await insertQRCode(supabase, {
-    user_id: data.user?.id as string,
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data, error } = await insertQRCode(supabase, {
+    user_id: user?.id as string,
   });
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    throw new Error('QR Code not inserted');
+  }
 
   revalidatePath('/');
 }
@@ -26,12 +37,12 @@ export default async function DashboardLayout({
 }) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  const qrCodes = await listQRCode(supabase);
+  const { data: qrCodes, error } = await listQRCode(supabase);
 
   return (
     <div className='flex w-full flex-1 flex-col items-center justify-start'>
       <div className='flex w-full flex-row items-center justify-between gap-3'>
-        {qrCodes.length > 0 ? (
+        {qrCodes && qrCodes.length > 0 ? (
           <StyledLink
             text='Add item'
             href={`/dashboard/item/create/${qrCodes[0].id}`}
@@ -43,8 +54,8 @@ export default async function DashboardLayout({
           </Text>
         )}
         <div className='flex w-full flex-row items-center justify-end gap-3'>
-          <Text variant='body'>
-            <strong>{qrCodes.length}</strong> left
+          <Text variant='caption'>
+            <strong>{qrCodes ? qrCodes.length : 0}</strong> left
           </Text>
           <form action={createQRCode}>
             <Button

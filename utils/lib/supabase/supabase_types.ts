@@ -37,36 +37,42 @@ export interface Database {
       item: {
         Row: {
           activated: boolean
+          created_at: string
           description: string | null
           found: boolean
           found_at: string | null
           id: string
           lost: boolean
           lost_at: string | null
-          qrcode_id: string
-          user_id: string | null
+          name: string
+          qrcode_id: string | null
+          user_id: string
         }
         Insert: {
           activated?: boolean
+          created_at?: string
           description?: string | null
           found?: boolean
           found_at?: string | null
           id?: string
           lost?: boolean
           lost_at?: string | null
-          qrcode_id: string
-          user_id?: string | null
+          name: string
+          qrcode_id?: string | null
+          user_id: string
         }
         Update: {
           activated?: boolean
+          created_at?: string
           description?: string | null
           found?: boolean
           found_at?: string | null
           id?: string
           lost?: boolean
           lost_at?: string | null
-          qrcode_id?: string
-          user_id?: string | null
+          name?: string
+          qrcode_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -120,21 +126,21 @@ export interface Database {
       qrcode: {
         Row: {
           barcode_data: string | null
-          created_at: string | null
+          created_at: string
           id: string
           item_id: string | null
           user_id: string
         }
         Insert: {
           barcode_data?: string | null
-          created_at?: string | null
+          created_at?: string
           id?: string
           item_id?: string | null
           user_id: string
         }
         Update: {
           barcode_data?: string | null
-          created_at?: string | null
+          created_at?: string
           id?: string
           item_id?: string | null
           user_id?: string

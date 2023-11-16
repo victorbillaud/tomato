@@ -17,7 +17,7 @@ export async function insertQRCode(
         .single();
 
     if (error) {
-        throw error;
+        return { data, error }
     }
 
     return await createQrCodeImage(supabaseInstance, data);
@@ -38,23 +38,16 @@ async function createQrCodeImage(supabaseInstance: SupabaseClient<Database>, qrC
         .select()
         .single();
 
-    if (error) {
-        throw error;
-    }
-
-    return data;
+    return { data, error }
 }
 
 export async function listQRCode(supabaseInstance: SupabaseClient<Database>) {
     const { data, error } = await supabaseInstance
         .from('qrcode')
-        .select('*');
+        .select('*')
+        .is('item_id', null);
 
-    if (error) {
-        throw error;
-    }
-
-    return data;
+    return { data, error }
 }
 
 export async function getQRCode(supabaseInstance: SupabaseClient<Database>, qrCodeId: string) {
@@ -64,11 +57,18 @@ export async function getQRCode(supabaseInstance: SupabaseClient<Database>, qrCo
         .eq('id', qrCodeId)
         .single();
 
-    if (error) {
-        throw error;
-    }
+    return { data, error }
+}
 
-    return data;
+export async function associateQRCodeToItem(supabaseInstance: SupabaseClient<Database>, qrCodeId: string, itemId: string) {
+    const { data, error } = await supabaseInstance
+        .from('qrcode')
+        .update({ item_id: itemId })
+        .eq('id', qrCodeId)
+        .select('*')
+        .single();
+
+    return { data, error }
 }
 
 function buildQRCodeURL(qrCodeId: string): string {
