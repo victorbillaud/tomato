@@ -36,12 +36,11 @@ jobs:
           echo "SUPABASE_KEY=$SUPABASE_KEY" >> "$GITHUB_ENV"
           echo env
 
-      - name: Change working directory
-        run: cd ./utils
-
       - name: Install dependencies
+        working-directory: ./utils
         run: npm install
 
       - name: Run Tests
+        working-directory: ./utils
         run: |
           npm test
