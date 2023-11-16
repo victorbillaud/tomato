@@ -47,6 +47,4 @@ export async function listItems(supabaseInstance: SupabaseClient<Database>) {
 }
 
 
-// TODO: Add a test ofr functions of qrcode and item.
-// TODO: Finish the frontend process of item creation.
 // TODO: Manage flow for item creations from QRCode.
