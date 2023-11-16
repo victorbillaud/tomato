@@ -7,6 +7,9 @@ import { Button } from './common/button';
 export default function AuthProviders() {
   const supabase = createClient();
 
+  console.log(process.env.NEXT_PUBLIC_SITE_URL);
+  console.log(process.env.NEXT_PUBLIC_VERCEL_URL);
+
   const getURL = () => {
     let url =
       process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
