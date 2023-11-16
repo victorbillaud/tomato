@@ -19,7 +19,7 @@ export default async function Index() {
           Hey, {data.user?.email}!
         </Text>
       )}
-      <StyledLink href={'/ui'} text='UI/Theme' variant='primary'></StyledLink>
+      <StyledLink href={'/ui'} text='UI/Theme' variant='primary' />
     </div>
   );
 }

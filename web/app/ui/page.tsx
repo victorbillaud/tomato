@@ -12,39 +12,24 @@ export default async function Index() {
       </Text>
       <div className='flex flex-wrap gap-10'>
         <div className='flex flex-col justify-end space-y-8'>
-          <Button variant={'primary'} text='Click me'></Button>
-          <Button variant={'secondary'} text='Click me'></Button>
-          <Button variant={'tertiary'} text='Click me'></Button>
+          <Button variant={'primary'} text='Click me' />
+          <Button variant={'secondary'} text='Click me' />
+          <Button variant={'tertiary'} text='Click me' />
         </div>
         <div className='flex flex-col justify-end space-y-8'>
-          <Button variant={'primary'} disabled text='Click me'></Button>
-          <Button variant={'secondary'} disabled text='Click me'></Button>
-          <Button variant={'tertiary'} disabled text='Click me'></Button>
+          <Button variant={'primary'} disabled text='Click me' />
+          <Button variant={'secondary'} disabled text='Click me' />
+          <Button variant={'tertiary'} disabled text='Click me' />
         </div>
         <div className='flex flex-col justify-end space-y-8'>
-          <StyledLink href={'/ui'} text='Link' variant='primary'></StyledLink>
-          <StyledLink href={'/ui'} text='Link' variant='secondary'></StyledLink>
-          <StyledLink href={'/ui'} text='Link' variant='tertiary'></StyledLink>
+          <StyledLink href={'/ui'} text='Link' variant='primary' />
+          <StyledLink href={'/ui'} text='Link' variant='secondary' />
+          <StyledLink href={'/ui'} text='Link' variant='tertiary' />
         </div>
         <div className='flex flex-col justify-end space-y-8'>
-          <StyledLink
-            href={'/ui'}
-            text='Link'
-            variant='primary'
-            disabled
-          ></StyledLink>
-          <StyledLink
-            href={'/ui'}
-            text='Link'
-            variant='secondary'
-            disabled
-          ></StyledLink>
-          <StyledLink
-            href={'/ui'}
-            text='Link'
-            variant='tertiary'
-            disabled
-          ></StyledLink>
+          <StyledLink href={'/ui'} text='Link' variant='primary' disabled />
+          <StyledLink href={'/ui'} text='Link' variant='secondary' disabled />
+          <StyledLink href={'/ui'} text='Link' variant='tertiary' disabled />
         </div>
         <div className='flex flex-col space-y-3'>
           <InputText labelText='Email' type='email' />
