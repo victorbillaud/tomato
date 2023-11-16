@@ -5,6 +5,7 @@ import { SplashScreen, Stack, usePathname } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
 import { Text } from "../components/Themed";
+import { AuthProvider, useAuth } from "../components/auth/AuthProvider";
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -37,14 +38,31 @@ export const unstable_settings = {  // router configuration
 
 function RootLayoutNav() {
 	const colorScheme = useColorScheme()
-	const path = usePathname()
 
 	return (
 		<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-			<Stack>
-				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-			</Stack>
-			<Text>Currently at: "{path}"</Text>
+			<AuthProvider>
+				<AuthGuard />
+			</AuthProvider>
 		</ThemeProvider>
+	)
+}
+
+function AuthGuard() {
+	const auth = useAuth()
+	const path = usePathname()
+
+	console.log('auth guard', auth)
+
+	return (
+		auth?.user ?
+			<>
+				<Stack>
+					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+				</Stack>
+				<Text>Currently at: "{path}"</Text>
+				<Text>Logged in as {auth.user.email}</Text>
+			</>
+			: <Text>Not logged in</Text>
 	)
 }
