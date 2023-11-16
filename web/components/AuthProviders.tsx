@@ -20,10 +20,23 @@ export default function AuthProviders() {
   };
 
   const handleProviderSignIn = async (provider: Provider) => {
+
+    const redirectUrl = new URL(getURL());
+
+    // Check if there is a redirectTo query param in the window location.
+    const redirectTo = new URL(window.location.href).searchParams.get(
+      'redirectTo'
+    );
+
+    // If there is a redirectTo query param, add it to the redirectUrl.
+    if (redirectTo) {
+      redirectUrl.searchParams.append('redirectTo', redirectTo);
+    }
+
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: getURL(),
+        redirectTo: redirectUrl.href,
       },
     });
   };

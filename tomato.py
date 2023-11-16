@@ -28,7 +28,7 @@ def parse_command(commands):
 
 def generate_supabase_types():
     project_id = os.environ.get("SUPABASE_PROJECT_ID")
-    f = open("./utils/supabase_types.ts", "w")
+    f = open("./utils/lib/supabase/supabase_types.ts", "w")
     if not project_id:
         print("Error: SUPABASE_PROJECT_ID environment variable not set.")
         return

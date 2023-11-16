@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "resolveJsonModule": true,
-    "esModuleInterop": true
-  }
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "include": ["lib"],
+  "exclude": ["node_modules"]
 }

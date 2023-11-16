@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     const supabase = createClient(cookieStore)
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      return NextResponse.redirect(requestUrl.origin)
+      return NextResponse.redirect(new URL(requestUrl.searchParams.get('redirectTo') || '/', requestUrl.origin).toString(), { status: 302 })
     }
 
     const url = new URL(request.url)

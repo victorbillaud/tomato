@@ -7,7 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./utils
+        working-directory: ./
+
+    env:
+      GOOGLE_CLIENT: ${{ secrets.GOOGLE_CLIENT }}
+      GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
+      DISCORD_CLIENT: ${{ secrets.DISCORD_CLIENT }}
+      DISCORD_SECRET: ${{ secrets.DISCORD_SECRET }}
 
     steps:
       - name: Checkout repository
@@ -17,9 +23,6 @@ jobs:
         uses: supabase/setup-cli@v1
         with:
           version: latest
-
-      - name: Initialize Supabase
-        run: supabase init
 
       - name: Start Supabase DB
         run: supabase start
@@ -34,8 +37,10 @@ jobs:
           echo env
 
       - name: Install dependencies
+        working-directory: ./utils
         run: npm install
 
       - name: Run Tests
+        working-directory: ./utils
         run: |
           npm test

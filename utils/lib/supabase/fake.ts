@@ -1,11 +1,14 @@
+
+import { SupabaseClient } from "@supabase/supabase-js";
 import { FAKE_USER_EMAIL, FAKE_USER_PASSWORD } from "../../lib/constant";
-import { getSupabase } from "./services";
+import { Database } from "./supabase_types";
 
 export async function createFakeUser(
+    supabaseInstance: SupabaseClient<Database>,
     email: string = FAKE_USER_EMAIL,
     password: string = FAKE_USER_PASSWORD,
 ) {
-    const { data, error } = await getSupabase().auth.admin.createUser({
+    const { data, error } = await supabaseInstance.auth.admin.createUser({
         email: email,
         password: password,
         email_confirm: true,
@@ -19,10 +22,11 @@ export async function createFakeUser(
 }
 
 export async function signInFakeUser(
+    supabaseInstance: SupabaseClient<Database>,
     email: string = FAKE_USER_EMAIL,
     password: string = FAKE_USER_PASSWORD
 ) {
-    const { data, error } = await getSupabase().auth.signInWithPassword({
+    const { data, error } = await supabaseInstance.auth.signInWithPassword({
         email: email,
         password: password
     })
@@ -34,8 +38,8 @@ export async function signInFakeUser(
     return data;
 }
 
-export async function deleteFakeUser(id: string) {
-    const { data, error } = await getSupabase().auth.admin.deleteUser(id)
+export async function deleteFakeUser(supabaseInstance: SupabaseClient<Database>, id: string) {
+    const { data, error } = await supabaseInstance.auth.admin.deleteUser(id)
 
     if (error) {
         throw error;

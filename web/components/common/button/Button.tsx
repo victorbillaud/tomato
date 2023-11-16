@@ -38,7 +38,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
 
   const buttonClassName = classNames(
     getButtonClass(variant),
-    'py-1',
+    'py-1 min-w-max',
     props.disabled ? 'opacity-50' : '',
     icon
       ? `flex items-center justify-center ${!isLoader ? 'py-0 pl-1' : 'py-0'}`

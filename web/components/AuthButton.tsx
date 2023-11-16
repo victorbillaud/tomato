@@ -23,31 +23,39 @@ export default async function AuthButton() {
     return redirect('/auth/login');
   };
 
-  return user ? (
-    <div className='flex w-full items-center justify-between gap-4'>
-      <Text variant={'caption'} className='text-center'>
-        Hey, {user.email}!
-      </Text>
-      <form action={signOut}>
-        <Button
-          text='Logout'
-          variant='tertiary'
-          color='red'
-          type='submit'
-          title='Logout'
-        />
-      </form>
-    </div>
-  ) : (
+  return (
     <div className='flex w-full items-center justify-between gap-4'>
       <Link href='/'>
         <Text variant={'caption'} className='text-center'>
           Tomato
         </Text>
       </Link>
+      <Link href='/dashboard'>
+        <Text variant={'caption'} className='text-center'>
+          Dashboard
+        </Text>
+      </Link>
       <div className='flex w-full items-center justify-end gap-1'>
-        <StyledLink href='/auth/login' text='Login' />
-        <StyledLink href='/auth/register' text='Register' variant='tertiary' />
+        {user ? (
+          <form action={signOut}>
+            <Button
+              text='Logout'
+              variant='tertiary'
+              color='red'
+              type='submit'
+              title='Logout'
+            />
+          </form>
+        ) : (
+          <>
+            <StyledLink href='/auth/login' text='Login' />
+            <StyledLink
+              href='/auth/register'
+              text='Register'
+              variant='tertiary'
+            />
+          </>
+        )}
       </div>
     </div>
   );

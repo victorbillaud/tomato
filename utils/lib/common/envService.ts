@@ -1,14 +1,16 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-// Load .env from root directory
-function loadEnvFile(filePath: string) {
-    dotenv.config({ path: path.resolve(__dirname, filePath) });
+const BASE_PATH = path.resolve(__dirname, '../../../'); // Adjust this to your project's root
+
+function loadEnvFile(relativePath: string) {
+    const envPath = path.join(BASE_PATH, relativePath);
+    dotenv.config({ path: envPath });
 }
 
-loadEnvFile('../../.env.local');
-loadEnvFile('../../../web/.env.local');
+loadEnvFile('utils/.env.local'); // Root directory .env.local
+loadEnvFile('web/.env.local'); // Web directory .env.local
 
-export function getEnvVariable(key: string): string | null {
-    return process.env[key] || null;
+export function getEnvVariable(key: string): string {
+    return process.env[key] ?? '';
 }

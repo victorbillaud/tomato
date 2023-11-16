@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 export default function Login({
   searchParams,
 }: {
-  searchParams: { message: string };
+  searchParams: { message: string; redirectTo: string };
 }) {
   const signIn = async (formData: FormData) => {
     'use server';
@@ -30,7 +30,7 @@ export default function Login({
       );
     }
 
-    return redirect('/');
+    return redirect(searchParams.redirectTo || '/');
   };
 
   return (
