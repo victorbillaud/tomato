@@ -9,6 +9,12 @@ jobs:
       run:
         working-directory: ./
 
+    env:
+      GOOGLE_CLIENT: ${{ secrets.GOOGLE_CLIENT }}
+      GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
+      DISCORD_CLIENT: ${{ secrets.DISCORD_CLIENT }}
+      DISCORD_SECRET: ${{ secrets.DISCORD_SECRET }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -31,7 +37,7 @@ jobs:
           echo env
 
       - name: Change working directory
-        run: cd ./functions
+        run: cd ./utils
 
       - name: Install dependencies
         run: npm install
