@@ -17,6 +17,8 @@ export default function AuthProviders() {
     // Make sure to include /auth/callback at the end.
     url = url.endsWith('/') ? `${url}auth/callback` : `${url}/auth/callback`;
 
+    console.log(url);
+
     return url;
   };
 
