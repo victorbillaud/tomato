@@ -13,7 +13,9 @@ describe('qrcode service module', () => {
             user_id: data.user.id,
         });
 
-        expect(error).toBeNull();
+        if (error) {
+            throw error;
+        }
 
         // Assert each property of the object.
         expect(qrCode.id).toBeDefined();
@@ -30,7 +32,9 @@ describe('qrcode service module', () => {
 
         const { data: qrCodeList, error } = await listQRCode(sp);
 
-        expect(error).toBeNull();
+        if (error) {
+            throw error;
+        }
 
         // Assert each property of the object.
         expect(qrCodeList).toBeDefined();
@@ -48,7 +52,9 @@ describe('qrcode service module', () => {
 
         const { data: qrCodeObject, error } = await getQRCode(sp, qrCode.id);
 
-        expect(error).toBeNull();
+        if (error) {
+            throw error;
+        }
 
         // Assert each property of the object.
         expect(qrCodeObject).toBeDefined();
