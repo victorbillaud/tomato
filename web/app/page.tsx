@@ -1,13 +1,23 @@
+import { Text } from '@/components/common/text';
+import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
 export default async function Index() {
   const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const { data } = await supabase.auth.getUser();
 
   return (
-    <div className='flex w-full flex-1 flex-col items-center gap-20'>
-      <div className='animate-in flex max-w-4xl flex-1 flex-col gap-20 px-3 opacity-0'>
-        <h1 className='text-center text-4xl font-bold'>Tomato</h1>
-      </div>
+    <div className='animate-in flex w-full flex-col gap-5 px-3 opacity-0'>
+      <Text variant={'h1'} className='text-center'>
+        Tomato
+      </Text>
+
+      {data.user && (
+        <Text variant={'caption'} className='text-center'>
+          Hey, {data.user?.email}!
+        </Text>
+      )}
     </div>
   );
 }

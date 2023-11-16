@@ -8,6 +8,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      GOOGLE_CLIENT: ${{ secrets.GOOGLE_CLIENT }}
+      GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
+      DISCORD_CLIENT: ${{ secrets.DISCORD_CLIENT }}
+      DISCORD_SECRET: ${{ secrets.DISCORD_SECRET }}
+
     steps:
       - uses: actions/checkout@v3
 
