@@ -7,9 +7,6 @@ import { Button } from './common/button';
 export default function AuthProviders() {
   const supabase = createClient();
 
-  console.log(process.env.NEXT_PUBLIC_SITE_URL);
-  console.log(process.env.NEXT_PUBLIC_VERCEL_URL);
-
   const getURL = () => {
     let url =
       process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
@@ -19,11 +16,13 @@ export default function AuthProviders() {
     url = url.includes('http') ? url : `https://${url}`;
     // Make sure to include /auth/callback at the end.
     url = url.endsWith('/') ? `${url}auth/callback` : `${url}/auth/callback`;
+
+    console.log(url);
+
     return url;
   };
 
   const handleProviderSignIn = async (provider: Provider) => {
-
     const redirectUrl = new URL(getURL());
 
     // Check if there is a redirectTo query param in the window location.
@@ -35,6 +34,8 @@ export default function AuthProviders() {
     if (redirectTo) {
       redirectUrl.searchParams.append('redirectTo', redirectTo);
     }
+
+    console.log(redirectUrl.href);
 
     await supabase.auth.signInWithOAuth({
       provider,
