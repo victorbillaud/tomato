@@ -33,6 +33,9 @@ jobs:
           echo "SUPABASE_KEY=$SUPABASE_KEY" >> "$GITHUB_ENV"
           echo env
 
+      - name: Reset Supabase DB
+        run: supabase db reset
+
       - name: Install dependencies
         run: npm install
 
