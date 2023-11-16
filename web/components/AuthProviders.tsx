@@ -16,11 +16,13 @@ export default function AuthProviders() {
     url = url.includes('http') ? url : `https://${url}`;
     // Make sure to include /auth/callback at the end.
     url = url.endsWith('/') ? `${url}auth/callback` : `${url}/auth/callback`;
+
+    console.log(url);
+
     return url;
   };
 
   const handleProviderSignIn = async (provider: Provider) => {
-
     const redirectUrl = new URL(getURL());
 
     // Check if there is a redirectTo query param in the window location.
