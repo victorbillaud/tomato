@@ -160,6 +160,67 @@ export interface Database {
           }
         ]
       }
+      scan: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string | null
+          location: unknown | null
+          qrcode_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id?: string | null
+          location?: unknown | null
+          qrcode_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string | null
+          location?: unknown | null
+          qrcode_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scan_item_id_fkey"
+            columns: ["item_id"]
+            referencedRelation: "item"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scan_qrcode_id_fkey"
+            columns: ["qrcode_id"]
+            referencedRelation: "qrcode"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scan_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      test_tenant: {
+        Row: {
+          details: string | null
+          id: number
+        }
+        Insert: {
+          details?: string | null
+          id?: number
+        }
+        Update: {
+          details?: string | null
+          id?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
