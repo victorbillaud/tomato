@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import { Icon } from '../icon';
 import { IButtonProps, TButtonVariant } from './types';
-import { get } from 'http';
 
 export const Button: FunctionComponent<IButtonProps> = ({
   size = 'medium',
@@ -32,9 +31,9 @@ export const Button: FunctionComponent<IButtonProps> = ({
   };
 
   const iconColor = {
-    primary: 'white',
-    secondary: 'gray',
-    tertiary: 'gray',
+    primary: 'text-white-100',
+    secondary: 'text-gray-100',
+    tertiary: 'text-gray-100',
   };
 
   const buttonClasses = getButtonClass(variant);
