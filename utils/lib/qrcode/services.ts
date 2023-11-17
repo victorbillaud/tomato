@@ -41,10 +41,14 @@ async function createQrCodeImage(supabaseInstance: SupabaseClient<Database>, qrC
 }
 
 export async function listQRCode(supabaseInstance: SupabaseClient<Database>) {
+
+    const { data: { user } } = await supabaseInstance.auth.getUser();
+
     const { data, error } = await supabaseInstance
         .from('qrcode')
         .select('*')
-        .is('item_id', null);
+        .is('item_id', null)
+        .eq('user_id', user.id);
 
     return { data, error }
 }
