@@ -9,8 +9,6 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
 
-  console.log(requestUrl)
-
   if (code) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
@@ -20,7 +18,7 @@ export async function GET(request: Request) {
     }
 
     const url = new URL(request.url)
-    url.pathname = '/auth/signin'
+    url.pathname = '/auth/login'
     url.searchParams.set('error', error.message)
 
     return NextResponse.redirect(url.toString(), { status: 302 })

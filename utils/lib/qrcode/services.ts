@@ -1,5 +1,4 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { getEnvVariable } from "../../lib/common/envService";
 import { Database } from "../supabase/supabase_types";
 
 export async function insertQRCode(
@@ -55,6 +54,7 @@ export async function getQRCode(supabaseInstance: SupabaseClient<Database>, qrCo
         .from('qrcode')
         .select('*')
         .eq('id', qrCodeId)
+        .limit(1)
         .single();
 
     return { data, error }
@@ -72,10 +72,11 @@ export async function associateQRCodeToItem(supabaseInstance: SupabaseClient<Dat
 }
 
 function buildQRCodeURL(qrCodeId: string): string {
-    let baseURL =
-        getEnvVariable('NEXT_PUBLIC_SITE_URL') ?? // Set this to your site URL in production env.
-        getEnvVariable('NEXT_PUBLIC_VERCEL_URL') ?? // Automatically set by Vercel.
-        'http://localhost:3000/';
+    let baseURL = "http://localhost:3000";
+
+    if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'preview') {
+        baseURL = process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL
+    }
 
     // Make sure to include `https://` when not localhost.
     baseURL = baseURL.includes('http') ? baseURL : `https://${baseURL}`;
