@@ -98,7 +98,7 @@ const getButtonClass = (style: TButtonVariant) => {
       };
     case 'secondary':
       return {
-        base: 'rounded-md border dark:border-gray-100 bg-gray-100 dark:bg-transparent font-medium text-gray-700 dark:text-gray-100 shadow-sm',
+        base: 'rounded-md border dark:border-stone-600 bg-gray-100 dark:bg-transparent font-medium text-gray-700 dark:text-gray-100 shadow-sm',
         interact:
           'hover:bg-gray-200 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200',
       };
