@@ -22,6 +22,14 @@ module.exports = {
         },
       },
     },
+    animation: {
+      'pulse-bg': 'pulse-bg-once 2s ease-in forwards'
+    },
+    keyframes: {
+      'pulse-bg-once': {
+        to: { backgroundColor: 'transparent' }
+      }
+    }
   },
   plugins: [],
 };

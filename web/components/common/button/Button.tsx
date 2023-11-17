@@ -32,7 +32,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
 
   const iconColor = {
     primary: 'text-white-100',
-    secondary: 'text-gray-100',
+    secondary: 'text-gray-700',
     tertiary: 'text-gray-100',
   };
 
