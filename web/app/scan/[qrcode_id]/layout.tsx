@@ -1,8 +1,34 @@
 import { createClient } from '@/utils/supabase/server';
 import { getItemFromQrCodeId } from '@utils/lib/item/services';
 import { getQRCode } from '@utils/lib/qrcode/services';
+import { insertScan } from '@utils/lib/scan/services';
+import { Database } from '@utils/lib/supabase/supabase_types';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+
+const handleScan = async ({
+  item_id: itemId,
+  qrcode_id: qrCodeId,
+  location,
+}: Database['public']['Tables']['scan']['Insert']) => {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data, error } = await insertScan(supabase, {
+    item_id: itemId,
+    qrcode_id: qrCodeId,
+    location: location,
+  });
+
+  if (error) {
+    console.error(error);
+    throw new Error("Couldn't insert Scan");
+  }
+
+  if (data) {
+    return data;
+  }
+};
 
 export default async function ScanLayout(props: {
   children: React.ReactNode;
@@ -29,12 +55,22 @@ export default async function ScanLayout(props: {
   // FINDER FLOW
   // IF USER NOT LOGGED IN OR NOT OWNER => CHILDREN
   if (user == null || user.id !== qrCode?.user_id) {
+    await handleScan({
+      item_id: null,
+      qrcode_id: qrCode?.id,
+      location: null,
+    });
     return <>{props.children}</>;
   }
 
   // OWNER FLOW
   // IF QR CODE IS NOT LINKED TO AN ITEM => CREATION PAGE
   if (qrCode?.item_id == null) {
+    await handleScan({
+      item_id: null,
+      qrcode_id: qrCode?.id,
+      location: null,
+    });
     return <>{props.creation}</>;
     // IF QR CODE IS LINKED TO AN ITEM => ACTIVATION PAGE
   } else {
@@ -46,6 +82,14 @@ export default async function ScanLayout(props: {
     if (getItemError) {
       console.error(getItemError);
       throw new Error("Couldn't fetch Item");
+    }
+
+    if (item) {
+      await handleScan({
+        item_id: item?.id,
+        qrcode_id: qrCode?.id,
+        location: null,
+      });
     }
 
     if (item && item?.activated) {
