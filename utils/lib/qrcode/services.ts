@@ -55,6 +55,7 @@ export async function getQRCode(supabaseInstance: SupabaseClient<Database>, qrCo
         .from('qrcode')
         .select('*')
         .eq('id', qrCodeId)
+        .limit(1)
         .single();
 
     return { data, error }

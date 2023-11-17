@@ -46,6 +46,25 @@ export async function listItems(supabaseInstance: SupabaseClient<Database>) {
     return { data, error }
 }
 
+export async function getItemFromQrCodeId(
+    supabaseInstance: SupabaseClient<Database>,
+    qrCodeId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .select(`
+            *,
+            qrcode!qrcode_item_id_fkey (
+                *
+            )
+        `)
+        .eq('qrcode_id', qrCodeId)
+        .limit(1)
+        .single();
+
+    return { data, error }
+}
+
 
 // TODO: Manage flow for item creations from QRCode.
 
