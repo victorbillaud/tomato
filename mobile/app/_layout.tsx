@@ -4,8 +4,10 @@ import { useFonts } from 'expo-font'
 import { SplashScreen, Stack, usePathname } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
-import { Text } from "../components/Themed";
+import {Text, View} from "../components/Themed";
 import { AuthProvider, useAuth } from "../components/auth/AuthProvider";
+import {styles} from "../constants/Styles";
+import tw from 'twrnc';
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -63,6 +65,9 @@ function AuthGuard() {
 				<Text>Currently at: "{path}"</Text>
 				<Text>Logged in as {auth.user.email}</Text>
 			</>
-			: <Text>Not logged in</Text>
+			: <View style={tw`flex-1 justify-center items-center`}>
+				<Text style={styles.title}>Not logged in</Text>
+			 </View>
+
 	)
 }
