@@ -3,13 +3,16 @@ create extension if not exists "postgis" with schema "extensions";
 
 create sequence "public"."test_tenant_id_seq";
 
+drop policy "Enable select for owner only" on "public"."qrcode";
+
+drop policy "Enable update for owner only" on "public"."item";
+
 create table "public"."scan" (
     "id" uuid not null default gen_random_uuid(),
     "created_at" timestamp with time zone not null default now(),
     "qrcode_id" uuid,
     "item_id" uuid,
-    "user_id" uuid,
-    "location" geography
+    "user_id" uuid default auth.uid()
 );
 
 
@@ -43,7 +46,15 @@ alter table "public"."scan" add constraint "scan_user_id_fkey" FOREIGN KEY (user
 
 alter table "public"."scan" validate constraint "scan_user_id_fkey";
 
-create policy "Enable insert for everyone"
+create policy "Enable select for website user"
+on "public"."qrcode"
+as permissive
+for select
+to anon, authenticated
+using (true);
+
+
+create policy "Enable insert for authenticated users only"
 on "public"."scan"
 as permissive
 for insert
@@ -51,14 +62,21 @@ to public
 with check (true);
 
 
-create policy "Enable read for item owner only"
+create policy "Enable read access for all users"
 on "public"."scan"
 as permissive
 for select
+to anon, authenticated
+using (true);
+
+
+create policy "Enable update for owner only"
+on "public"."item"
+as permissive
+for update
 to authenticated
-using ((auth.uid() = ( SELECT item.user_id
-   FROM item
-  WHERE (item.id = scan.item_id))));
+using ((auth.uid() = user_id))
+with check ((auth.uid() = user_id));
 
 
 
