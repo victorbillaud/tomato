@@ -31,9 +31,9 @@ export const Button: FunctionComponent<IButtonProps> = ({
   };
 
   const iconColor = {
-    primary: 'text-white-100',
-    secondary: 'text-gray-700',
-    tertiary: 'text-gray-100',
+    primary: 'text-gray-100',
+    secondary: 'text-gray-700 dark:text-gray-100',
+    tertiary: 'text-gray-700 dark:text-gray-200',
   };
 
   const buttonClasses = getButtonClass(variant);
