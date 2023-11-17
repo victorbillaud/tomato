@@ -12,7 +12,7 @@ interface AuthContextType {
 	signOut: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType> ({} as AuthContextType)
 
 interface AuthProviderProps {
 	children: ReactNode
@@ -46,10 +46,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			user,
 			loading,
 			signIn: async (email: string, password: string) => {
-				await supabase.auth.signInWithPassword({ email, password })
+				const {data, error} = await supabase.auth.signInWithPassword({ email, password });
+				if (error) {
+					console.error(error)
+					return
+				}
+				setUser(data?.user ?? null);
 			},
 			signInWithProvider: async (provider: Provider) => {
-				await supabase.auth.signInWithOAuth({ provider })
+				const {error} = await supabase.auth.signInWithOAuth({ provider })
+				if (error) {
+					console.error(error)
+					return
+				}
 			},
 			signOut: async () => {
 				await supabase.auth.signOut()
