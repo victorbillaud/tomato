@@ -2,7 +2,7 @@ import { describe, test } from '@jest/globals';
 import { insertQRCode } from '../qrcode/services';
 import { signInFakeUser } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
-import { getItemFromQrCodeId, insertItem, listItems } from './services';
+import { activateItem, getItemFromQrCodeId, insertItem, listItems } from './services';
 
 const sp = getSupabase();
 
@@ -90,5 +90,29 @@ describe('service item module', () => {
 
         // Assert each property of the object.
         expect(item).toBeNull();
+    });
+
+    test('activate item', async () => {
+        const data = await signInFakeUser(sp);
+
+        const { data: qrCode } = await insertQRCode(sp, {
+            user_id: data.user.id,
+        });
+
+        const { insertedItem } = await insertItem(sp, {
+            name: 'test',
+            description: 'test',
+            qrcode_id: qrCode.id,
+        });
+
+        expect(insertedItem.activated).toBe(false);
+
+        const { data: item, error } = await activateItem(sp, insertedItem.id);
+
+        if (error) {
+            throw error;
+        }
+
+        expect(item.activated).toBe(true);
     });
 });

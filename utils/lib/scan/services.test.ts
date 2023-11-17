@@ -1,5 +1,4 @@
 import { describe, test } from '@jest/globals';
-import { FAKE_LOCATION_COORDINATES } from '../constant';
 import { insertItem } from '../item/services';
 import { insertQRCode } from '../qrcode/services';
 import { signInFakeUser } from '../supabase/fake';
@@ -53,7 +52,6 @@ describe('service scan module', () => {
         const { data, error } = await insertScan(sp, {
             item_id: globalThis.insertedItem.id,
             qrcode_id: globalThis.qrCode.id,
-            location: `POINT(${FAKE_LOCATION_COORDINATES.latitude} ${FAKE_LOCATION_COORDINATES.longitude})`,
         });
 
         if (error) {
@@ -73,7 +71,6 @@ describe('service scan module', () => {
         const { data: scan, error: insertScanError } = await insertScan(sp, {
             item_id: globalThis.insertedItem.id,
             qrcode_id: globalThis.qrCode.id,
-            location: `POINT(${FAKE_LOCATION_COORDINATES.latitude} ${FAKE_LOCATION_COORDINATES.longitude})`,
         });
 
         if (insertScanError) {
@@ -95,7 +92,6 @@ describe('service scan module', () => {
         const { data: scan, error: insertScanError } = await insertScan(sp, {
             item_id: globalThis.insertedItem.id,
             qrcode_id: globalThis.qrCode.id,
-            location: `POINT(${FAKE_LOCATION_COORDINATES.latitude} ${FAKE_LOCATION_COORDINATES.longitude})`,
         });
 
         if (insertScanError) {
@@ -110,4 +106,5 @@ describe('service scan module', () => {
 
         globalThis.scansCreated.push(scan);
     });
+
 });

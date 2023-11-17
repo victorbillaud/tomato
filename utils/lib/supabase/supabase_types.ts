@@ -165,7 +165,6 @@ export interface Database {
           created_at: string
           id: string
           item_id: string | null
-          location: unknown | null
           qrcode_id: string | null
           user_id: string | null
         }
@@ -173,7 +172,6 @@ export interface Database {
           created_at?: string
           id?: string
           item_id?: string | null
-          location?: unknown | null
           qrcode_id?: string | null
           user_id?: string | null
         }
@@ -181,7 +179,6 @@ export interface Database {
           created_at?: string
           id?: string
           item_id?: string | null
-          location?: unknown | null
           qrcode_id?: string | null
           user_id?: string | null
         }

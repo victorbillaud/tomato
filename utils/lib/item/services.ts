@@ -65,6 +65,20 @@ export async function getItemFromQrCodeId(
     return { data, error }
 }
 
+export async function activateItem(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .update({ activated: true })
+        .eq('id', itemId)
+        .select('*')
+        .single();
+
+    return { data, error }
+}
+
 
 // TODO: Manage flow for item creations from QRCode.
 

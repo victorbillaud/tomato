@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { getItemFromQrCodeId } from '@utils/lib/item/services';
 import { getQRCode } from '@utils/lib/qrcode/services';
 import { insertScan } from '@utils/lib/scan/services';
@@ -6,30 +7,37 @@ import { Database } from '@utils/lib/supabase/supabase_types';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const handleScan = async ({
-  item_id: itemId,
-  qrcode_id: qrCodeId,
-  location,
-}: Database['public']['Tables']['scan']['Insert']) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const { data, error } = await insertScan(supabase, {
+const handleScan = async (
+  supabase: SupabaseClient<Database>,
+  itemId: string | null,
+  qrCodeId: string
+) => {
+  const { error } = await insertScan(supabase, {
     item_id: itemId,
     qrcode_id: qrCodeId,
-    location: location,
   });
 
   if (error) {
     console.error(error);
     throw new Error("Couldn't insert Scan");
   }
-
-  if (data) {
-    return data;
-  }
 };
 
+const getUserAndQrCode = async (
+  supabase: SupabaseClient<Database>,
+  qrCodeId: string
+) => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: qrCode, error: qrError } = await getQRCode(supabase, qrCodeId);
+
+  if (qrError) {
+    console.error(qrError);
+    throw new Error("Couldn't fetch QR Code");
+  }
+  return { user, qrCode };
+};
 export default async function ScanLayout(props: {
   children: React.ReactNode;
   activation: React.ReactNode;
@@ -38,68 +46,40 @@ export default async function ScanLayout(props: {
 }) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: qrCode, error: getQrError } = await getQRCode(
+  const { user, qrCode } = await getUserAndQrCode(
     supabase,
     props.params.qrcode_id
   );
 
-  if (getQrError) {
-    console.error(getQrError);
-    throw new Error("Couldn't fetch QR Code");
-  }
-
-  // FINDER FLOW
-  // IF USER NOT LOGGED IN OR NOT OWNER => CHILDREN
-  if (user == null || user.id !== qrCode?.user_id) {
-    await handleScan({
-      item_id: null,
-      qrcode_id: qrCode?.id,
-      location: null,
-    });
+  // Finder Flow
+  if (!user || user.id !== qrCode?.user_id) {
+    await handleScan(supabase, null, props.params.qrcode_id);
     return <>{props.children}</>;
   }
 
-  // OWNER FLOW
-  // IF QR CODE IS NOT LINKED TO AN ITEM => CREATION PAGE
-  if (qrCode?.item_id == null) {
-    await handleScan({
-      item_id: null,
-      qrcode_id: qrCode?.id,
-      location: null,
-    });
+  // Owner Flow
+  if (!qrCode?.item_id) {
+    await handleScan(supabase, null, props.params.qrcode_id);
     return <>{props.creation}</>;
-    // IF QR CODE IS LINKED TO AN ITEM => ACTIVATION PAGE
   } else {
-    const { data: item, error: getItemError } = await getItemFromQrCodeId(
+    const { data: item, error: itemError } = await getItemFromQrCodeId(
       supabase,
       props.params.qrcode_id
     );
-
-    if (getItemError) {
-      console.error(getItemError);
+    if (itemError) {
+      console.error(itemError);
       throw new Error("Couldn't fetch Item");
     }
 
-    if (item) {
-      await handleScan({
-        item_id: item?.id,
-        qrcode_id: qrCode?.id,
-        location: null,
-      });
+    if (!item) {
+      return <>{props.creation}</>;
     }
 
-    if (item && item?.activated) {
+    if (item?.activated) {
       redirect(`/dashboard/item/${item.id}`);
-    }
-
-    if (item && !item?.activated) {
+    } else {
+      await handleScan(supabase, item?.id, props.params.qrcode_id);
       return <>{props.activation}</>;
     }
-
-    return <>{props.children}</>;
   }
 }

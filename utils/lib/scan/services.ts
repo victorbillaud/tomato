@@ -3,13 +3,10 @@ import { Database } from "../supabase/supabase_types";
 
 export async function insertScan(
     supabaseInstance: SupabaseClient<Database>,
-    scan: Pick<Database["public"]["Tables"]["scan"]["Insert"], "item_id" | "qrcode_id" | "location">
+    scan: Pick<Database["public"]["Tables"]["scan"]["Insert"], "item_id" | "qrcode_id">
 ) {
 
-    const { data: { user } } = await supabaseInstance.auth.getUser();
-
     const scanToInsert: Database["public"]["Tables"]["scan"]["Insert"] = {
-        user_id: user?.id || null,
         ...scan,
     };
 
