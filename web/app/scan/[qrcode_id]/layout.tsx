@@ -38,6 +38,8 @@ const getUserAndQrCode = async (
   }
   return { user, qrCode };
 };
+
+
 export default async function ScanLayout(props: {
   children: React.ReactNode;
   activation: React.ReactNode;

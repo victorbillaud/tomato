@@ -4,7 +4,7 @@ import { Database } from "../supabase/supabase_types";
 
 export async function insertItem(
     supabaseInstance: SupabaseClient<Database>,
-    item: Pick<Database["public"]["Tables"]["item"]["Insert"], "name" | "description" | "qrcode_id">
+    item: Pick<Database["public"]["Tables"]["item"]["Insert"], "name" | "description" | "qrcode_id" | "activated">
 ) {
 
     const { data: { user } } = await supabaseInstance.auth.getUser();
