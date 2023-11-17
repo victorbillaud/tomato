@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/common/button';
 import { Text } from '@/components/common/text';
-import { useEffect } from 'react';
 
 export default function Error({
   error,
@@ -11,11 +10,6 @@ export default function Error({
   error: Error & { digest?: string; message: any };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log the error to an error reporting service
-    // console.error(error);
-  }, [error]);
-
   return (
     <div className='flex w-full flex-1 flex-col items-center justify-start gap-1'>
       <div className='my-5 flex w-full flex-col rounded-md border border-red-400 bg-red-600/20 px-4 py-3 shadow-sm'>

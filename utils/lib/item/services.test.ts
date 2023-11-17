@@ -88,7 +88,6 @@ describe('service item module', () => {
 
         expect(error).toBeDefined();
 
-        // Assert each property of the object.
         expect(item).toBeNull();
     });
 

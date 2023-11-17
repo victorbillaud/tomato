@@ -3,7 +3,7 @@ import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
-export default async function Index() {
+export default async function NotFound() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const { data } = await supabase.auth.getUser();
