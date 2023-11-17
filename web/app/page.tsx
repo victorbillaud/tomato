@@ -1,3 +1,4 @@
+import { StyledLink } from '@/components/common/link';
 import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
@@ -18,6 +19,7 @@ export default async function Index() {
           Hey, {data.user?.email}!
         </Text>
       )}
+      <StyledLink href={'/ui'} text='UI/Theme' variant='primary' />
     </div>
   );
 }

@@ -1,10 +1,11 @@
-import { IconArrowLeft, IconBrandDiscordFilled, IconBrandGoogleFilled, IconLoader } from '@tabler/icons-react';
+import { IconArrowLeft, IconBrandDiscordFilled, IconBrandGoogleFilled, IconDiscountCheckFilled, IconLoader } from '@tabler/icons-react';
 
 const ICONS = {
     'arrow-left': IconArrowLeft,
     'loader': IconLoader,
     'discord': IconBrandDiscordFilled,
-    'google': IconBrandGoogleFilled
+    'google': IconBrandGoogleFilled,
+    'discount-check': IconDiscountCheckFilled,
 };
 
 export default ICONS;

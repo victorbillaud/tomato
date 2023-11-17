@@ -7,27 +7,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        btn: {
-          background: 'hsl(var(--btn-background))',
-          'background-hover': 'hsl(var(--btn-background-hover))',
-        },
         primary: {
-          '50': '#fff2f1',
-          '100': '#ffe2e1',
-          '200': '#ffcac7',
-          '300': '#ffa4a0',
-          '400': '#ff716a',
-          '500': '#f8443b',
-          '600': '#e6281f',
-          '700': '#c11c14',
-          '800': '#a01a14',
-          '900': '#841d18',
-          '950': '#480a07',
+          50: '#fff1f1',
+          100: '#ffe0e0',
+          200: '#ffc7c7',
+          300: '#ffa0a0',
+          400: '#ff6969', // received msg
+          500: '#fa3939',
+          600: '#e71b1b',
+          700: '#c31212',
+          800: '#a11313',
+          900: '#861717', // sent msg
+          950: '#490606',
         },
       },
     },
   },
   plugins: [],
-}
+};
