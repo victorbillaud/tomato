@@ -8,13 +8,15 @@ export async function GET(request: Request) {
   // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-sign-in-with-code-exchange
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
+  const next = requestUrl.searchParams.get('next')
 
   if (code) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
     const { error } = await supabase.auth.exchangeCodeForSession(code)
+
     if (!error) {
-      return NextResponse.redirect(new URL(requestUrl.searchParams.get('redirectTo') || '/', requestUrl.origin).toString(), { status: 302 })
+      return NextResponse.redirect(new URL(next || '/', requestUrl.origin).toString(), { status: 302 })
     }
 
     const url = new URL(request.url)

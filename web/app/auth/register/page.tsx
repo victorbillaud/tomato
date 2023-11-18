@@ -1,5 +1,8 @@
+import AuthProviders from '@/components/AuthProviders';
 import { Button } from '@/components/common/button';
 import { InputText } from '@/components/common/input/InputText';
+import { StyledLink } from '@/components/common/link';
+import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -15,6 +18,14 @@ export default function Register({
     const origin = headers().get('origin');
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirm-password') as string;
+
+    if (password !== confirmPassword) {
+      return redirect(
+        `/auth/register?message=${encodeURIComponent('Passwords do not match')}`
+      );
+    }
+
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
@@ -40,54 +51,60 @@ export default function Register({
   };
 
   return (
-    <form
-      action={signUp}
-      method='post'
-      className='my-5 flex flex-col items-center justify-between'
-    >
-      <div className='w-full max-w-lg space-y-6 rounded-lg'>
-        <InputText
-          labelText='Email'
-          name='email'
-          placeholder='you@example.com'
-        />
-        <InputText
-          labelText='Password'
-          name='password'
-          type='password'
-          placeholder='••••••••'
-        />
-        <InputText
-          labelText='Confirm password'
-          name='confirm-password'
-          type='password'
-          placeholder='••••••••'
-        />
-        {searchParams?.message && (
-          <div
-            className='relative rounded border border-red-400 bg-red-600/20 px-4 py-3 text-sm text-red-700'
-            role='alert'
-          >
-            <span className='block sm:inline'> {searchParams?.message}</span>
+    <>
+      <AuthProviders />
+      <div className='my-5 h-0.5 w-2/3 rounded-full border border-stone-200 opacity-50 dark:border-stone-700'></div>{' '}
+      <form
+        action={signUp}
+        method='post'
+        className='my-5 flex w-full flex-col items-center justify-between'
+      >
+        <div className='w-full max-w-lg space-y-3 rounded-lg'>
+          <InputText
+            labelText='Email'
+            name='email'
+            placeholder='you@example.com'
+            icon='at'
+          />
+          <InputText
+            labelText='Password'
+            name='password'
+            type='password'
+            placeholder='••••••••'
+            icon='lock'
+            error={searchParams.message !== undefined}
+          />
+          <InputText
+            labelText='Confirm password'
+            name='confirm-password'
+            type='password'
+            placeholder='••••••••'
+            icon='lock'
+            error={searchParams.message !== undefined}
+          />
+          {searchParams.message !== '' && (
+            <div className='flex items-center justify-center'>
+              <Text variant='caption' color='text-red-500/80'>
+                {searchParams.message}
+              </Text>
+            </div>
+          )}
+          <div className='flex items-center justify-between pt-3'>
+            <Button
+              variant='primary'
+              type='submit'
+              text='Register'
+              className='w-full'
+            />
           </div>
-        )}
-        <div className='flex items-center justify-between'>
-          <Button
-            variant='primary'
-            type='submit'
-            text='Register'
-            className='w-full'
+          <StyledLink
+            href={`/auth/login`}
+            text='Already have an account? Login'
+            variant='tertiary'
+            className='text-sm opacity-75'
           />
         </div>
-        <div className='text-center text-sm'>
-          <a
-            href='/auth/login'
-            className='font-medium text-primary-600 hover:text-primary-500'
-          >
-            Already have an account? Log in
-          </a>
-        </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
