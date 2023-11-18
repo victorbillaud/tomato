@@ -1,66 +1,61 @@
-'use client';
-
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/server';
 import { Provider } from '@supabase/supabase-js';
+import { cookies, headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { Button } from './common/button';
 
 export default function AuthProviders() {
-  const supabase = createClient();
+  const handleProviderLogin = async (formData: FormData) => {
+    'use server';
 
-  const getURL = () => {
-    let url = window.location.hostname;
+    const origin = headers().get('origin');
+    const provider = formData.get('provider') as Provider;
 
-    if (url == 'localhost') {
-      url = 'http://localhost:3000';
+    if (!provider) {
+      return;
     }
 
-    // Make sure to include `https://` when not localhost.
-    url = url.includes('http') ? url : `https://${url}`;
-    // Make sure to include /auth/callback at the end.
-    url = url.endsWith('/') ? `${url}auth/callback` : `${url}/auth/callback`;
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
 
-    console.log(url);
-
-    return url;
-  };
-
-  const handleProviderSignIn = async (provider: Provider) => {
-    const redirectUrl = new URL(getURL());
-
-    // Check if there is a redirectTo query param in the window location.
-    const redirectTo = new URL(window.location.href).searchParams.get(
-      'redirectTo'
-    );
-
-    // If there is a redirectTo query param, add it to the redirectUrl.
-    if (redirectTo) {
-      redirectUrl.searchParams.append('redirectTo', redirectTo);
-    }
-
-    await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: redirectUrl.href,
+        redirectTo: `${origin}/auth/callback`,
       },
     });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    return redirect(data.url);
   };
 
   return (
     <div className='my-5 flex w-full flex-col items-center justify-between gap-4'>
-      <Button
-        onClick={() => handleProviderSignIn('google')}
-        text='Sign with Google'
-        variant='secondary'
-        className='w-full'
-        icon='google'
-      />
-      <Button
-        onClick={() => handleProviderSignIn('discord')}
-        text='Sign with Discord'
-        variant='secondary'
-        className='w-full'
-        icon='discord'
-      />
+      <form className='w-full' action={handleProviderLogin}>
+        <input type='hidden' name='provider' value='google' />
+        <Button
+          type='submit'
+          text='Sign with Google'
+          variant='secondary'
+          className='w-full'
+          icon='google'
+        />
+      </form>
+
+      <form className='w-full' action={handleProviderLogin}>
+        <input type='hidden' name='provider' value='discord' />
+        <Button
+          type='submit'
+          text='Sign with Discord'
+          variant='secondary'
+          className='w-full'
+          icon='discord'
+        />
+      </form>
     </div>
   );
 }
