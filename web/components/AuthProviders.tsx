@@ -8,8 +8,9 @@ export default function AuthProviders() {
   const handleProviderLogin = async (formData: FormData) => {
     'use server';
 
-    const origin = headers().get('origin');
+    const referer = new URL(headers().get('referer') as string);
     const provider = formData.get('provider') as Provider;
+    const next = referer.searchParams.get('next');
 
     if (!provider) {
       return;
@@ -21,7 +22,9 @@ export default function AuthProviders() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${origin}/auth/callback`,
+        redirectTo: next
+          ? `${referer.origin}/auth/callback?next=${next}`
+          : `${referer.origin}/auth/callback`,
       },
     });
 

@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation';
 export default function Login({
   searchParams,
 }: {
-  searchParams: { message: string; redirectTo: string };
+  searchParams: { message: string; next: string };
 }) {
   const handleFormPost = async (formData: FormData) => {
     'use server';
@@ -28,16 +28,20 @@ export default function Login({
       });
 
       if (error) {
-        return redirect(
-          `/auth/login?message=${encodeURIComponent(
-            error.message || 'Unknown error'
-          )}`
+        const redirectUrl = new URL(headers().get('referer') as string);
+        redirectUrl.searchParams.set(
+          'message',
+          error.message || 'Unknown error'
         );
+        return redirect(redirectUrl.href);
       }
 
-      return redirect(
-        `/auth/login?message=Check email to continue reset password process`
+      const redirectUrl = new URL(headers().get('referer') as string);
+      redirectUrl.searchParams.set(
+        'message',
+        'Check email to continue reset password process'
       );
+      return redirect(redirectUrl.href);
     } else {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -45,14 +49,16 @@ export default function Login({
       });
 
       if (error) {
-        return redirect(
-          `/auth/login?message=${encodeURIComponent(
-            error.message || 'Unknown error'
-          )}`
+        const redirectUrl = new URL(headers().get('referer') as string);
+        redirectUrl.searchParams.set(
+          'message',
+          error.message || 'Unknown error'
         );
+
+        return redirect(redirectUrl.href);
       }
 
-      return redirect(searchParams.redirectTo || '/');
+      return redirect(searchParams.next || '/');
     }
   };
 
@@ -84,19 +90,11 @@ export default function Login({
 
           {searchParams.message !== '' && (
             <div className='flex items-center justify-center'>
-              <Text variant='caption' className='text-red-500/70'>
+              <Text variant='caption' color='text-red-500/70'>
                 {searchParams.message}
               </Text>
             </div>
           )}
-
-          <div className='flex items-center justify-end'>
-            <button name='reset-password' value='Reset password' type='submit'>
-              <Text variant='overline' className='opacity-80'>
-                Forgot Password?
-              </Text>
-            </button>
-          </div>
 
           <div className='flex items-center justify-between'>
             <Button
@@ -106,6 +104,13 @@ export default function Login({
               name='login'
               className='w-full'
             />
+          </div>
+          <div className='flex items-center justify-end'>
+            <button name='reset-password' value='Reset password' type='submit'>
+              <Text variant='overline' className='opacity-80'>
+                Forgot Password?
+              </Text>
+            </button>
           </div>
           <StyledLink
             href={`/auth/register`}

@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 export default function ForgotPassword({
   searchParams,
 }: {
-  searchParams: { message: string; redirectTo: string };
+  searchParams: { message: string };
 }) {
   const changePassword = async (formData: FormData) => {
     'use server';
