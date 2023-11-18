@@ -54,7 +54,7 @@ export default async function CreateItem({
   return qrCode ? (
     <div className='flex w-full flex-1 flex-col items-center justify-center gap-20'>
       <div className='flex flex-col items-center justify-center gap-5'>
-        <Text variant='h4' className='text-center opacity-50'>
+        <Text variant='h3' className='text-center opacity-50'>
           This is now the time to create your item, you have 2 possibilities:
         </Text>
       </div>
@@ -70,13 +70,14 @@ export default async function CreateItem({
         <div className='h-1 w-2/4 rounded-md bg-stone-300 dark:bg-stone-700 md:h-2/4 md:w-1' />
 
         <div className='flex w-full flex-col items-center justify-center gap-5'>
-          <form action={insertItemAction}>
-            <div className='flex flex-col items-center justify-center gap-2'>
+          <form action={insertItemAction} className='w-full'>
+            <div className='flex w-full flex-col items-center justify-center gap-2'>
               <input type='hidden' name='qrcode_id' value={qrCode.id} />
               <InputText
                 labelText='Item name'
                 name='name'
                 placeholder='Phone'
+                className='w-full md:w-2/4'
               />
               <InputText
                 labelText='Item description'
