@@ -80,6 +80,10 @@ function buildQRCodeURL(qrCodeId: string): string {
 
     let baseURL = process.env.VERCEL_URL || 'http://localhost:3000';
 
+    if (process.env.NODE_ENV === 'production') {
+        baseURL = "tomato.victorbillaud.fr"
+    }
+
     // Add protocol if not present
     if (!baseURL.startsWith('http')) {
         baseURL = `https://${baseURL}`;
