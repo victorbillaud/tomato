@@ -47,10 +47,11 @@ export default async function DashboardLayout({
             text='Add item'
             href={`/dashboard/item/create/${qrCodes[0].id}`}
             target='_self'
+            aria-disabled='true'
           />
         ) : (
-          <Text variant='body' className='opacity-50'>
-            You have no QR Code left, please buy a new one
+          <Text variant='caption' className='p-2 opacity-50'>
+            Buy a new QR Code to add an item
           </Text>
         )}
         <div className='flex w-full flex-row items-center justify-end gap-3 p-1'>

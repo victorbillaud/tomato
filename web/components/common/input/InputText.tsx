@@ -4,15 +4,27 @@ import { Icon, IconNames } from '../icon';
 import { Text } from '../text';
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   labelText?: string;
-  error?: string;
+  error?: boolean;
+  errorMessage?: string;
   children?: React.ReactNode;
   icon?: IconNames;
 }
 
 export const InputText = React.forwardRef<HTMLInputElement, IProps>(
-  ({ className, children, labelText, type = 'text', error, ...props }, ref) => {
+  (
+    {
+      className,
+      children,
+      labelText,
+      type = 'text',
+      error,
+      errorMessage,
+      ...props
+    },
+    ref
+  ) => {
     const inputContainerClass = classNames(
-      'group flex items-stretch gap-2 border shadow-sm',
+      'group flex items-center gap-2 border shadow-sm',
       error
         ? 'animate-shake border border-red-500 bg-red-700/10'
         : 'border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 bg-zinc-100',
@@ -33,15 +45,23 @@ export const InputText = React.forwardRef<HTMLInputElement, IProps>(
                 {labelText}
               </Text>
             </label>
-            {error && (
-              <Text variant='overline' className='text-red-600'>
-                {error}
+            {errorMessage && (
+              <Text variant='overline' color='text-red-600'>
+                {errorMessage}
               </Text>
             )}
           </div>
         )}
         <div className={inputContainerClass}>
-          {props.icon && <Icon name={props.icon} size={20} />}
+          {props.icon && (
+            <Icon
+              name={props.icon}
+              size={20}
+              color={`opacity-50 ${
+                error ? 'text-red-500' : 'text-gray-700 dark:text-gray-200'
+              }`}
+            />
+          )}
           <input
             id='txt'
             autoComplete='off'

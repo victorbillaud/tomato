@@ -1,81 +1,125 @@
+import AuthProviders from '@/components/AuthProviders';
 import { Button } from '@/components/common/button';
 import { InputText } from '@/components/common/input/InputText';
+import { StyledLink } from '@/components/common/link';
+import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export default function Login({
   searchParams,
 }: {
-  searchParams: { message: string; redirectTo: string };
+  searchParams: { message: string; next: string };
 }) {
-  const signIn = async (formData: FormData) => {
+  const handleFormPost = async (formData: FormData) => {
     'use server';
 
+    const origin = headers().get('origin');
+    const resetPassword = formData.get('reset-password') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    if (resetPassword) {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${origin}/auth/callback?next=/auth/forgot-password`,
+      });
 
-    if (error) {
-      return redirect(
-        `/auth/login?message=${encodeURIComponent(
+      if (error) {
+        const redirectUrl = new URL(headers().get('referer') as string);
+        redirectUrl.searchParams.set(
+          'message',
           error.message || 'Unknown error'
-        )}`
-      );
-    }
+        );
+        return redirect(redirectUrl.href);
+      }
 
-    return redirect(searchParams.redirectTo || '/');
+      const redirectUrl = new URL(headers().get('referer') as string);
+      redirectUrl.searchParams.set(
+        'message',
+        'Check email to continue reset password process'
+      );
+      return redirect(redirectUrl.href);
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        const redirectUrl = new URL(headers().get('referer') as string);
+        redirectUrl.searchParams.set(
+          'message',
+          error.message || 'Unknown error'
+        );
+
+        return redirect(redirectUrl.href);
+      }
+
+      return redirect(searchParams.next || '/');
+    }
   };
 
   return (
-    <form
-      action={signIn}
-      method='post'
-      className='my-5 flex flex-col items-center justify-between'
-    >
-      <div className='w-full max-w-lg space-y-6 rounded-lg'>
-        <InputText
-          labelText='Email'
-          name='email'
-          placeholder='you@example.com'
-        />
-        <InputText
-          labelText='Password'
-          name='password'
-          type='password'
-          placeholder='••••••••'
-        />
-        {searchParams.message && (
-          <div
-            className='relative rounded border border-red-400 bg-red-600/20 px-4 py-3 text-sm text-red-700'
-            role='alert'
-          >
-            <span className='block sm:inline'> {searchParams.message}</span>
+    <>
+      <AuthProviders />
+      <div className='my-5 h-0.5 w-2/3 rounded-full border border-stone-200 opacity-50 dark:border-stone-700'></div>{' '}
+      <form
+        action={handleFormPost}
+        method='post'
+        className='my-5 flex w-full flex-col items-center justify-between'
+      >
+        <div className='w-full space-y-3 rounded-lg'>
+          <InputText
+            labelText='Email'
+            name='email'
+            placeholder='you@example.com'
+            icon='at'
+            error={searchParams.message !== undefined}
+          />
+          <InputText
+            labelText='Password'
+            name='password'
+            type='password'
+            placeholder='••••••••'
+            error={searchParams.message !== undefined}
+            icon='lock'
+          />
+
+          {searchParams.message !== '' && (
+            <div className='flex items-center justify-center'>
+              <Text variant='caption' color='text-red-500/70'>
+                {searchParams.message}
+              </Text>
+            </div>
+          )}
+
+          <div className='flex items-center justify-between'>
+            <Button
+              variant='primary'
+              type='submit'
+              text='Login'
+              name='login'
+              className='w-full'
+            />
           </div>
-        )}
-        <div className='flex items-center justify-between'>
-          <Button
-            variant='primary'
-            type='submit'
-            text='Login'
-            className='w-full'
+          <div className='flex items-center justify-end'>
+            <button name='reset-password' value='Reset password' type='submit'>
+              <Text variant='overline' className='opacity-80'>
+                Forgot Password?
+              </Text>
+            </button>
+          </div>
+          <StyledLink
+            href={`/auth/register`}
+            text='Need an account? Sign Up'
+            variant='tertiary'
+            className='text-sm opacity-75'
           />
         </div>
-        <div className='text-center text-sm'>
-          <a
-            href='/auth/register'
-            className='font-medium text-primary-600 hover:text-primary-500'
-          >
-            Need an account? Sign Up
-          </a>
-        </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
