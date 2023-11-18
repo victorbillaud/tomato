@@ -25,7 +25,7 @@ export default async function AuthButton() {
 
   return (
     <div className='flex w-full items-center justify-between gap-4'>
-      <Link href='/'>
+      <Link href='/' className='px-2'>
         <Text variant={'caption'} className='text-center'>
           Tomato
         </Text>
@@ -48,12 +48,13 @@ export default async function AuthButton() {
           </form>
         ) : (
           <>
-            <StyledLink href='/auth/login' text='Login' />
             <StyledLink
               href='/auth/register'
               text='Register'
               variant='tertiary'
+              size='small'
             />
+            <StyledLink href='/auth/login' text='Login' size='small' />
           </>
         )}
       </div>

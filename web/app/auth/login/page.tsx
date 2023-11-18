@@ -1,7 +1,10 @@
 import { Button } from '@/components/common/button';
 import { InputText } from '@/components/common/input/InputText';
+import { StyledLink } from '@/components/common/link';
+import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 export default function Login({
@@ -37,20 +40,29 @@ export default function Login({
     <form
       action={signIn}
       method='post'
-      className='my-5 flex flex-col items-center justify-between'
+      className='my-5 flex w-full flex-col items-center justify-between'
     >
-      <div className='w-full max-w-lg space-y-6 rounded-lg'>
+      <div className='w-full space-y-2 rounded-lg'>
         <InputText
           labelText='Email'
           name='email'
           placeholder='you@example.com'
+          icon='at'
         />
         <InputText
           labelText='Password'
           name='password'
           type='password'
           placeholder='••••••••'
+          icon='lock'
         />
+        <div className='flex items-center justify-end py-1'>
+          <Link href={`/auth/forgot-password`} className='text-sm'>
+            <Text variant='overline' className='text-gray-600'>
+              Forgot Password?
+            </Text>
+          </Link>
+        </div>
         {searchParams.message && (
           <div
             className='relative rounded border border-red-400 bg-red-600/20 px-4 py-3 text-sm text-red-700'
@@ -67,14 +79,12 @@ export default function Login({
             className='w-full'
           />
         </div>
-        <div className='text-center text-sm'>
-          <a
-            href='/auth/register'
-            className='font-medium text-primary-600 hover:text-primary-500'
-          >
-            Need an account? Sign Up
-          </a>
-        </div>
+        <StyledLink
+          href={`/auth/register`}
+          text='Need an account? Sign Up'
+          variant='tertiary'
+          className='text-sm opacity-75'
+        />
       </div>
     </form>
   );

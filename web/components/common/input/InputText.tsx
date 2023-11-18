@@ -41,7 +41,13 @@ export const InputText = React.forwardRef<HTMLInputElement, IProps>(
           </div>
         )}
         <div className={inputContainerClass}>
-          {props.icon && <Icon name={props.icon} size={20} />}
+          {props.icon && (
+            <Icon
+              name={props.icon}
+              size={20}
+              color='opacity-20 text-gray-700 dark:text-gray-200'
+            />
+          )}
           <input
             id='txt'
             autoComplete='off'

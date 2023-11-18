@@ -1,5 +1,6 @@
 import { Button } from '@/components/common/button';
 import { InputText } from '@/components/common/input/InputText';
+import { StyledLink } from '@/components/common/link';
 import { createClient } from '@/utils/supabase/server';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -43,25 +44,28 @@ export default function Register({
     <form
       action={signUp}
       method='post'
-      className='my-5 flex flex-col items-center justify-between'
+      className='my-5 flex w-full flex-col items-center justify-between'
     >
-      <div className='w-full max-w-lg space-y-6 rounded-lg'>
+      <div className='w-full max-w-lg space-y-2 rounded-lg'>
         <InputText
           labelText='Email'
           name='email'
           placeholder='you@example.com'
+          icon='at'
         />
         <InputText
           labelText='Password'
           name='password'
           type='password'
           placeholder='••••••••'
+          icon='lock'
         />
         <InputText
           labelText='Confirm password'
           name='confirm-password'
           type='password'
           placeholder='••••••••'
+          icon='lock'
         />
         {searchParams?.message && (
           <div
@@ -71,7 +75,7 @@ export default function Register({
             <span className='block sm:inline'> {searchParams?.message}</span>
           </div>
         )}
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between pt-3'>
           <Button
             variant='primary'
             type='submit'
@@ -79,14 +83,12 @@ export default function Register({
             className='w-full'
           />
         </div>
-        <div className='text-center text-sm'>
-          <a
-            href='/auth/login'
-            className='font-medium text-primary-600 hover:text-primary-500'
-          >
-            Already have an account? Log in
-          </a>
-        </div>
+        <StyledLink
+          href={`/auth/login`}
+          text='Already have an account? Login'
+          variant='tertiary'
+          className='text-sm opacity-75'
+        />
       </div>
     </form>
   );
