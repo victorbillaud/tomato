@@ -50,7 +50,7 @@ export default async function DashboardLayout({
             aria-disabled='true'
           />
         ) : (
-          <Text variant='caption' className='opacity-50'>
+          <Text variant='caption' className='p-2 opacity-50'>
             Buy a new QR Code to add an item
           </Text>
         )}
