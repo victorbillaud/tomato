@@ -77,7 +77,12 @@ export async function associateQRCodeToItem(supabaseInstance: SupabaseClient<Dat
 
 function buildQRCodeURL(qrCodeId: string): string {
 
-    let baseURL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+    let baseURL = process.env.VERCEL_URL || 'http://localhost:3000';
+
+    // Add protocol if not present
+    if (!baseURL.startsWith('http')) {
+        baseURL = `https://${baseURL}`;
+    }
 
     const qrCodeURL = `${baseURL}/scan/${qrCodeId}`;
 
