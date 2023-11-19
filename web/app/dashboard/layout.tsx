@@ -35,39 +35,50 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <div className='flex w-full flex-1 flex-col items-center justify-start'>
+      <DashboardNavBar />
+      <div className='mt-3 h-0.5 w-[95%] rounded-full border border-stone-200 opacity-50 dark:border-stone-700' />
+      {children}
+    </div>
+  );
+}
+
+async function DashboardNavBar() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const { data: qrCodes, error } = await listQRCode(supabase);
 
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-start'>
-      <div className='flex w-full flex-row items-center justify-between gap-3'>
+    <div className='flex w-full flex-row items-center justify-between gap-3'>
+      <div className='flex w-full flex-row items-center justify-end gap-3'>
+        <Text variant='caption'>
+          <strong>{qrCodes ? qrCodes.length : 0}</strong> left
+        </Text>
+        <form action={createQRCode}>
+          <SubmitButton
+            text='Buy new qr code'
+            variant='secondary'
+            color='red'
+            type='submit'
+            size='small'
+          />
+        </form>
         {qrCodes && qrCodes.length > 0 ? (
           <AddItemLink
             text='Add item'
             href={`/dashboard/item/create/${qrCodes[0].id}`}
             target='_self'
+            size='small'
           />
         ) : (
           <Text variant='caption' className='opacity-50'>
             Buy a new QR Code to add an item
           </Text>
         )}
-        <div className='flex w-full flex-row items-center justify-end gap-3'>
-          <Text variant='caption'>
-            <strong>{qrCodes ? qrCodes.length : 0}</strong> left
-          </Text>
-          <form action={createQRCode}>
-            <SubmitButton
-              text='Buy new qr code'
-              variant='secondary'
-              color='red'
-              type='submit'
-            />
-          </form>
-        </div>
       </div>
-      {children}
     </div>
   );
 }
+
+
