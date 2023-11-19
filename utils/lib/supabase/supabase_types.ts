@@ -166,6 +166,7 @@ export interface Database {
           id: string
           item_id: string | null
           qrcode_id: string | null
+          type: Database["public"]["Enums"]["ScanType"][] | null
           user_id: string | null
         }
         Insert: {
@@ -173,6 +174,7 @@ export interface Database {
           id?: string
           item_id?: string | null
           qrcode_id?: string | null
+          type?: Database["public"]["Enums"]["ScanType"][] | null
           user_id?: string | null
         }
         Update: {
@@ -180,6 +182,7 @@ export interface Database {
           id?: string
           item_id?: string | null
           qrcode_id?: string | null
+          type?: Database["public"]["Enums"]["ScanType"][] | null
           user_id?: string | null
         }
         Relationships: [
@@ -226,7 +229,12 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      ScanType:
+        | "activation"
+        | "creation"
+        | "owner_scan"
+        | "registered_user_scan"
+        | "non_registered_user_scan"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -243,6 +251,7 @@ export interface Database {
           id: string
           name: string
           owner: string | null
+          owner_id: string | null
           public: boolean | null
           updated_at: string | null
         }
@@ -254,6 +263,7 @@ export interface Database {
           id: string
           name: string
           owner?: string | null
+          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
@@ -265,17 +275,11 @@ export interface Database {
           id?: string
           name?: string
           owner?: string | null
+          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "buckets_owner_fkey"
-            columns: ["owner"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       migrations: {
         Row: {
@@ -307,6 +311,7 @@ export interface Database {
           metadata: Json | null
           name: string | null
           owner: string | null
+          owner_id: string | null
           path_tokens: string[] | null
           updated_at: string | null
           version: string | null
@@ -319,6 +324,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
+          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
@@ -331,6 +337,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
+          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null

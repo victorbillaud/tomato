@@ -63,6 +63,7 @@ describe('service scan module', () => {
         expect(data.id).toBeDefined();
         expect(data.user_id).toBeNull();
         expect(data.item_id).toBeDefined();
+        expect(data.type).toContain('non_registered_user_scan');
 
         globalThis.scansCreated.push(data);
     });
@@ -103,8 +104,32 @@ describe('service scan module', () => {
         expect(scan.id).toBeDefined();
         expect(scan.user_id).toBe(data.user.id);
         expect(scan.item_id).toBeDefined();
+        expect(scan.type).toContain("registered_user_scan");
 
         globalThis.scansCreated.push(scan);
     });
 
+    test('insert scan with array of types', async () => {
+        await signInFakeUser(sp);
+
+        const { data: scan, error: insertScanError } = await insertScan(sp, {
+            item_id: globalThis.insertedItem.id,
+            qrcode_id: globalThis.qrCode.id,
+            type: ["creation", "owner_scan"],
+        });
+
+        if (insertScanError) {
+            throw insertScanError;
+        }
+
+        // Assert each property of the object.
+        expect(scan).toBeDefined();
+        expect(scan.id).toBeDefined();
+        expect(scan.item_id).toBeDefined();
+        expect(scan.type).toContain("creation");
+        expect(scan.type).toContain("owner_scan");
+        expect(scan.type).toContain("registered_user_scan");
+
+        globalThis.scansCreated.push(scan);
+    });
 });

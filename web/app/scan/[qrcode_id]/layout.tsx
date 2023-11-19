@@ -10,11 +10,13 @@ import { redirect } from 'next/navigation';
 const handleScan = async (
   supabase: SupabaseClient<Database>,
   itemId: string | null,
-  qrCodeId: string
+  qrCodeId: string,
+  scanTypes: Database['public']['Enums']['ScanType'][] = []
 ) => {
   const { error } = await insertScan(supabase, {
     item_id: itemId,
     qrcode_id: qrCodeId,
+    type: scanTypes,
   });
 
   if (error) {
@@ -61,7 +63,10 @@ export default async function ScanLayout(props: {
 
   // Owner Flow
   if (!qrCode?.item_id) {
-    await handleScan(supabase, null, props.params.qrcode_id);
+    await handleScan(supabase, null, props.params.qrcode_id, [
+      'owner_scan',
+      'creation',
+    ]);
     return <>{props.creation}</>;
   } else {
     const { data: item, error: itemError } = await getItemFromQrCodeId(
@@ -74,13 +79,23 @@ export default async function ScanLayout(props: {
     }
 
     if (!item) {
+      await handleScan(supabase, null, props.params.qrcode_id, [
+        'owner_scan',
+        'creation',
+      ]);
       return <>{props.creation}</>;
     }
 
     if (item?.activated) {
+      await handleScan(supabase, item?.id, props.params.qrcode_id, [
+        'owner_scan',
+      ]);
       redirect(`/dashboard/item/${item.id}`);
     } else {
-      await handleScan(supabase, item?.id, props.params.qrcode_id);
+      await handleScan(supabase, item?.id, props.params.qrcode_id, [
+        'owner_scan',
+        'activation',
+      ]);
       return <>{props.activation}</>;
     }
   }
