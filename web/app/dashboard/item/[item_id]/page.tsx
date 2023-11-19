@@ -112,7 +112,12 @@ type TItemScanHistoryProps = {
 async function ItemScanHistory(props: TItemScanHistoryProps) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  const { data: scans, error } = await listScans(supabase, props.item.id);
+  // TODO: Find a way to show scans of item and related qrcode
+  const { data: scans, error } = await listScans(
+    supabase,
+    undefined,
+    props.item.qrcode_id || undefined
+  );
 
   if (error) {
     throw error;
