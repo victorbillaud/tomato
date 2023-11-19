@@ -1,4 +1,4 @@
-import { IconAlertHexagon, IconArrowLeft, IconAt, IconBrandDiscordFilled, IconBrandGoogleFilled, IconChevronCompactDown, IconDiscountCheck, IconDiscountCheckFilled, IconLoader, IconLock } from '@tabler/icons-react';
+import { IconAlertHexagon, IconArrowLeft, IconAt, IconBrandDiscordFilled, IconBrandGoogleFilled, IconChevronCompactDown, IconDiscountCheck, IconDiscountCheckFilled, IconLoader, IconLock, IconQrcode } from '@tabler/icons-react';
 
 const ICONS = {
     'arrow-left': IconArrowLeft,
@@ -11,6 +11,7 @@ const ICONS = {
     'chevron-compact-down': IconChevronCompactDown,
     'lock': IconLock,
     'at': IconAt,
+    'qrcode': IconQrcode,
 };
 
 export default ICONS;

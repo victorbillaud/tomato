@@ -57,7 +57,7 @@ export default async function ScanLayout(props: {
 
   // Finder Flow
   if (!user || user.id !== qrCode?.user_id) {
-    await handleScan(supabase, null, props.params.qrcode_id);
+    await handleScan(supabase, qrCode?.item_id || null, props.params.qrcode_id);
     return <>{props.children}</>;
   }
 

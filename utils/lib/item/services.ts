@@ -65,6 +65,25 @@ export async function getItemFromQrCodeId(
     return { data, error }
 }
 
+export async function getItem(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .select(`
+            *,
+            qrcode!qrcode_item_id_fkey (
+                *
+            )
+        `)
+        .eq('id', itemId)
+        .limit(1)
+        .single();
+
+    return { data, error }
+}
+
 export async function activateItem(
     supabaseInstance: SupabaseClient<Database>,
     itemId: string

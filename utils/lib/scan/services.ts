@@ -40,12 +40,23 @@ export async function deleteScan(
 
 export async function listScans(
     supabaseInstance: SupabaseClient<Database>,
-    qrcodeId: string
+    itemId?: string,
+    qrcodeId?: string
 ) {
-    const { data, error } = await supabaseInstance
+    let query = supabaseInstance
         .from('scan')
         .select('*')
-        .eq('qrcode_id', qrcodeId)
+        .order('created_at', { ascending: false })
+
+    if (itemId) {
+        query = query.eq('item_id', itemId)
+    }
+
+    if (qrcodeId) {
+        query = query.eq('qrcode_id', qrcodeId)
+    }
+
+    const { data, error } = await query
 
     return { data, error }
 }

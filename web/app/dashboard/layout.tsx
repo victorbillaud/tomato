@@ -38,7 +38,7 @@ export default async function DashboardLayout({
   return (
     <div className='flex w-full flex-1 flex-col items-center justify-start'>
       <DashboardNavBar />
-      <div className='mt-3 h-0.5 w-[95%] rounded-full border border-stone-200 opacity-50 dark:border-stone-700' />
+      {/* <div className='mt-3 h-0.5 w-[95%] rounded-full border border-stone-200 opacity-50 dark:border-stone-700' /> */}
       {children}
     </div>
   );
@@ -64,21 +64,16 @@ async function DashboardNavBar() {
             size='small'
           />
         </form>
-        {qrCodes && qrCodes.length > 0 ? (
-          <AddItemLink
-            text='Add item'
-            href={`/dashboard/item/create/${qrCodes[0].id}`}
-            target='_self'
-            size='small'
-          />
-        ) : (
-          <Text variant='caption' className='opacity-50'>
-            Buy a new QR Code to add an item
-          </Text>
-        )}
+        <AddItemLink
+          text='Add item'
+          href={`/dashboard/item/create/${
+            qrCodes && qrCodes.length ? qrCodes[0].id : ''
+          }`}
+          target='_self'
+          size='small'
+          disabled={qrCodes && qrCodes.length > 0 ? false : true}
+        />
       </div>
     </div>
   );
 }
-
-

@@ -1,6 +1,7 @@
 import { Button } from '@/components/common/button';
 import { InputText } from '@/components/common/input/InputText';
 import { StyledLink } from '@/components/common/link';
+import { Tag, tagsConfig } from '@/components/common/tag';
 import { Text } from '@/components/common/text';
 
 // Storybook
@@ -34,8 +35,18 @@ export default async function Index() {
         <div className='flex flex-col space-y-3'>
           <InputText labelText='Email' type='email' />
           <InputText labelText='Password' type='password' />
-          <InputText labelText='Email' type='email' error='Error' />
+          <InputText
+            labelText='Email'
+            type='email'
+            error
+            errorMessage='Error'
+          />
         </div>
+      </div>
+      <div className='flex flex-wrap gap-10'>
+        {Object.keys(tagsConfig).map((color) => (
+          <Tag key={color} text={color} color={color as any} size='small' />
+        ))}
       </div>
     </div>
   );
