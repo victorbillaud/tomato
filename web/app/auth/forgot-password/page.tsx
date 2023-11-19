@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/button';
+import { SubmitButton } from '@/components/common/button';
 import { InputText } from '@/components/common/input/InputText';
 import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
@@ -72,7 +72,7 @@ export default function ForgotPassword({
           </div>
         )}
         <div className='flex items-center justify-between'>
-          <Button
+          <SubmitButton
             variant='primary'
             type='submit'
             text='Change password'

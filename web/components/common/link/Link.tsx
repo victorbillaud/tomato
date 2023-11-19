@@ -19,7 +19,12 @@ export const StyledLink: FunctionComponent<ILinkProps> = ({
     props.className
   );
   return (
-    <Link passHref {...props} className={linkClassName}>
+    <Link
+      passHref
+      {...props}
+      href={props.disabled ? '#' : props.href}
+      className={linkClassName}
+    >
       {props.text}
     </Link>
   );

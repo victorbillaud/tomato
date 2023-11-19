@@ -1,5 +1,5 @@
 import AuthProviders from '@/components/AuthProviders';
-import { Button } from '@/components/common/button';
+import { SubmitButton } from '@/components/common/button';
 import { InputText } from '@/components/common/input/InputText';
 import { StyledLink } from '@/components/common/link';
 import { Text } from '@/components/common/text';
@@ -90,7 +90,7 @@ export default function Register({
             </div>
           )}
           <div className='flex items-center justify-between pt-3'>
-            <Button
+            <SubmitButton
               variant='primary'
               type='submit'
               text='Register'
