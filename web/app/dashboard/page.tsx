@@ -14,7 +14,7 @@ export default async function Dashboard() {
   }
 
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-start gap-3 p-1 py-3'>
+    <div className='flex w-full flex-1 flex-col items-center justify-start gap-3 py-3'>
       {items && items.length > 0 ? (
         <div className='grid w-full grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3'>
           {items.map((item) => (

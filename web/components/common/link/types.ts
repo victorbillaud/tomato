@@ -6,5 +6,6 @@ export interface ILinkProps extends LinkProps, React.HTMLAttributes<HTMLAnchorEl
     text: string;
     variant?: LinkVariant;
     size?: 'small' | 'medium' | 'large';    
+    disabled?: boolean;
     [key: string]: any;
 }

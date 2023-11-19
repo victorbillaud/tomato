@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/button';
+import { SubmitButton } from '@/components/common/button';
 import { Icon } from '@/components/common/icon';
 import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
@@ -53,7 +53,7 @@ export default async function Scan({
       </Text>
       <form action={handleActivation}>
         <input type='hidden' name='itemId' value={item.id} />
-        <Button
+        <SubmitButton
           type='submit'
           variant='primary'
           text='Activate'
