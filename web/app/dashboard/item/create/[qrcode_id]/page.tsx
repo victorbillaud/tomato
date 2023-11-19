@@ -1,4 +1,5 @@
 import { Button } from '@/components/common/button';
+import { SubmitButton } from '@/components/common/button/SubmitButton';
 import { Card } from '@/components/common/card';
 import { InputText } from '@/components/common/input/InputText';
 import { Text } from '@/components/common/text';
@@ -52,9 +53,9 @@ export default async function CreateItem({
   }
 
   return qrCode ? (
-    <div className='flex w-full flex-1 flex-col items-center justify-center gap-20'>
-      <div className='flex flex-col items-center justify-center gap-5'>
-        <Text variant='h3' className='text-center opacity-50'>
+    <div className='flex w-full flex-1 flex-col items-center justify-center gap-10'>
+      <div className='flex flex-col items-center justify-center py-5'>
+        <Text variant='body' className='text-center opacity-50'>
           This is now the time to create your item, you have 2 possibilities:
         </Text>
       </div>
@@ -84,7 +85,7 @@ export default async function CreateItem({
                 name='description'
                 placeholder='My phone'
               />
-              <Button
+              <SubmitButton
                 text='Create item'
                 variant='primary'
                 color='green'

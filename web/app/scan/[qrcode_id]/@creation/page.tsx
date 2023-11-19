@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/button';
+import { SubmitButton } from '@/components/common/button';
 import { InputText } from '@/components/common/input/InputText';
 import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
@@ -52,7 +52,7 @@ export default async function Scan({
             name='description'
             placeholder='My phone'
           />
-          <Button
+          <SubmitButton
             text='Create item'
             variant='secondary'
             color='green'

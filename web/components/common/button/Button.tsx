@@ -56,7 +56,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
       {...props}
     >
       {isLoader ? (
-        <div className='flex h-full w-full items-center justify-center pr-1'>
+        <div className='flex h-full w-full items-center justify-center px-3'>
           <div className='animate-spin'>
             <Icon
               name='loader'
