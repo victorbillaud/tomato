@@ -101,7 +101,7 @@ export async function activateItem(
 export async function updateItem(
     supabaseInstance: SupabaseClient<Database>,
     itemId: string,
-    item: Omit<Database["public"]["Tables"]["item"]["Update"], "id" | "created_at" | "user_id">
+    item: Omit<Database["public"]["Tables"]["item"]["Update"], "id" | "created_at" | "user_id" | "activated">
 ) {
     const { data, error } = await supabaseInstance
         .from('item')
@@ -112,9 +112,3 @@ export async function updateItem(
 
     return { data, error }
 }
-
-
-// TODO: Manage flow for item creations from QRCode.
-
-
-// TODO: Random name for qrcode

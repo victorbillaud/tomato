@@ -3,7 +3,7 @@ import { insertItem } from '../item/services';
 import { insertQRCode } from '../qrcode/services';
 import { signInFakeUser } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
-import { deleteScan, insertScan } from './services';
+import { deleteScan, insertScan, listScans } from './services';
 
 const sp = getSupabase();
 
@@ -131,5 +131,47 @@ describe('service scan module', () => {
         expect(scan.type).toContain("registered_user_scan");
 
         globalThis.scansCreated.push(scan);
+    });
+
+    test('list items scans', async () => {
+        for (let i = 0; i < 3; i++) {
+            await insertScan(sp, {
+                item_id: globalThis.insertedItem.id,
+                qrcode_id: globalThis.qrCode.id,
+            });
+        }
+
+        const { data, error } = await listScans(sp, globalThis.insertedItem.id);
+
+        if (error) {
+            throw error;
+        }
+
+        // Assert each property of the object.
+        expect(data).toBeDefined();
+        expect(data.length).toBeGreaterThan(0);
+
+        globalThis.scansCreated.push(...data);
+    });
+
+    test('list qrcode scans', async () => {
+        for (let i = 0; i < 3; i++) {
+            await insertScan(sp, {
+                item_id: null,
+                qrcode_id: globalThis.qrCode.id,
+            });
+        }
+
+        const { data, error } = await listScans(sp, null, globalThis.qrCode.id);
+
+        if (error) {
+            throw error;
+        }
+
+        // Assert each property of the object.
+        expect(data).toBeDefined();
+        expect(data.length).toBeGreaterThan(0);
+
+        globalThis.scansCreated.push(...data);
     });
 });
