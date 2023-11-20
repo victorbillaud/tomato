@@ -69,7 +69,7 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
   }
 
   return (
-    <div className='flex h-full w-full flex-col items-center justify-between gap-1'>
+    <div className='flex h-full w-full flex-col items-center justify-between gap-5'>
       <div className='flex w-full flex-col items-center justify-start gap-5'>
         <ItemStateBanner item={item} />
         <div className='flex w-full flex-col items-center justify-center gap-1 md:flex-row'>
@@ -140,7 +140,7 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
             )}
           </div>
           {item.qrcode[0].barcode_data && (
-            <QrCode url={item.qrcode[0].barcode_data} />
+            <QrCode url={item.qrcode[0].barcode_data} download />
           )}
         </div>
 
@@ -159,7 +159,7 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
             text='Declare item as lost'
             type='submit'
             variant='tertiary'
-            className='text-red-600'
+            className='text-red-600 dark:text-red-500'
           />
         </form>
       ) : (
