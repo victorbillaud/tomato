@@ -98,27 +98,14 @@ export async function activateItem(
     return { data, error }
 }
 
-export async function declareItemAsLost(
+export async function updateItem(
     supabaseInstance: SupabaseClient<Database>,
-    itemId: string
+    itemId: string,
+    item: Omit<Database["public"]["Tables"]["item"]["Update"], "id" | "created_at" | "user_id">
 ) {
     const { data, error } = await supabaseInstance
         .from('item')
-        .update({ lost: true, lost_at: new Date().toISOString() })
-        .eq('id', itemId)
-        .select('*')
-        .single();
-
-    return { data, error }
-}
-
-export async function declareItemAsFound(
-    supabaseInstance: SupabaseClient<Database>,
-    itemId: string
-) {
-    const { data, error } = await supabaseInstance
-        .from('item')
-        .update({ lost: false, lost_at: null, found: true, found_at: new Date().toISOString() })
+        .update(item)
         .eq('id', itemId)
         .select('*')
         .single();

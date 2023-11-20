@@ -1,14 +1,9 @@
 import { SubmitButton } from '@/components/common/button';
 import { Text } from '@/components/common/text';
-import { ItemScanHistory, ItemStateBanner } from '@/components/item';
+import { ItemInfo, ItemScanHistory, ItemStateBanner } from '@/components/item';
 import { QrCode } from '@/components/qrcode/QrCode';
 import { createClient } from '@/utils/supabase/server';
-import {
-  declareItemAsFound,
-  declareItemAsLost,
-  getItem,
-} from '@utils/lib/item/services';
-import dateFormat, { masks } from 'dateformat';
+import { getItem, updateItem } from '@utils/lib/item/services';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -20,7 +15,10 @@ async function handleDeclareLost(formData: FormData) {
   const supabase = createClient(cookieStore);
   const itemId = formData.get('item_id') as string;
 
-  const { data: item, error } = await declareItemAsLost(supabase, itemId);
+  const { data: item, error } = await updateItem(supabase, itemId, {
+    lost: true,
+    lost_at: new Date().toISOString(),
+  });
 
   if (error) {
     throw error;
@@ -41,7 +39,12 @@ async function handleDeclareFound(formData: FormData) {
   const supabase = createClient(cookieStore);
   const itemId = formData.get('item_id') as string;
 
-  const { data: item, error } = await declareItemAsFound(supabase, itemId);
+  const { data: item, error } = await updateItem(supabase, itemId, {
+    lost: false,
+    lost_at: null,
+    found: true,
+    found_at: new Date().toISOString(),
+  });
 
   if (error) {
     throw error;
@@ -72,73 +75,8 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
     <div className='flex h-full w-full flex-col items-center justify-between gap-5'>
       <div className='flex w-full flex-col items-center justify-start gap-5'>
         <ItemStateBanner item={item} />
-        <div className='flex w-full flex-col items-center justify-center gap-1 md:flex-row'>
-          <div className='flex w-full flex-col items-center justify-start gap-3'>
-            <div className={`flex w-full flex-row items-center justify-start`}>
-              <Text
-                variant='h3'
-                className='first-letter:capitalize'
-                weight={600}
-              >
-                {item.name}
-              </Text>
-            </div>
-            <div className='items-top flex w-full flex-row justify-between py-1'>
-              <div className='flex flex-col items-start justify-center'>
-                <Text
-                  variant='overline'
-                  className='text-center capitalize opacity-40'
-                >
-                  Description
-                </Text>
-                <Text
-                  variant='caption'
-                  weight={500}
-                  className='text-start opacity-70'
-                >
-                  {item.description}
-                </Text>
-              </div>
-            </div>
-            <div className='items-top flex w-full flex-row justify-between py-1'>
-              <div className='flex flex-col items-start justify-center'>
-                <Text
-                  variant='overline'
-                  className='text-center capitalize opacity-40'
-                >
-                  created at
-                </Text>
-                <Text
-                  variant='caption'
-                  weight={500}
-                  className='text-center opacity-70'
-                >
-                  {dateFormat(item.created_at, masks.default)}
-                </Text>
-              </div>
-            </div>
-            {item.lost_at && (
-              <div className='items-top flex w-full flex-row justify-between py-1'>
-                <div className='flex flex-col items-start justify-center'>
-                  <Text
-                    variant='overline'
-                    className='text-center capitalize opacity-40'
-                    color='text-red-500'
-                  >
-                    lost at
-                  </Text>
-                  <Text
-                    variant='caption'
-                    weight={500}
-                    className='text-center opacity-70'
-                    color='text-red-500'
-                  >
-                    {dateFormat(item.lost_at, masks.default)}
-                  </Text>
-                </div>
-              </div>
-            )}
-          </div>
+        <div className='flex w-full flex-col items-center justify-center gap-5 md:flex-row'>
+          <ItemInfo item={item} />
           {item.qrcode[0].barcode_data && (
             <QrCode url={item.qrcode[0].barcode_data} download />
           )}
