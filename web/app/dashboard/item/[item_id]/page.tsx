@@ -1,10 +1,8 @@
 import { Icon } from '@/components/common/icon';
-import { TTagColor, Tag } from '@/components/common/tag';
 import { Text } from '@/components/common/text';
+import { ItemScanHistory } from '@/components/item';
 import { createClient } from '@/utils/supabase/server';
 import { getItem } from '@utils/lib/item/services';
-import { listScans } from '@utils/lib/scan/services';
-import { Database } from '@utils/lib/supabase/supabase_types';
 import dateFormat, { masks } from 'dateformat';
 import { cookies } from 'next/headers';
 
@@ -101,99 +99,6 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
           No scan history
         </Text>
       )}
-    </div>
-  );
-}
-
-type TItemScanHistoryProps = {
-  item: Database['public']['Tables']['item']['Row'];
-};
-
-async function ItemScanHistory(props: TItemScanHistoryProps) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  // TODO: Find a way to show scans of item and related qrcode
-  const { data: scans, error } = await listScans(
-    supabase,
-    undefined,
-    props.item.qrcode_id || undefined
-  );
-
-  if (error) {
-    throw error;
-  }
-
-  if (!scans) {
-    throw new Error('Scans not found');
-  }
-
-  return (
-    <div className='flex w-full flex-col items-center justify-start gap-3'>
-      <div className={`flex w-full flex-row items-center justify-between`}>
-        <Text variant='body' weight={600}>
-          Scans history
-        </Text>
-      </div>
-      {scans.length > 0 ? (
-        <div className='w-full divide-y divide-stone-300 rounded-md border border-stone-300 dark:divide-stone-700 dark:border-stone-700'>
-          {scans.map((scan) => (
-            <ItemScanHistoryItem scan={scan} key={scan.id} />
-          ))}
-        </div>
-      ) : (
-        <Text variant='caption' className='opacity-50'>
-          This item has not been scanned yet
-        </Text>
-      )}
-    </div>
-  );
-}
-
-interface IItemScanHistoryItemProps {
-  scan: Database['public']['Tables']['scan']['Row'];
-}
-
-function ItemScanHistoryItem(props: IItemScanHistoryItemProps) {
-  const tagsTypes: Record<Database['public']['Enums']['ScanType'], TTagColor> =
-    {
-      activation: 'green',
-      creation: 'green',
-      owner_scan: 'blue',
-      registered_user_scan: 'orange',
-      non_registered_user_scan: 'red',
-    };
-
-  const tagsLabels: Record<Database['public']['Enums']['ScanType'], string> = {
-    activation: 'Activation',
-    creation: 'Creation',
-    owner_scan: 'Yours',
-    registered_user_scan: 'Registered user',
-    non_registered_user_scan: 'Anonymous user',
-  };
-
-  return (
-    <div
-      key={props.scan.id}
-      className={`flex w-full flex-col items-center justify-start gap-3 p-2 md:flex-row`}
-    >
-      <div className='flex w-full flex-row items-center justify-start gap-3'>
-        <Text variant='caption' weight={400}>
-          {`${dateFormat(
-            props.scan.created_at,
-            masks.shortDate
-          )} - ${dateFormat(props.scan.created_at, masks.shortTime)}`}
-        </Text>
-      </div>
-      <div className='flex w-full flex-row items-center justify-start gap-1 md:justify-end'>
-        {props.scan.type?.map((type) => (
-          <Tag
-            text={tagsLabels[type]}
-            color={tagsTypes[type]}
-            size='small'
-            key={type}
-          />
-        ))}
-      </div>
     </div>
   );
 }
