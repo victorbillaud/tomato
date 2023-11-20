@@ -98,6 +98,34 @@ export async function activateItem(
     return { data, error }
 }
 
+export async function declareItemAsLost(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .update({ lost: true, lost_at: new Date().toISOString() })
+        .eq('id', itemId)
+        .select('*')
+        .single();
+
+    return { data, error }
+}
+
+export async function declareItemAsFound(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .update({ lost: false, lost_at: null, found: true, found_at: new Date().toISOString() })
+        .eq('id', itemId)
+        .select('*')
+        .single();
+
+    return { data, error }
+}
+
 
 // TODO: Manage flow for item creations from QRCode.
 

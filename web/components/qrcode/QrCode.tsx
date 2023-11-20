@@ -33,7 +33,13 @@ export const QrCode: React.FC<QrCodeProps> = ({ url, size = 250 }) => {
             className='rounded-md shadow-md'
           />
         ) : (
-          <div className='h-72 w-72 animate-pulse rounded-md bg-stone-300 dark:bg-stone-700' />
+          <div
+            className='animate-pulse rounded-md bg-stone-300 dark:bg-stone-700'
+            style={{
+              width: size,
+              height: size,
+            }}
+          />
         )}
       </div>
     </div>
