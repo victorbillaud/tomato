@@ -1,12 +1,12 @@
 import { createClient } from '@/utils/supabase/server';
 import { updateItem } from '@utils/lib/item/services';
-import { Database } from '@utils/lib/supabase/supabase_types';
 import dateFormat, { masks } from 'dateformat';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { InputTextForm } from '../common/input';
 import { Text } from '../common/text';
+import { IItemInfoProps } from './types';
 
 async function handleUpdate(formData: FormData) {
   'use server';
@@ -31,10 +31,6 @@ async function handleUpdate(formData: FormData) {
 
   revalidatePath(`/dashboard/item/${item.id}`);
   redirect(`/dashboard/item/${item.id}`);
-}
-
-interface IItemInfoProps {
-  item: Database['public']['Tables']['item']['Row'];
 }
 
 export function ItemInfo({ item }: IItemInfoProps) {

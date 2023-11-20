@@ -2,10 +2,8 @@ import { Database } from '@utils/lib/supabase/supabase_types';
 import dateFormat, { masks } from 'dateformat';
 import { TTagColor, Tag } from '../common/tag';
 import { Text } from '../common/text';
+import { IItemScanHistoryItemProps } from './types';
 
-interface IItemScanHistoryItemProps {
-  scan: Database['public']['Tables']['scan']['Row'];
-}
 
 export function ItemScanHistoryItem(props: IItemScanHistoryItemProps) {
   const tagsTypes: Record<Database['public']['Enums']['ScanType'], TTagColor> =

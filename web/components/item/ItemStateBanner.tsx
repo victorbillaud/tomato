@@ -1,10 +1,6 @@
-import { Database } from '@utils/lib/supabase/supabase_types';
 import { Icon } from '../common/icon';
 import { Text } from '../common/text';
-
-interface IItemStateManagerProps {
-  item: Database['public']['Tables']['item']['Row'];
-}
+import { IItemStateManagerProps } from './types';
 
 export async function ItemStateBanner(props: IItemStateManagerProps) {
   return (

@@ -1,13 +1,10 @@
 import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
 import { listScans } from '@utils/lib/scan/services';
-import { Database } from '@utils/lib/supabase/supabase_types';
 import { cookies } from 'next/headers';
 import { ItemScanHistoryItem } from './ItemScanHistoryItem';
+import { TItemScanHistoryProps } from './types';
 
-type TItemScanHistoryProps = {
-  item: Database['public']['Tables']['item']['Row'];
-};
 
 export async function ItemScanHistory(props: TItemScanHistoryProps) {
   const cookieStore = cookies();
