@@ -39,8 +39,6 @@ export interface Database {
           activated: boolean
           created_at: string
           description: string | null
-          found: boolean
-          found_at: string | null
           id: string
           lost: boolean
           lost_at: string | null
@@ -52,8 +50,6 @@ export interface Database {
           activated?: boolean
           created_at?: string
           description?: string | null
-          found?: boolean
-          found_at?: string | null
           id?: string
           lost?: boolean
           lost_at?: string | null
@@ -65,8 +61,6 @@ export interface Database {
           activated?: boolean
           created_at?: string
           description?: string | null
-          found?: boolean
-          found_at?: string | null
           id?: string
           lost?: boolean
           lost_at?: string | null

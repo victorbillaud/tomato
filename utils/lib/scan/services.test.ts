@@ -133,6 +133,38 @@ describe('service scan module', () => {
         globalThis.scansCreated.push(scan);
     });
 
+    test('insert scan with array of types with duplicates', async () => {
+        await signInFakeUser(sp);
+
+        const { data: scan, error: insertScanError } = await insertScan(sp, {
+            item_id: globalThis.insertedItem.id,
+            qrcode_id: globalThis.qrCode.id,
+            type: ["creation", "owner_scan", "owner_scan"],
+        });
+
+        // Should raise an error.
+        expect(insertScanError).toBeDefined();
+
+        // Assert each property of the object.
+        expect(scan).toBeNull();
+    });
+
+    test('insert scan with array of types with unknown user and registered user', async () => {
+        await signInFakeUser(sp);
+
+        const { data: scan, error: insertScanError } = await insertScan(sp, {
+            item_id: globalThis.insertedItem.id,
+            qrcode_id: globalThis.qrCode.id,
+            type: ["creation", "non_registered_user_scan"],
+        });
+
+        // Should raise an error.
+        expect(insertScanError).toBeDefined();
+
+        // Assert each property of the object.
+        expect(scan).toBeNull();
+    });
+
     test('list items scans', async () => {
         for (let i = 0; i < 3; i++) {
             await insertScan(sp, {

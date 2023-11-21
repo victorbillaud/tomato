@@ -42,8 +42,6 @@ async function handleDeclareFound(formData: FormData) {
   const { data: item, error } = await updateItem(supabase, itemId, {
     lost: false,
     lost_at: null,
-    found: true,
-    found_at: new Date().toISOString(),
   });
 
   if (error) {
