@@ -65,6 +65,25 @@ export async function getItemFromQrCodeId(
     return { data, error }
 }
 
+export async function getItem(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .select(`
+            *,
+            qrcode!qrcode_item_id_fkey (
+                *
+            )
+        `)
+        .eq('id', itemId)
+        .limit(1)
+        .single();
+
+    return { data, error }
+}
+
 export async function activateItem(
     supabaseInstance: SupabaseClient<Database>,
     itemId: string
@@ -79,8 +98,17 @@ export async function activateItem(
     return { data, error }
 }
 
+export async function updateItem(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string,
+    item: Omit<Database["public"]["Tables"]["item"]["Update"], "id" | "created_at" | "user_id" | "activated">
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .update(item)
+        .eq('id', itemId)
+        .select('*')
+        .single();
 
-// TODO: Manage flow for item creations from QRCode.
-
-
-// TODO: Random name for qrcode
+    return { data, error }
+}

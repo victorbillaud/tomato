@@ -68,7 +68,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
       ) : (
         <>
           {icon && (
-            <div className='pr-2'>
+            <div className='px-1'>
               <Icon
                 name={icon}
                 size={iconSize[size]}
