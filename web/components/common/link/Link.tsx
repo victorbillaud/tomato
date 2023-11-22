@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
+import { Icon } from '../icon';
 import { ILinkProps, LinkVariant } from './types';
 
 export const StyledLink: FunctionComponent<ILinkProps> = ({
@@ -25,6 +26,9 @@ export const StyledLink: FunctionComponent<ILinkProps> = ({
       href={props.disabled ? '#' : props.href}
       className={linkClassName}
     >
+      {props.icon && (
+        <Icon name={props.icon} size={getIconSize(size)} className='mr-2' />
+      )}
       {props.text}
     </Link>
   );
@@ -38,6 +42,17 @@ const getLinkSize = (size: 'small' | 'medium' | 'large') => {
       return 'h-10 px-4 text-sm';
     case 'large':
       return 'h-12 px-6 text-base';
+  }
+};
+
+const getIconSize = (size: 'small' | 'medium' | 'large') => {
+  switch (size) {
+    case 'small':
+      return 18;
+    case 'medium':
+      return 20;
+    case 'large':
+      return 22;
   }
 };
 

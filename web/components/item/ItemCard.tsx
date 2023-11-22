@@ -11,7 +11,7 @@ export const ItemCard: React.FC<IItemCardProps> = ({ item }) => {
       className={`flex flex-col items-center justify-center divide-y divide-stone-300 rounded-lg border border-stone-300 bg-stone-100 shadow-sm dark:divide-stone-700 dark:border-stone-700 dark:bg-stone-900`}
     >
       {item.lost ? (
-        <div className='-mb-2 flex w-full flex-row items-center justify-center gap-1 rounded-t-md bg-primary-600 p-2 pb-3'>
+        <div className='-mb-2 flex w-full flex-row items-center justify-center gap-1 rounded-t-md bg-red-600 p-2 pb-3'>
           <Text
             variant='caption'
             weight={400}
@@ -23,7 +23,7 @@ export const ItemCard: React.FC<IItemCardProps> = ({ item }) => {
           <Icon name='alert' size={24} color='text-white/90' stroke={2} />
         </div>
       ) : !item.activated ? (
-        <div className='-mb-2 flex w-full flex-row items-center justify-center gap-1 rounded-t-md bg-orange-500/80 p-2 pb-3'>
+        <div className='-mb-2 flex w-full flex-row items-center justify-center gap-1 rounded-t-md bg-orange-500 p-2 pb-3'>
           <Text
             variant='caption'
             weight={400}
@@ -45,7 +45,7 @@ export const ItemCard: React.FC<IItemCardProps> = ({ item }) => {
           item.lost || !item.activated ? 'rounded-t-lg' : 'rounded-t-lg'
         } bg-stone-200/70 p-2 py-3 backdrop-blur-md dark:bg-stone-800/90`}
       >
-        <Text variant='body' weight={600}>
+        <Text variant='body' className='first-letter:capitalize' weight={600}>
           {item.name}
         </Text>
       </div>

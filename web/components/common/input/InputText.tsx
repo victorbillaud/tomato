@@ -2,7 +2,8 @@ import classNames from 'classnames';
 import React from 'react';
 import { Icon, IconNames } from '../icon';
 import { Text } from '../text';
-interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface IInputTextProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   labelText?: string;
   error?: boolean;
   errorMessage?: string;
@@ -10,7 +11,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: IconNames;
 }
 
-export const InputText = React.forwardRef<HTMLInputElement, IProps>(
+export const InputText = React.forwardRef<HTMLInputElement, IInputTextProps>(
   (
     {
       className,
