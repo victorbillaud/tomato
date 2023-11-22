@@ -20,6 +20,7 @@ export default async function Index() {
         </Text>
       )}
       <StyledLink href={'/ui'} text='UI/Theme' variant='primary' />
+      <StyledLink href={'/chat'} text='Chat' variant='primary' />
     </div>
   );
 }
