@@ -1,16 +1,10 @@
 'use client';
 
-import { IConversation, IMessage } from './types';
+import { IChatProps, IMessage } from './types';
 import fakeData from '@/components/chat/fakeData.json';
 import Message from './Message';
-import { User } from '@supabase/supabase-js';
 
-type ChatProps = {
-  conversation: IConversation | null;
-  currentUser: User | null;
-};
-
-const Chat = ({ conversation, currentUser }: ChatProps) => {
+const Chat = ({ conversation, currentUser }: IChatProps) => {
   // TODO charger les messages de la conversation
   const messages: IMessage[] = fakeData.messages.filter(
     (message) => message.conversation_id === conversation?.id

@@ -1,11 +1,6 @@
-import { IMessage } from './types';
+import { IMessageProps } from './types';
 
-type MessageProps = {
-  message: IMessage;
-  isSent?: boolean;
-};
-
-const Message = ({ message, isSent = false }: MessageProps) => {
+const Message = ({ message, isSent = false }: IMessageProps) => {
   const messageColor = isSent ? 'bg-primary-900' : 'bg-primary-400';
   const messageStyle = isSent ? 'self-end items-end' : 'self-start items-start';
 

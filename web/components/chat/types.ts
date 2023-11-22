@@ -1,3 +1,4 @@
+import { User } from '@supabase/supabase-js';
 import { Database } from '@utils/lib/supabase/supabase_types';
 
 // ! A supprimer !
@@ -16,7 +17,7 @@ export interface IConversation {
   created_at: Date;
   item_owner: Database['public']['Tables']['profiles']['Row'];
   item_id: string;
-  participants: Array<Database['public']['Tables']['profiles']['Row']>;
+  participants: Array<Database['public']['Tables']['profiles']['Row']>; // autres personnes dans la conversation (minimum 1)
   last_message: IMessage; // TODO : Supabase function
 }
 
@@ -26,4 +27,14 @@ export interface IMessage {
   content: string;
   created_at: Date | string; // supprimer le string
   user_id: string; // sender id
+}
+
+export interface IChatProps {
+  conversation: IConversation | null;
+  currentUser: User | null;
+}
+
+export interface IMessageProps {
+  message: IMessage;
+  isSent?: boolean;
 }
