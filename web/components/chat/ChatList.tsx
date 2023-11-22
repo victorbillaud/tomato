@@ -16,8 +16,15 @@ export default async function ChatList() {
     (chat) => chat.item_owner.id === user?.id
   );
 
+  // sort conversations by last message date & time (newest first)
+  conversations.sort((a, b) => {
+    const dateA = new Date(a.last_message.created_at);
+    const dateB = new Date(b.last_message.created_at);
+    return dateB.getTime() - dateA.getTime();
+  });
+
   return (
-    <div className='flex h-full w-2/5 flex-col divide-y-2 divide-gray-700 dark:divide-white'>
+    <div className='flex h-full w-1/3 flex-col divide-y-2 divide-gray-700 dark:divide-white'>
       <Text variant={'h2'} className='pb-6 pt-2'>
         Conversations
       </Text>
@@ -34,7 +41,10 @@ export default async function ChatList() {
               ')'}
           </Text>
           <Text key={conversation.id} variant={'body'}>
-            {conversation.last_message.content}
+            <Text key={conversation.id} variant={'body'} className='truncate'>
+              {conversation.last_message.user_id === user?.id ? 'You: ' : ''}
+              {conversation.last_message.content}
+            </Text>
           </Text>
         </Link>
       ))}

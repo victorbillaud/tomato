@@ -8,9 +8,7 @@ export default function ChatLayout(props: {
   return (
     <div className='flex h-full w-full'>
       {props.chatList}
-      <div className='flex h-full w-full flex-col justify-end'>
-        {props.chat}
-      </div>
+      <div className='flex h-full w-2/3 flex-col justify-end'>{props.chat}</div>
     </div>
   );
 }
