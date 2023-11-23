@@ -7,10 +7,10 @@ settings:
 dependencies:
   '@supabase/ssr':
     specifier: latest
-    version: 0.0.10(@supabase/supabase-js@2.38.4)
+    version: 0.0.10(@supabase/supabase-js@2.38.5)
   '@supabase/supabase-js':
     specifier: latest
-    version: 2.38.4
+    version: 2.38.5
   '@tabler/icons-react':
     specifier: ^2.40.0
     version: 2.40.0(react@18.2.0)
@@ -339,12 +339,12 @@ packages:
       - supports-color
     dev: false
 
-  /@supabase/ssr@0.0.10(@supabase/supabase-js@2.38.4):
+  /@supabase/ssr@0.0.10(@supabase/supabase-js@2.38.5):
     resolution: {integrity: sha512-eVs7+bNlff8Fd79x8K3Jbfpmf8P8QRA1Z6rUDN+fi4ReWvRBZyWOFfR6eqlsX6vTjvGgTiEqujFSkv2PYW5kbQ==}
     peerDependencies:
       '@supabase/supabase-js': ^2.33.1
     dependencies:
-      '@supabase/supabase-js': 2.38.4
+      '@supabase/supabase-js': 2.38.5
       cookie: 0.5.0
       ramda: 0.29.1
     dev: false
@@ -355,8 +355,8 @@ packages:
       '@supabase/node-fetch': 2.6.15
     dev: false
 
-  /@supabase/supabase-js@2.38.4:
-    resolution: {integrity: sha512-bYwxm/GosvRqOMIv6YP7qUTZWi/trgHtDWUEZDEmyRHW24d0JYIb1GOt6RaO2hsWlecn88DAJIpjoNbprocgRA==}
+  /@supabase/supabase-js@2.38.5:
+    resolution: {integrity: sha512-QTXld3AfwAJgeOGyOKsCcT7AjC3jJxN02iHy299Fw+qKX0lJ1tVVhMGlga101C1stUCvgzjcypmMSGiZ2oeKsw==}
     dependencies:
       '@supabase/functions-js': 2.1.5
       '@supabase/gotrue-js': 2.57.0
