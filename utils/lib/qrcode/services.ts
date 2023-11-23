@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "../supabase/supabase_types";
+import { generateQRCodeName } from "../common";
 
 export async function insertQRCode(
     supabaseInstance: SupabaseClient<Database>,
@@ -7,6 +8,7 @@ export async function insertQRCode(
 ): Promise<ReturnType<typeof createQrCodeImage>> {
     const qrCodeObject: Database["public"]["Tables"]["qrcode"]["Insert"] = {
         user_id: qrCode.user_id,
+        name: qrCode.name || generateQRCodeName()
     };
 
     const { data, error } = await supabaseInstance

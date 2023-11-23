@@ -1,2 +1,2 @@
-export * from "./date"
-export * from "./envService"
+export * from './envService';
+export * from './generateQrcodeName';
