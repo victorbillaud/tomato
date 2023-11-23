@@ -4,8 +4,6 @@ import subprocess
 
 from dotenv import load_dotenv
 
-load_dotenv()
-
 
 def parse_command(commands):
     """Parse the cli arguments and return them"""
@@ -27,6 +25,7 @@ def parse_command(commands):
 
 
 def generate_supabase_types():
+    """Generates the supabase database types for typescript development"""
     project_id = os.environ.get("SUPABASE_PROJECT_ID")
     f = open("./utils/lib/supabase/supabase_types.ts", "w")
     if not project_id:
@@ -67,9 +66,67 @@ def generate_supabase_types():
         stdout=f,
     )
 
+def apply_db_change_to_migration(migration_name: str):
+    """Create a new migration with your local db schema changes"""
+    user_choice = input(
+        f"Do you want to create a new migration named '{migration_name}'? (y/n): "
+    )
+    if user_choice == "y":
+        subprocess.run(["supabase", "db", "diff", "-f", migration_name])
+
+def migrate_db_changes():
+    """Apply pending database migration to your local supabase instance"""
+    subprocess.run(["supabase", "migration", "up", "--local"])
+
+def reset_database():
+    """Reset your local database and apply all the migrations"""
+    user_choice = input(
+        "Are you sure you want to reset your local database ? (y/n): "
+    )
+    if user_choice == "y":
+        subprocess.run(["supabase", "db", "reset"])
+
+def install_dependencies():
+    """Install all the project dependencies needed by node.js"""
+    # Move to utils directory
+    os.chdir('./utils')
+    # Install node dependencies via pnpm
+    subprocess.run(["pnpm", "install"])
+    # Move to web directory
+    os.chdir('../web')
+    # Install node dependencies via pnpm
+    subprocess.run(["pnpm", "install"])
+    # Move back to original directory
+    os.chdir('../')
+
+def start_supabase():
+    """Start the supabase local instance with the environments loaded"""
+    # TODO check the envs and give better error message
+    # Move to supabase directory
+    os.chdir('./supabase')
+    # Start supabase local install
+    subprocess.run(["supabase", "start"])
+    # Move back to original directory
+    os.chdir('../')
+
+def stop_supabase():
+    """Stop the supabase local instance"""
+    # TODO check the envs and give better error message
+    # Move to supabase directory
+    os.chdir('./supabase')
+    # Stop the supabase local install
+    subprocess.run(["supabase", "stop"])
+    # Move back to original directory
+    os.chdir('../')
 
 COMMANDS = {
     "db_types": generate_supabase_types,
+    "db_apply": apply_db_change_to_migration,
+    "db_reset": reset_database,
+    "db_migrate": migrate_db_changes,
+    "setup": install_dependencies,
+    "start": start_supabase,
+    "stop": stop_supabase,
 }
 
 
@@ -79,6 +136,9 @@ def main():
 
     # Change the current working directory to the script directory
     os.chdir(script_dir)
+    os.chdir('../')
+    load_dotenv("./.env")
+    load_dotenv('./supabase/.env')
 
     # Rest of your main function follows
     args = parse_command(COMMANDS)
