@@ -8,7 +8,7 @@ interface AuthContextType {
 	user: User | null
 	loading: boolean
 	signIn: (email: string, password: string) => Promise<void>
-	signInWithProvider: (provider: Provider) => Promise<void>
+	//signInWithProvider: (provider: Provider) => Promise<void>
 	signOut: () => Promise<void>
 }
 
@@ -54,13 +54,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 				}
 				setUser(data?.user ?? null);
 			},
-			signInWithProvider: async (provider: Provider) => {
+			/*signInWithProvider: async (provider: Provider) => {
 				const {error} = await supabase.auth.signInWithOAuth({ provider })
 				if (error) {
 					console.error(error)
 					return
 				}
-			},
+			},*/
 			signOut: async () => {
 				await supabase.auth.signOut()
 			},
