@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { Provider, User } from '@supabase/gotrue-js'
-import { supabase } from "../../utils/client"
+import {createSupabaseClient} from "../../utils/client"
 import { styles } from "../../constants/Styles";
 import { Text } from "../Themed";
 
@@ -21,6 +21,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [user, setUser] = useState<User | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
+	const supabase = createSupabaseClient();
 
 	useEffect(() => {
 		// initial fetch of session
