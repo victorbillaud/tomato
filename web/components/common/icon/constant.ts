@@ -19,6 +19,7 @@ const ICONS = {
     'check': IconCheck,
     'chevron-down': IconChevronDown,
     'chevron-up': IconChevronUp,
+  send: IconSend,
 };
 
 export default ICONS;
