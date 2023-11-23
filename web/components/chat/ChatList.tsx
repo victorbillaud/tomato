@@ -40,8 +40,8 @@ export default async function ChatList() {
               conversation.participants[0].id +
               ')'}
           </Text>
-          <Text key={conversation.id} variant={'body'}>
-            <Text key={conversation.id} variant={'body'} className='truncate'>
+          <Text variant={'body'}>
+            <Text variant={'body'} className='truncate'>
               {conversation.last_message.user_id === user?.id ? 'You: ' : ''}
               {conversation.last_message.content}
             </Text>

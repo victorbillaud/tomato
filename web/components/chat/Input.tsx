@@ -1,5 +1,11 @@
+import { InputText } from '../common/input';
+
 const Input = () => {
-  return <div className='bg-slate-200'>Input</div>;
+  return (
+    <>
+      <InputText placeholder='Type a message' />
+    </>
+  );
 };
 
 export default Input;
