@@ -8,7 +8,6 @@ export default async function Page(props: {
   children: React.ReactNode;
   searchParams: { message: string; next: string };
 }) {
-
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const {
@@ -18,7 +17,6 @@ export default async function Page(props: {
   if (user) {
     redirect('/user');
   }
-
 
   return (
     <>
