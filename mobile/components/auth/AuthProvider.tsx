@@ -3,6 +3,7 @@ import { Provider, User } from '@supabase/gotrue-js'
 import {createSupabaseClient} from "../../utils/client"
 import { styles } from "../../constants/Styles";
 import { Text } from "../Themed";
+import {Alert} from "react-native";
 
 interface AuthContextType {
 	user: User | null
@@ -42,6 +43,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		return () => { listener.subscription?.unsubscribe() }
 	}, [])
 
+	const InvalidCredentialsAlert = () =>
+		Alert.alert('Invalid credentials');
+
 	return (
 		<AuthContext.Provider value={{
 			user,
@@ -49,7 +53,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			signIn: async (email: string, password: string) => {
 				const {data, error} = await supabase.auth.signInWithPassword({ email, password });
 				if (error) {
-					console.error(error)
+					if(error.message === 'Invalid login credentials') {InvalidCredentialsAlert()}
+					else{console.error(error)}
 					return
 				}
 				setUser(data?.user ?? null);
