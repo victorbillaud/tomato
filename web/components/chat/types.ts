@@ -37,4 +37,6 @@ export interface IChatProps {
 export interface IMessageProps {
   message: IMessage;
   isSent?: boolean;
+  firstMessage?: boolean;
+  lastMessage?: boolean;
 }
