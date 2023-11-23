@@ -10,8 +10,8 @@ export default async function Index() {
   } = await supabase.auth.getUser();
 
   return (
-    <>
+    <div className='flex h-full w-2/3 flex-col justify-end'>
       <Chat conversation={null} currentUser={user} />
-    </>
+    </div>
   );
 }
