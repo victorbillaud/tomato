@@ -43,6 +43,7 @@ export interface Database {
           lost: boolean
           lost_at: string | null
           name: string
+          notify_anyway: boolean
           qrcode_id: string | null
           user_id: string
         }
@@ -54,6 +55,7 @@ export interface Database {
           lost?: boolean
           lost_at?: string | null
           name: string
+          notify_anyway?: boolean
           qrcode_id?: string | null
           user_id: string
         }
@@ -65,6 +67,7 @@ export interface Database {
           lost?: boolean
           lost_at?: string | null
           name?: string
+          notify_anyway?: boolean
           qrcode_id?: string | null
           user_id?: string
         }
