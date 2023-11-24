@@ -3,6 +3,7 @@ import { SubmitButton } from '@/components/common/button/SubmitButton';
 import { Card } from '@/components/common/card';
 import { InputText } from '@/components/common/input/InputText';
 import { Text } from '@/components/common/text';
+import NameSelector from '@/components/qrcode/NameSelector';
 import { QrCode } from '@/components/qrcode/QrCode';
 import { createClient } from '@/utils/supabase/server';
 import { insertItem } from '@utils/lib/item/services';
@@ -43,6 +44,12 @@ export default async function CreateItem({
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const { data: qrCode, error } = await getQRCode(supabase, params.qrcode_id);
+  const codes = [
+    { id: 1, name: 'test' },
+    { id: 2, name: 'test2' },
+    { id: 3, name: 'test3' },
+    { id: 4, name: 'test4' },
+  ];
 
   if (error) {
     throw new Error("This QR Code doesn't exist or is not yours");
@@ -62,6 +69,7 @@ export default async function CreateItem({
 
       <div className='flex w-full flex-col-reverse items-center justify-between gap-10 md:flex-row'>
         <div className='flex w-full flex-col items-center justify-center gap-10'>
+          <NameSelector values={codes.map((code) => ({name: code.name, id: code.id.toString()}))} />
           {qrCode.barcode_data && <QrCode url={qrCode.barcode_data} />}
           <Text variant='body' className='text-center opacity-50'>
             Scan this QR Code with your phone and follow the instructions
