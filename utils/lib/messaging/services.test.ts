@@ -139,7 +139,36 @@ describe('service messaging module', () => {
         expect(data[0]).toHaveProperty('owner_id');
         expect(data[0]).toHaveProperty('finder_id');
         expect(data[0]).toHaveProperty('item_id');
-        expect(data[0]).toHaveProperty('last_message');
+        expect(data[0].last_message).toBeInstanceOf(Object);
+    
+        await sp.auth.signOut();
+        await deleteFakeUser(sp, finder.id);
+        const deletedConversation = await sp.from('conversation').delete().eq('id', insertedConversation.id).select('*').single();
+        expect(deletedConversation.data).toBeDefined();
+    });
+
+    test('list user conversations without last message', async () => {
+        await signInFakeUser(sp);
+        const { user: finder } = await createFakeUser(sp, "finder@example.com");
+
+        const { insertedConversation, error: insertConversationError } = await insertConversation(sp, {
+            finder_id: finder.id,
+            item_id: globalThis.insertedItem.id,
+        });
+
+        if (insertConversationError) {
+            throw insertConversationError;
+        }
+
+        const {data, error} = await listUserConversations(sp);
+
+        expect(error).toBeNull();
+        expect(data).toBeDefined();
+        expect(data).toHaveLength(1);
+        expect(data[0]).toHaveProperty('owner_id');
+        expect(data[0]).toHaveProperty('finder_id');
+        expect(data[0]).toHaveProperty('item_id');
+        expect(data[0].last_message).toBeNull();
     
         await sp.auth.signOut();
         await deleteFakeUser(sp, finder.id);

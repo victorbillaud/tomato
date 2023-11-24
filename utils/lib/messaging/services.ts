@@ -1,9 +1,22 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "../supabase/supabase_types";
+
+type ArrayElementType<T> = T extends (infer U)[] ? U : never;
+
+type TConversation = ArrayElementType<Database["public"]["Functions"]["get_user_conversations_with_last_message"]["Returns"]> & {
+    last_message: {
+        content: string;
+        created_at: string;
+        sender_id: string;
+    } | null;
+}
 
 export async function listUserConversations(
     supabaseInstance: SupabaseClient<Database>,
-) {
+): Promise<{
+    data: TConversation[],
+    error: PostgrestError | null
+}> {
     const { data: { user } } = await supabaseInstance.auth.getUser();
 
     const { data, error } = await supabaseInstance
@@ -11,7 +24,7 @@ export async function listUserConversations(
             user_id: user.id,
         })
 
-    return { data, error }
+    return { data, error } as { data: TConversation[], error: PostgrestError | null }
 }
 
 export async function insertConversation(
