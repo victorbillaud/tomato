@@ -13,6 +13,10 @@ export interface IItemInfoProps {
     item: ItemType;
 }
 
+export interface IItemSettingsProps {
+    item: ItemType;
+}
+
 export interface TItemScanHistoryProps {
     item: ItemType;
 };
