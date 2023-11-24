@@ -5,41 +5,37 @@ import { createClient } from '@/utils/supabase/server';
 import { insertMessage } from '@utils/lib/messaging/services';
 import { revalidatePath } from 'next/cache';
 
-async function Input(props: { conversation_id: string }) {
+const sendMessage = async (formData: FormData) => {
+  'use server';
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
-  const sendMessage = async (formData: FormData) => {
-    'use server';
+  const value = formData.get('message') as string;
+  const conversation_id = formData.get('conversation_id') as string;
 
-    const value = formData.get('message') as string;
-    const conversation_id = formData.get('conversation_id') as string;
+  // Check that the message is not empty
+  if (value.trim().length === 0) {
+    return;
+  }
 
-    // Check that the message is not empty
-    if (value.trim().length === 0) {
-      return;
-    }
+  const { insertedMessage, error } = await insertMessage(supabase, {
+    content: value as string,
+    conversation_id: conversation_id as string,
+  });
 
-    const { insertedMessage, error } = await insertMessage(supabase, {
-      content: value as string,
-      conversation_id: conversation_id as string,
-    });
+  if (error) {
+    console.error(error);
+    throw error;
+  }
 
-    if (error) {
-      console.error(error);
-      throw error;
-    }
+  if (!insertedMessage) {
+    throw new Error('Message not inserted');
+  }
 
-    if (!insertedMessage) {
-      throw new Error('Message not inserted');
-    }
+  revalidatePath('/chat/' + conversation_id);
+};
 
-    revalidatePath('/chat/' + conversation_id);
-  };
-
+async function Input(props: { conversation_id: string }) {
   return (
     <form action={sendMessage} className='flex '>
       <InputText name='message' placeholder='Type a message' />
