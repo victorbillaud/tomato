@@ -34,6 +34,52 @@ export interface Database {
   }
   public: {
     Tables: {
+      conversation: {
+        Row: {
+          created_at: string
+          finder_id: string | null
+          id: string
+          item_id: string
+          owner_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          finder_id?: string | null
+          id?: string
+          item_id: string
+          owner_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          finder_id?: string | null
+          id?: string
+          item_id?: string
+          owner_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_finder_id_fkey"
+            columns: ["finder_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_item_id_fkey"
+            columns: ["item_id"]
+            referencedRelation: "item"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_owner_id_fkey"
+            columns: ["owner_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       item: {
         Row: {
           activated: boolean
@@ -81,6 +127,43 @@ export interface Database {
           {
             foreignKeyName: "item_user_id_fkey"
             columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      message: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          sender_id: string | null
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          sender_id?: string | null
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_conversation_id_fkey"
+            columns: ["conversation_id"]
+            referencedRelation: "conversation"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_sender_id_fkey"
+            columns: ["sender_id"]
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -226,7 +309,20 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_conversations_with_last_message: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          conversation_id: string
+          created_at: string
+          updated_at: string
+          item_id: string
+          owner_id: string
+          finder_id: string
+          last_message: string
+        }[]
+      }
     }
     Enums: {
       ScanType:
