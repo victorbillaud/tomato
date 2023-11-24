@@ -2,7 +2,8 @@ import { InputText } from '../common/input';
 import { Icon } from '../common/icon';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
+import { insertMessage } from '@utils/lib/messaging/services';
+import { revalidatePath } from 'next/cache';
 
 async function Input(props: { conversation_id: string }) {
   const cookieStore = cookies();
@@ -15,24 +16,34 @@ async function Input(props: { conversation_id: string }) {
     'use server';
 
     const value = formData.get('message') as string;
+    const conversation_id = formData.get('conversation_id') as string;
 
-    const message = {
-      id: '1', // generé par supabase
-      conversation_id: conversation_id,
-      content: value,
-      created_at: new Date(),
-      user_id: user?.id,
-    };
+    // Check that the message is not empty
+    if (value.trim().length === 0) {
+      return;
+    }
 
-    console.log(message);
+    const { insertedMessage, error } = await insertMessage(supabase, {
+      content: value as string,
+      conversation_id: conversation_id as string,
+    });
 
-    // TODO bon bah là faut ajouter le message à la conversation quoi
-    return redirect('/chat/' + conversation_id);
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+
+    if (!insertedMessage) {
+      throw new Error('Message not inserted');
+    }
+
+    revalidatePath('/chat/' + conversation_id);
   };
 
   return (
     <form action={sendMessage} className='flex '>
       <InputText name='message' placeholder='Type a message' />
+      <input name='conversation_id' value={props.conversation_id} hidden />
       <div className='flex h-10 w-10 cursor-pointer items-center justify-center'>
         <button type='submit'>
           <Icon name={'send'} size={30} color={'text-primary-900'} fill />
