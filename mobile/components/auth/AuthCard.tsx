@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import {View} from "../Themed";
-import {Button, TextInput} from "react-native";
+import {View, Text} from "../Themed";
+import {TextInput} from "react-native";
 import {useAuth} from "./AuthProvider";
-import {Button as Button2} from "../common/Button";
+import {Button} from "../common/Button";
+import tw from "../../constants/tw";
 
 export function AuthCard() {
     const [email, setEmail] = useState<string>('');
@@ -21,8 +22,7 @@ export function AuthCard() {
         <View>
             <TextInput placeholder="Email" onChangeText={handleEmailChange}></TextInput>
             <TextInput placeholder="Password" onChangeText={handlePasswordChange}></TextInput>
-            <Button title={"Sign in"} onPress={() => signIn(email, password)} />
-            <Button2 text={"Sign in"} onPress={() => signIn(email, password)} variant={"primary"} />
+            <Button text={"Sign in"} onPress={() => signIn(email, password)} variant={"primary"} />
         </View>
     )
 }
