@@ -68,7 +68,6 @@ export default function Login({
       <div className='my-5 h-0.5 w-2/3 rounded-full border border-stone-200 opacity-50 dark:border-stone-700'></div>{' '}
       <form
         action={handleFormPost}
-        method='post'
         className='my-5 flex w-full flex-col items-center justify-between'
       >
         <div className='w-full space-y-3 rounded-lg'>
