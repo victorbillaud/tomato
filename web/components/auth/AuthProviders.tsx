@@ -2,7 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { Provider } from '@supabase/supabase-js';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { Button } from './common/button';
+import { Button } from '../common/button';
 
 export default function AuthProviders() {
   const handleProviderLogin = async (formData: FormData) => {

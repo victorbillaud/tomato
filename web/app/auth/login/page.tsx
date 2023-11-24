@@ -1,5 +1,5 @@
+import AuthProviders from '@/components/auth/AuthProviders';
 import { Login } from '@/components/auth/Login';
-import AuthProviders from '@/components/AuthProviders';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
