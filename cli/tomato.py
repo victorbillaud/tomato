@@ -26,8 +26,11 @@ def parse_command(commands):
 
 def generate_supabase_types():
     """Generates the supabase database types for typescript development"""
+    type_file = open("./utils/lib/supabase/supabase_types.ts", "w+")
+    
+    os.chdir('./web')
+    
     project_id = os.environ.get("SUPABASE_PROJECT_ID")
-    f = open("./utils/lib/supabase/supabase_types.ts", "w")
     if not project_id:
         print("Error: SUPABASE_PROJECT_ID environment variable not set.")
         return
@@ -40,31 +43,34 @@ def generate_supabase_types():
     if user_choice == "y":
         subprocess.run(
             [
-                "npx",
+                "pnpm",
+                "dlx",
                 "supabase",
                 "gen",
                 "types",
                 "typescript",
                 "--local",
             ],
-            stdout=f,
+            stdout=type_file,
         )
-        return
-
-    subprocess.run(
-        [
-            "npx",
-            "supabase",
-            "gen",
-            "types",
-            "typescript",
-            "--project-id",
-            project_id,
-            "--schema",
-            "public",
-        ],
-        stdout=f,
-    )
+    else:
+        subprocess.run(
+            [
+                "pnpm",
+                "dlx",
+                "supabase",
+                "gen",
+                "types",
+                "typescript",
+                "--project-id",
+                project_id,
+                "--schema",
+                "public",
+            ],
+            stdout=type_file,
+        )
+    type_file.close()
+    os.chdir('../')
 
 def apply_db_change_to_migration(migration_name: str):
     """Create a new migration with your local db schema changes"""
