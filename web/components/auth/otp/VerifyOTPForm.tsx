@@ -3,7 +3,7 @@ import { Database } from '@utils/lib/supabase/supabase_types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import OtpInput from 'react-otp-input';
-import { SubmitButton } from '../common/button';
+import { SubmitButton } from '../../common/button';
 
 interface IVerifyOTPFormProps {
   supabase: SupabaseClient<Database>;

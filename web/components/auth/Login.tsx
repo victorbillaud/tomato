@@ -6,10 +6,10 @@ import { createClient } from '@/utils/supabase/client';
 import { useState } from 'react';
 import EmailForm from './EmailForm';
 import LoginWithPasswordForm from './LoginWithPasswordForm';
-import SendOTPButton from './SendOTPButton';
-import VerifyOTPForm from './VerifyOTPForm';
+import SendOTPButton from './otp/SendOTPButton';
+import VerifyOTPForm from './otp/VerifyOTPForm';
 
-export const OTPHandler = () => {
+export const Login = () => {
   const [email, setEmail] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
 

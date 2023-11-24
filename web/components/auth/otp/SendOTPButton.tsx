@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@utils/lib/supabase/supabase_types';
-import { Button } from '../common/button';
+import { Button } from '../../common/button';
 
 interface ISendOTPButtonProps {
   supabase: SupabaseClient<Database>;
