@@ -81,6 +81,14 @@ END;
 $function$
 ;
 
+create policy "Enable delete for users based on user_id"
+on "public"."conversation"
+as permissive
+for delete
+to public
+using ((auth.uid() = owner_id));
+
+
 create policy "Enable insert with item_id for item owner only"
 on "public"."conversation"
 as permissive

@@ -3,7 +3,7 @@ import { insertItem } from '../item/services';
 import { insertQRCode } from '../qrcode/services';
 import { createFakeUser, deleteFakeUser, signInFakeUser } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
-import { insertConversation, insertMessage } from './services';
+import { insertConversation, insertMessage, listUserConversations } from './services';
 
 const sp = getSupabase();
 
@@ -43,6 +43,7 @@ afterAll(async () => {
 
 describe('service messaging module', () => {
     test('insertConversation', async () => {
+        await signInFakeUser(sp);
         const { user: finder } = await createFakeUser(sp, "finder@example.com");
 
         const { insertedConversation, error } = await insertConversation(sp, {
@@ -56,11 +57,14 @@ describe('service messaging module', () => {
         expect(insertedConversation).toHaveProperty('finder_id');
         expect(insertedConversation.finder_id).toBe(finder.id);
 
+        await sp.auth.signOut();
         await deleteFakeUser(sp, finder.id);
-        sp.from('conversation').delete().eq('id', insertedConversation.id);
+        const deletedConversation = await sp.from('conversation').delete().eq('id', insertedConversation.id).select('*').single();
+        expect(deletedConversation.data).toBeDefined();
     });
 
     test('insert message into conversation', async () => {
+        await signInFakeUser(sp);
         const { user: finder } = await createFakeUser(sp, "finder@example.com");
 
         const { insertedConversation, error: insertConversationError } = await insertConversation(sp, {
@@ -78,13 +82,68 @@ describe('service messaging module', () => {
         });
 
         expect(insertMessageError).toBeNull();
-        
+
         expect(insertedMessage).toBeDefined();
         expect(insertedMessage).toHaveProperty('id');
         expect(insertedMessage).toHaveProperty('conversation_id');
         expect(insertedMessage).toHaveProperty('content');
 
+        await sp.auth.signOut();
         await deleteFakeUser(sp, finder.id);
-        sp.from('conversation').delete().eq('id', insertedConversation.id);
+        const deletedConversation = await sp.from('conversation').delete().eq('id', insertedConversation.id).select('*').single();
+        expect(deletedConversation.data).toBeDefined();
+    });
+
+    test('insert message into conversation with invalid conversation id', async () => {
+        await signInFakeUser(sp);
+        const { insertedMessage, error } = await insertMessage(sp, {
+            conversation_id: 'invalid',
+            content: 'test',
+        });
+
+        expect(error).toBeDefined();
+        expect(error).toHaveProperty('message');
+        expect(error.message).toBeDefined();
+
+        expect(insertedMessage).toBeNull();
+    });
+
+    test('list user conversations', async () => {
+        await signInFakeUser(sp);
+        const { user: finder } = await createFakeUser(sp, "finder@example.com");
+
+        const { insertedConversation, error: insertConversationError } = await insertConversation(sp, {
+            finder_id: finder.id,
+            item_id: globalThis.insertedItem.id,
+        });
+
+        if (insertConversationError) {
+            throw insertConversationError;
+        }
+
+        await insertMessage(sp, {
+            conversation_id: insertedConversation.id,
+            content: 'test 1',
+        });
+
+        await insertMessage(sp, {
+            conversation_id: insertedConversation.id,
+            content: 'test 2',
+        });
+
+        const {data, error} = await listUserConversations(sp);
+
+        expect(error).toBeNull();
+        expect(data).toBeDefined();
+        expect(data).toHaveLength(1);
+        expect(data[0]).toHaveProperty('owner_id');
+        expect(data[0]).toHaveProperty('finder_id');
+        expect(data[0]).toHaveProperty('item_id');
+        expect(data[0]).toHaveProperty('last_message');
+    
+        await sp.auth.signOut();
+        await deleteFakeUser(sp, finder.id);
+        const deletedConversation = await sp.from('conversation').delete().eq('id', insertedConversation.id).select('*').single();
+        expect(deletedConversation.data).toBeDefined();
     });
 });
