@@ -6,11 +6,11 @@ import { Database } from '@utils/lib/supabase/supabase_types';
 
 const Chat = ({ messages, currentUser }: ChatProps) => {
   const renderMessages = () => {
-    // Check if messages exist
+    // Check if there are any messages
     if (!messages) {
       return (
         <div className='flex h-full w-full items-center justify-center'>
-          Select a conversation
+          No messages in this conversation.
         </div>
       );
     }
@@ -19,11 +19,6 @@ const Chat = ({ messages, currentUser }: ChatProps) => {
     messages.sort((a, b) => {
       return a.created_at > b.created_at ? 1 : -1;
     });
-
-    // Check if there are any messages
-    if (!messages.length) {
-      return <div>No messages in this conversation.</div>;
-    }
 
     const renderedMessages: JSX.Element[] = [];
     let prevMessage: Database['public']['Tables']['message']['Row'] | null =
