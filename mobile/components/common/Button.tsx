@@ -56,6 +56,7 @@ export function Button (props: IButtonProps) {
     };
 
     const buttonClasses = getButtonClass(variant);
+    const textClasses = getTextClass(variant);
 
     const handlePress = (event: GestureResponderEvent) => {
         if (!props.disabled && !props.isLoader && props.onPress) {
@@ -89,7 +90,7 @@ export function Button (props: IButtonProps) {
                         </View>
                     )}
                     {!props.iconOnly && (
-                        <Text style={[sizeStyles[size], props.icon ? tw`pr-2` : tw`px-4`]}>
+                        <Text style={[sizeStyles[size], props.icon ? tw`pr-2` : tw`px-4`, textClasses]}>
                             {props.text}
                         </Text>
                     )}
@@ -104,20 +105,31 @@ const getButtonClass = (style: TButtonVariant): ButtonStyle => {
     switch (style) {
         case 'primary':
             return {
-                base: tw`rounded-md border border-transparent bg-primary-900 font-medium text-gray-100 shadow-sm`,
+                base: tw`rounded-md border border-transparent bg-primary-900 shadow-sm`,
                 interact: tw`hover:bg-primary-950 focus:outline-none focus:ring-2 focus:ring-primary-950 focus:ring-offset-2`,
             };
         case 'secondary':
             return {
-                base: tw`rounded-md border dark:border-gray-100 bg-gray-100 dark:bg-transparent font-medium text-gray-700 dark:text-gray-100 shadow-sm`,
+                base: tw`rounded-md border dark:border-gray-100 bg-gray-100 dark:bg-transparent shadow-sm`,
                 interact: tw`hover:bg-gray-200 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200`,
             };
         case 'tertiary':
             return {
-                base: tw`rounded-md border border-transparent bg-transparent font-medium text-gray-700 dark:text-gray-200`,
+                base: tw`rounded-md border border-transparent bg-transparent`,
                 interact: tw`hover:text-gray-500 dark:hover:text-gray-500 focus:outline-none`,
             };
     }
 };
+
+const getTextClass = (style: TButtonVariant): Style => {
+    switch(style) {
+        case 'primary':
+            return tw`font-medium text-gray-100`;
+        case 'secondary':
+            return tw`font-medium text-gray-700 dark:text-gray-100`;
+        case 'tertiary':
+            return tw`font-medium text-gray-700 dark:text-gray-200`;
+    }
+}
 
 export default Button;
