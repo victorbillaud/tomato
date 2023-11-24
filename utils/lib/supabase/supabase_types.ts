@@ -314,13 +314,13 @@ export interface Database {
           user_id: string
         }
         Returns: {
-          conversation_id: string
+          id: string
           created_at: string
           updated_at: string
           item_id: string
           owner_id: string
           finder_id: string
-          last_message: string
+          last_message: Json
         }[]
       }
     }

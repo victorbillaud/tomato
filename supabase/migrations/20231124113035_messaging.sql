@@ -52,21 +52,21 @@ alter table "public"."message" validate constraint "message_sender_id_fkey";
 set check_function_bodies = off;
 
 CREATE OR REPLACE FUNCTION public.get_user_conversations_with_last_message(user_id uuid)
- RETURNS TABLE(conversation_id uuid, created_at timestamp with time zone, updated_at timestamp with time zone, item_id uuid, owner_id uuid, finder_id uuid, last_message text)
+ RETURNS TABLE(id uuid, created_at timestamp with time zone, updated_at timestamp with time zone, item_id uuid, owner_id uuid, finder_id uuid, last_message jsonb)
  LANGUAGE plpgsql
  STABLE
 AS $function$
 BEGIN
   RETURN QUERY
   SELECT
-    c.id AS conversation_id,
+    c.id,
     c.created_at,
     c.updated_at,
     c.item_id,
     c.owner_id,
     c.finder_id,
     (
-      SELECT m.content
+      SELECT jsonb_build_object('content', m.content, 'created_at', m.created_at, 'sender_id', sender_id)
       FROM message m
       WHERE m.conversation_id = c.id
       ORDER BY m.created_at DESC
