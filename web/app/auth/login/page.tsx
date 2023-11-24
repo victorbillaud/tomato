@@ -1,10 +1,25 @@
 import { OTPHandler } from '@/components/auth/OTPHandler';
 import AuthProviders from '@/components/AuthProviders';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default async function Login(props: {
   children: React.ReactNode;
   searchParams: { message: string; next: string };
 }) {
+
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect('/user');
+  }
+
+
   return (
     <>
       <AuthProviders />
