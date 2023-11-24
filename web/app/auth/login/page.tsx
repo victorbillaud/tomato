@@ -21,7 +21,7 @@ export default async function Page(props: {
   return (
     <>
       <AuthProviders />
-      <div className='my-5 h-0.5 w-2/3 rounded-full border border-stone-200 opacity-50 dark:border-stone-700'></div>{' '}
+      <div className='my-5 h-0.5 w-2/3 rounded-full border border-stone-200 opacity-50 dark:border-stone-700'></div>
       <Login />
     </>
   );
