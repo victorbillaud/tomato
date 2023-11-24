@@ -43,11 +43,3 @@ async function Input(props: { conversation_id: string }) {
 }
 
 export default Input;
-
-// export interface IMessage {
-//   id: string;
-//   conversation_id: string;
-//   content: string;
-//   created_at: Date;
-//   user_id: string; // sender id
-// }

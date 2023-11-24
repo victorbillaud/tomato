@@ -1,16 +1,20 @@
 'use client';
 
-import { IChatProps, IMessage } from './types';
-import fakeData from '@/components/chat/fakeData.json';
+import { ChatProps } from './types';
 import Message from './Message';
+import { Database } from '@utils/lib/supabase/supabase_types';
 
-const Chat = ({ conversation, currentUser }: IChatProps) => {
-  // TODO charger les messages de la conversation (en UseEffect ?)
-  const messages: IMessage[] = fakeData.messages.filter(
-    (message) => message.conversation_id === conversation?.id
-  );
-
+const Chat = ({ messages, currentUser }: ChatProps) => {
   const renderMessages = () => {
+    // Check if messages exist
+    if (!messages) {
+      return (
+        <div className='flex h-full w-full items-center justify-center'>
+          Select a conversation
+        </div>
+      );
+    }
+
     // sort the messages by date & time (oldest first)
     messages.sort((a, b) => {
       return a.created_at > b.created_at ? 1 : -1;
@@ -22,12 +26,13 @@ const Chat = ({ conversation, currentUser }: IChatProps) => {
     }
 
     const renderedMessages: JSX.Element[] = [];
-    let prevMessage: IMessage | null = null;
+    let prevMessage: Database['public']['Tables']['message']['Row'] | null =
+      null;
     let displayDate = true;
 
     for (const message of messages) {
-      const isCurrentUser = message.user_id === currentUser?.id;
-      const isSameUser = message.user_id === prevMessage?.user_id;
+      const isCurrentUser = message.sender_id === currentUser?.id;
+      const isSameUser = message.sender_id === prevMessage?.sender_id;
 
       // Calculate time difference between current message and previous message
       if (prevMessage) {
@@ -68,18 +73,9 @@ const Chat = ({ conversation, currentUser }: IChatProps) => {
 
   return (
     <div className='h-full bg-slate-100 px-6 dark:bg-zinc-700 dark:text-white'>
-      {conversation === null ? (
-        <div>Select a conversation</div>
-      ) : (
-        <div className='flex flex-col overflow-y-scroll '>
-          <span className='text-center'>
-            debug : {conversation?.id} between{' '}
-            {conversation?.item_owner.username} and{' '}
-            {conversation?.participants[0].username}
-          </span>
-          {renderMessages()}
-        </div>
-      )}
+      <div className='flex h-full w-full flex-col overflow-y-scroll'>
+        {renderMessages()}
+      </div>
     </div>
   );
 };

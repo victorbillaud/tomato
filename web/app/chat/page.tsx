@@ -11,7 +11,7 @@ export default async function Index() {
 
   return (
     <div className='flex h-full w-2/3 flex-col justify-end'>
-      <Chat conversation={null} currentUser={user} />
+      <Chat messages={null} currentUser={user} />
     </div>
   );
 }

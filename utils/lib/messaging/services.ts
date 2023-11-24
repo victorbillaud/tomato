@@ -44,8 +44,24 @@ export async function insertConversation(
         .insert(conversationToInsert)
         .select("*")
         .single()
+  return { insertedConversation, error };
+}
 
-    return { insertedConversation, error }
+export async function getConversationMessages(
+  supabaseInstance: SupabaseClient<Database>,
+  conversationId: string
+) {
+  const {
+    data: { user },
+  } = await supabaseInstance.auth.getUser();
+
+  const { data: messages, error } = await supabaseInstance
+    .from('message')
+    .select('*')
+    .eq('conversation_id', conversationId)
+    .eq('owner_id' || 'finder_id', user.id);
+
+  return { messages, error };
 }
 
 export async function insertMessage(
