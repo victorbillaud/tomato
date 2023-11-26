@@ -39,7 +39,11 @@ async function Input(props: { conversation_id: string }) {
   return (
     <form action={sendMessage} className='flex '>
       <InputText name='message' placeholder='Type a message' />
-      <input name='conversation_id' value={props.conversation_id} hidden />
+      <input
+        name='conversation_id'
+        defaultValue={props.conversation_id}
+        hidden
+      />
       <div className='flex h-10 w-10 cursor-pointer items-center justify-center'>
         <button type='submit'>
           <Icon name={'send'} size={30} color={'text-primary-900'} fill />

@@ -1,13 +1,29 @@
 'use client';
-
-import { ChatProps } from './types';
+import { ChatProps, TMessage } from './types';
 import Message from './Message';
-import { Database } from '@utils/lib/supabase/supabase_types';
+import { useEffect, useRef } from 'react';
 
+// TODO: set this to a realtime
 const Chat = ({ messages, currentUser }: ChatProps) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat when a new message is sent
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop =
+        scrollContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   const renderMessages = () => {
     // Check if there are any messages
     if (!messages) {
+      return (
+        <div className='flex h-full w-full items-center justify-center'>
+          Select a conversation
+        </div>
+      );
+    } else if (messages.length === 0) {
       return (
         <div className='flex h-full w-full items-center justify-center'>
           No messages in this conversation.
@@ -21,8 +37,7 @@ const Chat = ({ messages, currentUser }: ChatProps) => {
     });
 
     const renderedMessages: JSX.Element[] = [];
-    let prevMessage: Database['public']['Tables']['message']['Row'] | null =
-      null;
+    let prevMessage: TMessage | null = null;
     let displayDate = true;
 
     for (const message of messages) {
@@ -63,14 +78,15 @@ const Chat = ({ messages, currentUser }: ChatProps) => {
       displayDate = false;
     }
 
-    return renderedMessages;
+    return <div className='flex w-full flex-col '>{renderedMessages}</div>;
   };
 
   return (
-    <div className='h-full bg-slate-100 px-6 dark:bg-zinc-700 dark:text-white'>
-      <div className='flex h-full w-full flex-col overflow-y-scroll'>
-        {renderMessages()}
-      </div>
+    <div
+      className='h-full w-full overflow-y-scroll rounded-md bg-slate-100 px-6 pb-2 dark:bg-zinc-700 dark:text-white'
+      ref={scrollContainerRef}
+    >
+      <>{renderMessages()}</>
     </div>
   );
 };

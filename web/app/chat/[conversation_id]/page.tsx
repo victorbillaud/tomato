@@ -1,7 +1,7 @@
 import Chat from '@/components/chat/Chat';
+import Input from '@/components/chat/Input';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
-import Input from '@/components/chat/Input';
 import { getConversationMessages } from '@utils/lib/messaging/services';
 
 export default async function Index(props: {
@@ -20,7 +20,7 @@ export default async function Index(props: {
   );
 
   return (
-    <div className='flex h-full w-2/3 flex-col justify-end'>
+    <div className='flex h-full w-2/3 flex-col justify-end space-y-2 '>
       <Chat messages={messages} currentUser={user} />
       <Input conversation_id={props.params.conversation_id} />
     </div>
