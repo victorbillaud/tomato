@@ -1,5 +1,6 @@
 import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '../supabase/supabase_types';
+import { getUserDetails } from '../user/services';
 
 type ArrayElementType<T> = T extends (infer U)[] ? U : never;
 
@@ -59,6 +60,35 @@ export async function insertConversation(
     .select('*')
     .single();
   return { insertedConversation, error };
+}
+
+export async function getConversationUsers(
+  supabaseInstance: SupabaseClient<Database>,
+  conversationId: string
+) {
+  const { data, error } = await supabaseInstance
+    .from('conversation')
+    .select('owner_id, finder_id')
+    .eq('id', conversationId);
+
+  let users: Database['public']['Tables']['profiles']['Row'][] = [];
+
+  for (const user in data[0]) {
+    const userId = data[0][user];
+
+    const { user: userDetails, error: userError } = await getUserDetails(
+      supabaseInstance,
+      userId
+    );
+
+    if (userError) {
+      return { users: null, error: userError };
+    }
+
+    users.push(userDetails);
+  }
+
+  return { users, error };
 }
 
 export async function getConversationMessages(

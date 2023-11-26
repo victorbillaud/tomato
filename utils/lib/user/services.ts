@@ -6,7 +6,7 @@ export async function getUserDetails(
   userId: string
 ) {
   const { data: user, error } = await supabaseInstance
-    .from('user')
+    .from('profiles')
     .select('*')
     .eq('id', userId)
     .single();

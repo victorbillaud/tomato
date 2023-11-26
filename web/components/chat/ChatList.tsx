@@ -52,9 +52,7 @@ export default async function ChatList() {
               key={conversation.id}
               className='p-2 hover:bg-gray-700/10 dark:hover:bg-white/20'
             >
-              <Text variant={'h4'}>
-                {itemInfo?.name + ' (' + conversation.finder_id + ')'}
-              </Text>
+              <Text variant={'h4'}>{itemInfo?.name}</Text>
               <Text variant={'body'}>
                 <Text variant={'body'} className='truncate'>
                   {conversation.last_message?.sender_id === user?.id

@@ -2,9 +2,10 @@
 import { ChatProps, TMessage } from './types';
 import Message from './Message';
 import { useEffect, useRef } from 'react';
+import { formatDate } from '@utils/lib/formatting/date';
 
 // TODO: set this to a realtime
-const Chat = ({ messages, currentUser }: ChatProps) => {
+const Chat = ({ messages, users, currentUser }: ChatProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const Chat = ({ messages, currentUser }: ChatProps) => {
     for (const message of messages) {
       const isCurrentUser = message.sender_id === currentUser?.id;
       const isSameUser = message.sender_id === prevMessage?.sender_id;
+      const user = users?.find((user) => user.id === message.sender_id);
 
       // Calculate time difference between current message and previous message
       if (prevMessage) {
@@ -61,12 +63,13 @@ const Chat = ({ messages, currentUser }: ChatProps) => {
         <>
           {displayDate ? (
             <div className='self-center text-sm'>
-              {message.created_at.toString()}
+              {formatDate(message?.created_at)}
             </div>
           ) : null}
           <Message
-            key={message.id}
+            key={message?.id}
             message={message}
+            user={user}
             isSent={isCurrentUser}
             firstMessage={!isSameUser}
           />
@@ -83,7 +86,7 @@ const Chat = ({ messages, currentUser }: ChatProps) => {
 
   return (
     <div
-      className='h-full w-full overflow-y-scroll rounded-md bg-slate-100 px-6 pb-2 dark:bg-zinc-700 dark:text-white'
+      className='h-full w-full overflow-y-scroll rounded-md bg-slate-100 px-6 py-2 dark:bg-zinc-700 dark:text-white'
       ref={scrollContainerRef}
     >
       <>{renderMessages()}</>
