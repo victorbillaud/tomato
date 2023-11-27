@@ -9,6 +9,7 @@ export async function middleware(request: NextRequest) {
 
     const privatePathsPrefix = [
       '/dashboard',
+      '/user'
     ]
 
     const isPrivatePath = privatePathsPrefix.some(prefix => request.nextUrl.pathname.startsWith(prefix))
