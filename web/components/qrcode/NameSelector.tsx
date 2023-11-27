@@ -1,31 +1,40 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import * as Select from '@/components/radix/Select';
 import classNames from 'classnames';
 import { Icon } from '../common/icon';
-
-// TODO: finish colors and dark mode colors + choose better colors
-// TODO: make a mutualize color palette to change it easily
-// TODO: actually change the QR code based on the selected QR code
-// TODO: set the first QR code as the default selected QR code
+import { useRouter } from 'next/navigation';
 
 interface NameSelectorProps {
   values: { name: string; id: string }[];
+  selectedValue: string;
 }
 
-const NameSelector = ({ values }: NameSelectorProps) => {
+const NameSelector = ({ values, selectedValue }: NameSelectorProps) => {
+  const router = useRouter();
+  const [value, setValue] = useState<string>('');
+  console.log(value);
+
+  const changeQrCode = (newValue: string) => {
+    router.push(`/dashboard/item/create/${newValue}`);
+  };
+
   return (
-    <Select.Root>
+    <Select.Root onValueChange={changeQrCode} defaultValue={selectedValue}>
       <Select.Trigger
-        className='inline-flex h-[35px] w-44 items-center justify-center gap-[5px] rounded bg-white px-[15px] text-[13px] leading-none text-slate-900 shadow-[0_2px_10px] shadow-black/10 outline-none hover:bg-red-100 focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-red-400 dark:bg-neutral-900 dark:text-white dark:hover:bg-red-950'
-        aria-label='Food'
+        className='inline-flex h-[35px] w-44 items-center justify-center gap-[5px] rounded bg-white px-[15px] text-[13px] capitalize leading-none text-red-800 shadow-sm shadow-black/10 outline-none hover:opacity-80 focus:shadow-[0_0_0_2px] focus:shadow-black dark:bg-neutral-900 dark:text-red-900 dark:hover:opacity-90'
+        aria-label='QrCodes'
       >
-        <Select.Value placeholder='Select a QR code' />
+        <Select.Value />
         <Select.Icon>
           <Icon name='chevron-down' size={16} />
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
-        <Select.Content className='overflow-hidden rounded-md bg-white dark:bg-neutral-900 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]'>
+        <Select.Content className='overflow-hidden rounded-md bg-white shadow-md dark:bg-neutral-900'>
+          <Select.ScrollUpButton className='flex h-[25px] cursor-default items-center justify-center bg-white dark:bg-neutral-900 dark:text-white'>
+            <Icon name='chevron-up' size={16} />
+          </Select.ScrollUpButton>
           <Select.Viewport className='p-[5px]'>
             <Select.Group>
               <Select.Label className='px-[25px] text-xs leading-[25px] text-slate-800 dark:text-slate-200'>
@@ -33,13 +42,20 @@ const NameSelector = ({ values }: NameSelectorProps) => {
               </Select.Label>
               {values.map((value) => {
                 return (
-                  <SelectItem key={value.id} value={value.name}>
+                  <SelectItem
+                    key={value.id}
+                    value={value.id}
+                    className='capitalize'
+                  >
                     {value.name}
                   </SelectItem>
                 );
               })}
             </Select.Group>
           </Select.Viewport>
+          <Select.ScrollDownButton className='flex h-[25px] cursor-default items-center justify-center bg-white dark:bg-neutral-900 dark:text-white'>
+            <Icon name='chevron-down' size={16} />
+          </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>
     </Select.Root>
@@ -57,7 +73,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, ISelectItemProps>(
     return (
       <Select.Item
         className={classNames(
-          'relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-red-400 dark:text-red-800 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-400 data-[disabled]:text-red-100 data-[highlighted]:text-white data-[highlighted]:outline-none',
+          'relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-red-800 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-900 data-[highlighted]:text-white data-[highlighted]:outline-none dark:text-red-900',
           className
         )}
         {...props}
