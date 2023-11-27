@@ -7,20 +7,19 @@ import { useRouter } from 'next/navigation';
 
 interface NameSelectorProps {
   values: { name: string; id: string }[];
-  selectedValue: string;
+  initalValue: string;
 }
 
-const NameSelector = ({ values, selectedValue }: NameSelectorProps) => {
+const NameSelector = ({ values, initalValue }: NameSelectorProps) => {
   const router = useRouter();
   const [value, setValue] = useState<string>('');
-  console.log(value);
 
   const changeQrCode = (newValue: string) => {
     router.push(`/dashboard/item/create/${newValue}`);
   };
 
   return (
-    <Select.Root onValueChange={changeQrCode} defaultValue={selectedValue}>
+    <Select.Root onValueChange={changeQrCode} defaultValue={initalValue}>
       <Select.Trigger
         className='inline-flex h-[35px] w-44 items-center justify-center gap-[5px] rounded bg-white px-[15px] text-[13px] capitalize leading-none text-red-800 shadow-sm shadow-black/10 outline-none hover:opacity-80 focus:shadow-[0_0_0_2px] focus:shadow-black dark:bg-neutral-900 dark:text-red-900 dark:hover:opacity-90'
         aria-label='QrCodes'
