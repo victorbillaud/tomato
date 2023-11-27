@@ -89,11 +89,13 @@ export default async function CreateItem({
                 name='name'
                 placeholder='Phone'
                 className='w-full md:w-2/4'
+                required
               />
               <InputText
                 labelText='Item description'
                 name='description'
                 placeholder='My phone'
+                required
               />
               <SubmitButton
                 text='Create item'
