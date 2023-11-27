@@ -1,6 +1,7 @@
 import { SubmitButton } from '@/components/common/button';
 import { Text } from '@/components/common/text';
 import { ItemInfo, ItemScanHistory, ItemStateBanner } from '@/components/item';
+import { ItemSettings } from '@/components/item/ItemSettings';
 import { QrCode } from '@/components/qrcode/QrCode';
 import { createClient } from '@/utils/supabase/server';
 import { getItem, updateItem } from '@utils/lib/item/services';
@@ -79,7 +80,7 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
             <QrCode url={item.qrcode[0].barcode_data} download />
           )}
         </div>
-
+        <ItemSettings item={item} />
         {item.qrcode_id ? (
           <ItemScanHistory item={item} />
         ) : (
