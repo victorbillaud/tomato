@@ -13,3 +13,18 @@ export async function getUserDetails(
 
   return { user, error };
 }
+
+export async function getUserAvatarUrlById(
+  supabaseInstance: SupabaseClient<Database>,
+  userId: string
+) {
+  const { data: user, error } = await supabaseInstance
+    .from('profiles')
+    .select('avatar_url')
+    .eq('id', userId)
+    .single();
+
+  const avatarUrl = user?.avatar_url;
+
+  return { avatarUrl, error };
+}

@@ -4,6 +4,9 @@ import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 import { listUserConversations } from '@utils/lib/messaging/services';
 import { getItem } from '@utils/lib/item/services';
+import { getUserAvatarUrlById } from '@utils/lib/user/services';
+import Image from 'next/image';
+import { Icon } from '../common/icon';
 
 export default async function ChatList() {
   const cookieStore = cookies();
@@ -11,12 +14,18 @@ export default async function ChatList() {
 
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
 
-  const { data: conversations, error } = await listUserConversations(supabase);
+  const { data: conversations, error: conversationsError } =
+    await listUserConversations(supabase);
 
-  if (error) {
-    console.error(error);
+  if (error || !user) {
+    throw new Error('User not found');
+  }
+
+  if (conversationsError) {
+    console.error(conversationsError);
     return <div>Erreur de chargement des conversations</div>;
   }
 
@@ -38,29 +47,48 @@ export default async function ChatList() {
   }
 
   return (
-    <div className='flex h-full w-1/3 flex-col divide-y-2 divide-gray-700 dark:divide-white'>
+    <div className='flex h-full w-1/3 flex-col divide-y-[1px] divide-gray-700 dark:divide-white'>
       <Text variant={'h2'} className='pb-6 pt-2'>
         Conversations
       </Text>
       {conversations &&
         conversations.map(async (conversation) => {
+          const { avatarUrl, error: avatarError } = await getUserAvatarUrlById(
+            supabase,
+            conversation.finder_id
+          );
+
           const itemInfo = await getItemInfo(conversation.item_id);
 
           return (
             <Link
               href={/chat/ + conversation.id}
               key={conversation.id}
-              className='p-2 hover:bg-gray-700/10 dark:hover:bg-white/20'
+              className='flex items-center space-x-2 p-2 hover:bg-gray-700/10 dark:hover:bg-white/20'
             >
-              <Text variant={'h4'}>{itemInfo?.name}</Text>
-              <Text variant={'body'}>
-                <Text variant={'body'} className='truncate'>
-                  {conversation.last_message?.sender_id === user?.id
-                    ? 'You: '
-                    : ''}
-                  {conversation.last_message?.content}
+              {avatarUrl ? (
+                <Image
+                  src={avatarUrl}
+                  alt='avatar'
+                  width={40}
+                  height={40}
+                  className=' rounded-full'
+                />
+              ) : (
+                <Icon name='user-circle' size={44} stroke={1} />
+              )}
+
+              <div>
+                <Text variant={'h4'}>{itemInfo?.name}</Text>
+                <Text variant={'body'}>
+                  <Text variant={'body'} className='truncate'>
+                    {conversation.last_message?.sender_id === user?.id
+                      ? 'You: '
+                      : ''}
+                    {conversation.last_message?.content}
+                  </Text>
                 </Text>
-              </Text>
+              </div>
             </Link>
           );
         })}

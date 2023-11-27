@@ -9,10 +9,9 @@ export type ChatProps = {
 
 export type MessageProps = {
   message: TMessage;
-  isSent?: boolean;
-  user: TProfile | undefined;
-  firstMessage?: boolean;
-  lastMessage?: boolean;
+  prevMessage: TMessage | null;
+  nextMessage: TMessage | null;
+  currentUser: User | null;
 };
 
 export type TConversation = Database['public']['Tables']['conversation']['Row'];

@@ -2,9 +2,6 @@
 import { ChatProps, TMessage } from './types';
 import Message from './Message';
 import { useEffect, useRef } from 'react';
-import dateFormat, { masks } from 'dateformat';
-
-masks.dateOnly = 'dd mmm yyyy';
 
 // TODO: set this to a realtime
 const Chat = ({ messages, users, currentUser }: ChatProps) => {
@@ -39,51 +36,23 @@ const Chat = ({ messages, users, currentUser }: ChatProps) => {
       return a.created_at > b.created_at ? 1 : -1;
     });
 
-    const renderedMessages: JSX.Element[] = [];
-    let prevMessage: TMessage | null = null;
-    let displayDate = true;
-
-    for (const message of messages) {
-      const isCurrentUser = message.sender_id === currentUser?.id;
-      const isSameUser = message.sender_id === prevMessage?.sender_id;
-      const user = users?.find((user) => user.id === message.sender_id);
-
-      // Calculate time difference between current message and previous message
-      if (prevMessage) {
-        const currentDate = new Date(message.created_at);
-        const prevDate = new Date(prevMessage.created_at);
-        const timeDiff = currentDate.getTime() - prevDate.getTime();
-        const diffHours = timeDiff / (1000 * 60);
-
-        // Set 'displayDate' to true if it's greater than 1 hour
-        if (diffHours > 60) {
-          displayDate = true;
-        }
-      }
-
-      renderedMessages.push(
-        <>
-          {displayDate ? (
-            <div className='self-center text-sm'>
-              {dateFormat(message.created_at, masks.dateOnly)}
-            </div>
-          ) : null}
-          <Message
-            key={message?.id}
-            message={message}
-            user={user}
-            isSent={isCurrentUser}
-            firstMessage={!isSameUser}
-          />
-        </>
-      );
-
-      // Update state for the next iteration
-      prevMessage = message;
-      displayDate = false;
-    }
-
-    return <div className='flex w-full flex-col '>{renderedMessages}</div>;
+    return (
+      <>
+        {messages.map((message, index) => {
+          return (
+            <Message
+              key={message.id}
+              message={message}
+              prevMessage={index !== 0 ? messages[index - 1] : null}
+              nextMessage={
+                index !== messages.length ? messages[index + 1] : null
+              }
+              currentUser={currentUser}
+            />
+          );
+        })}
+      </>
+    );
   };
 
   return (

@@ -45,7 +45,10 @@ async function Input(props: { conversation_id: string }) {
         hidden
       />
       <div className='mx-2 flex h-10 w-10 cursor-pointer items-center justify-center'>
-        <button type='submit'>
+        <button
+          type='submit'
+          className='transform transition-all duration-200 ease-in-out active:scale-[0.8]'
+        >
           <Icon name={'send'} size={33} color={'text-primary-900'} fill />
         </button>
       </div>

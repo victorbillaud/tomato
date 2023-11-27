@@ -26,6 +26,7 @@ export default async function Index(props: {
     supabase,
     props.params.conversation_id
   );
+
   return (
     <div className='flex h-full w-2/3 flex-col justify-end space-y-2 '>
       <Chat messages={messages} users={users} currentUser={user} />
