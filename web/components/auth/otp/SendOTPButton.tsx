@@ -43,7 +43,7 @@ const SendOTPButton = (props: ISendOTPButtonProps) => {
   return (
     <Button
       variant='secondary'
-      text='Login with OTP'
+      text='Login or register with OTP' 
       onClick={() => sendOTP(props.email)}
     />
   );

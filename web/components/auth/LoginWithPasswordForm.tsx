@@ -66,6 +66,7 @@ const LoginWithPasswordForm = (props: ILoginWithPasswordFormProps) => {
           error={loginWithPasswordError !== undefined}
           errorMessage={loginWithPasswordError}
           onChange={(e) => setPassword(e.target.value)}
+          autoFocus
           required
         />
         <PasswordResetButton {...props} />

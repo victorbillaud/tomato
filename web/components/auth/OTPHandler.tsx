@@ -135,38 +135,3 @@ export const OTPHandler = () => {
     </div>
   );
 };
-
-// <form onSubmit={handleVerifyOTP} className='my-5 flex w-full'>
-//           <div className='flex w-full flex-col items-center justify-center space-y-3 rounded-lg'>
-//             <div className='flex w-full justify-center'>
-//               <OtpInput
-//                 value={otp}
-//                 onChange={setOTP}
-//                 numInputs={6}
-//                 renderSeparator={<div className='mx-1'></div>}
-//                 inputType='number'
-//                 shouldAutoFocus={true}
-//                 renderInput={(props, index) => {
-//                   return (
-//                     <input
-//                       {...props}
-//                       className='rounded-lg border border-zinc-200 bg-transparent bg-zinc-100 p-2 text-gray-700 shadow-sm outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-gray-200'
-//                       maxLength={1}
-//                       style={{
-//                         width: '2em',
-//                         textAlign: 'center',
-//                         fontSize: '1.5em',
-//                       }}
-//                     />
-//                   );
-//                 }}
-//               />
-//             </div>
-//             <SubmitButton
-//               variant='primary'
-//               type='submit'
-//               text='Verify'
-//               name='verify'
-//             />
-//           </div>
-//         </form>
