@@ -2,7 +2,9 @@
 import { ChatProps, TMessage } from './types';
 import Message from './Message';
 import { useEffect, useRef } from 'react';
-import { formatDate } from '@utils/lib/formatting/date';
+import dateFormat, { masks } from 'dateformat';
+
+masks.dateOnly = 'dd mmm yyyy';
 
 // TODO: set this to a realtime
 const Chat = ({ messages, users, currentUser }: ChatProps) => {
@@ -63,7 +65,7 @@ const Chat = ({ messages, users, currentUser }: ChatProps) => {
         <>
           {displayDate ? (
             <div className='self-center text-sm'>
-              {formatDate(message?.created_at)}
+              {dateFormat(message.created_at, masks.dateOnly)}
             </div>
           ) : null}
           <Message

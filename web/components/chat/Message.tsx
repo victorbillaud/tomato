@@ -1,5 +1,7 @@
 import { MessageProps } from './types';
-import { formatTime } from '@utils/lib/formatting/date';
+import dateFormat, { masks } from 'dateformat';
+
+masks.timeOnly = 'hh:MM';
 
 const Message = ({
   message,
@@ -20,7 +22,7 @@ const Message = ({
         <div>{message.content}</div>
       </div>
       <div className='px-2 text-sm font-light'>
-        {lastMessage ? formatTime(message.created_at) : null}
+        {lastMessage ? dateFormat(message.created_at, masks.timeOnly) : null}
       </div>
     </div>
   );
