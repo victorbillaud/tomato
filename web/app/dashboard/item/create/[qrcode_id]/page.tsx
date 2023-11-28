@@ -1,15 +1,14 @@
-import { Button } from '@/components/common/button';
 import { SubmitButton } from '@/components/common/button/SubmitButton';
 import { Card } from '@/components/common/card';
 import { InputText } from '@/components/common/input/InputText';
 import { Text } from '@/components/common/text';
+import NameSelector from '@/components/qrcode/NameSelector';
 import { QrCode } from '@/components/qrcode/QrCode';
 import { createClient } from '@/utils/supabase/server';
 import { insertItem } from '@utils/lib/item/services';
-import { getQRCode } from '@utils/lib/qrcode/services';
+import { listQRCode } from '@utils/lib/qrcode/services';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { NextResponse } from 'next/server';
 
 const insertItemAction = async (formData: FormData) => {
   'use server';
@@ -42,17 +41,21 @@ export default async function CreateItem({
 }) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  const { data: qrCode, error } = await getQRCode(supabase, params.qrcode_id);
+  const { data: qrCodes, error } = await listQRCode(supabase);
 
-  if (error) {
-    throw new Error("This QR Code doesn't exist or is not yours");
+  if (error || !qrCodes) {
+    throw new Error("You don't have any QR Code");
   }
 
-  if (qrCode?.item_id != null) {
+  const qrCode = qrCodes.find((code) => code.id === params.qrcode_id);
+  if (!qrCode) {
+    throw new Error('This QR Code does not exist');
+  }
+  if (qrCode.item_id != null) {
     throw new Error('This QR Code is already linked to an item');
   }
 
-  return qrCode ? (
+  return (
     <div className='flex w-full flex-1 flex-col items-center justify-center gap-10'>
       <div className='flex flex-col items-center justify-center py-5'>
         <Text variant='body' className='text-center opacity-50'>
@@ -62,6 +65,13 @@ export default async function CreateItem({
 
       <div className='flex w-full flex-col-reverse items-center justify-between gap-10 md:flex-row'>
         <div className='flex w-full flex-col items-center justify-center gap-10'>
+          <NameSelector
+            values={qrCodes.map((code) => ({
+              name: code.name,
+              id: code.id.toString(),
+            }))}
+            selectedValue={qrCode.id}
+          />
           {qrCode.barcode_data && <QrCode url={qrCode.barcode_data} />}
           <Text variant='body' className='text-center opacity-50'>
             Scan this QR Code with your phone and follow the instructions
@@ -79,11 +89,13 @@ export default async function CreateItem({
                 name='name'
                 placeholder='Phone'
                 className='w-full md:w-2/4'
+                required
               />
               <InputText
                 labelText='Item description'
                 name='description'
                 placeholder='My phone'
+                required
               />
               <SubmitButton
                 text='Create item'
@@ -106,18 +118,6 @@ export default async function CreateItem({
           </Text>
         </Card>
       </div>
-    </div>
-  ) : (
-    <div className='flex w-full flex-1 flex-col items-center justify-center gap-5'>
-      <Text variant='h4' className='text-center opacity-50'>
-        {"This QR Code doesn't exist"}
-      </Text>
-      <Button
-        text='Go back'
-        variant='primary'
-        color='green'
-        onClick={() => NextResponse.redirect(`/dashboard`)}
-      />
     </div>
   );
 }
