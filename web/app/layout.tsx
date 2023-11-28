@@ -1,4 +1,4 @@
-import AuthButton from '@/components/AuthButton';
+import AuthButton from '@/components/auth/AuthButton';
 import { Text } from '@/components/common/text';
 import { GeistSans } from 'geist/font';
 

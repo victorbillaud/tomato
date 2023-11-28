@@ -43,6 +43,7 @@ export interface Database {
           lost: boolean
           lost_at: string | null
           name: string
+          notify_anyway: boolean
           qrcode_id: string | null
           user_id: string
         }
@@ -54,6 +55,7 @@ export interface Database {
           lost?: boolean
           lost_at?: string | null
           name: string
+          notify_anyway?: boolean
           qrcode_id?: string | null
           user_id: string
         }
@@ -65,6 +67,7 @@ export interface Database {
           lost?: boolean
           lost_at?: string | null
           name?: string
+          notify_anyway?: boolean
           qrcode_id?: string | null
           user_id?: string
         }
@@ -123,6 +126,7 @@ export interface Database {
           created_at: string
           id: string
           item_id: string | null
+          name: string
           user_id: string
         }
         Insert: {
@@ -130,6 +134,7 @@ export interface Database {
           created_at?: string
           id?: string
           item_id?: string | null
+          name?: string
           user_id: string
         }
         Update: {
@@ -137,6 +142,7 @@ export interface Database {
           created_at?: string
           id?: string
           item_id?: string | null
+          name?: string
           user_id?: string
         }
         Relationships: [
@@ -245,7 +251,6 @@ export interface Database {
           id: string
           name: string
           owner: string | null
-          owner_id: string | null
           public: boolean | null
           updated_at: string | null
         }
@@ -257,7 +262,6 @@ export interface Database {
           id: string
           name: string
           owner?: string | null
-          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
@@ -269,11 +273,17 @@ export interface Database {
           id?: string
           name?: string
           owner?: string | null
-          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "buckets_owner_fkey"
+            columns: ["owner"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       migrations: {
         Row: {
@@ -305,7 +315,6 @@ export interface Database {
           metadata: Json | null
           name: string | null
           owner: string | null
-          owner_id: string | null
           path_tokens: string[] | null
           updated_at: string | null
           version: string | null
@@ -318,7 +327,6 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
-          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
@@ -331,7 +339,6 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
-          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null

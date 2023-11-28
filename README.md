@@ -9,7 +9,9 @@
 
 ## Install dependencies
 
-`pnpm install`
+```bash
+pnpm install
+```
 
 ## Fill .env file
 
@@ -17,7 +19,9 @@ You need to create a `.env.local` file with the following the `.env.example` fil
 
 ## Run the app
 
-`pnpm run dev`
+```bash
+pnpm run dev
+```
 
 # How to use supabase
 
@@ -25,7 +29,13 @@ You need to create a `.env.local` file with the following the `.env.example` fil
 
 ### Install supabase CLI
 
-`npm install -g supabase-cli` or `brew install supabase-cli`
+```bash
+npm install -g supabase-cli
+```
+or 
+```bash
+brew install supabase-cli
+```
 
 ### Run supabase
 
@@ -33,7 +43,9 @@ Before running supabase you need to create a `.env` file with the following vari
 
 Then you can start supabase with:
 
-`supabase start`
+```bash
+supabase start
+```
 
 ### Errors
 
@@ -43,10 +55,11 @@ Because we are using env variable in the supabase config file, you need to first
 
 For example if you are at the root of the project you can run this command to source the `.env` file.
 
-`source ./supabase/.env`
+```bash
+source ./supabase/.env
+```
 
 Then you can restart the supabase server.
-
 
 ## Deployments
 
@@ -64,13 +77,17 @@ Create an employees table under the public schema using Studio UI, accessible at
 
 Next, generate a schema diff by running the following command:
 
-`supabase db diff -f new_employee`
+```bash
+supabase db diff -f new_employee
+```
 
 ### Manual migrations
 
 #### Create a new migration script by running:
 
-`supabase migration new name_of_migration`
+```bash
+supabase migration new name_of_migration
+```
 
 You should see a new file created: `supabase/migrations/<timestamp>_name_of_migration.sql`. You can then write SQL statements in this script using a text editor:
 
@@ -83,31 +100,49 @@ create table public.example (
 
 Apply the new migration to your **local database**:
 
-`supabase db reset`
+```bash
+supabase db reset
+```
 
 This command recreates your local database from scratch and applies all migration scripts under supabase/migrations directory. Now your local database is up to date.
 
 # Tomato helper
 
-This `tomato.py` file is a custom CLI for repetitive tasks. 
+The `tomato.py` file in the `cli` directory is a custom CLI for repetitive tasks.
 To use it you need to follow this steps:
 
-1. Install python requirements: `pip install -r requirements.txt`
+1. Install python requirements: `pip install -r cli/requirements.txt`
 
-2. Create a `.env` file with the following variables:
+2. Create a `.env` file with the following variables (see https://app.supabase.com/dashboard/project/_/settings/general):
 
 ```
 SUPABASE_PROJECT_ID=
 ```
 
-3. Run the script with `python tomato.py` or create an alias in your `.bashrc` (or `.zshrc`) file:
+3. Source the `source_me` file every time you start a new working session:
 
-```
-alias tomato="python /path/to/tomato.py"
+```bash
+source source_me
 ```
 
-4. Now you can use the CLI with `tomato` command
+Or add this line to your `.bashrc` or `.zshrc` depending on which on you use:
+
+```bash
+alias tmt="python3 /path/to/tomato/cli/tomato.py"
+```
+
+4. Now you can use the CLI with `tmt` command
 
 ### Available commands
 
-- `tomato db_types` : Generate typescript types for supabase tables 
+- `tmt db_types` : Generate typescript types for supabase tables
+- `tmt db_migrate` : Apply pending database migration to your local supabase instance
+- `tmt db_reset` : Reset your local database and apply all the migrations
+- `tmt db_types` : Generates the supabase database types for typescript development
+- `tmt setup` : Install all the project dependencies needed by node.js
+- `tmt start` : Start the supabase local instance with the environments loaded
+- `tmt stop` : Stop the supabase local instance
+
+You can see each one off these by doing:
+
+- `tmt -h`

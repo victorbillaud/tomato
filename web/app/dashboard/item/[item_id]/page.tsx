@@ -1,6 +1,8 @@
 import { SubmitButton } from '@/components/common/button';
+import { Tag } from '@/components/common/tag';
 import { Text } from '@/components/common/text';
 import { ItemInfo, ItemScanHistory, ItemStateBanner } from '@/components/item';
+import { ItemSettings } from '@/components/item/ItemSettings';
 import { QrCode } from '@/components/qrcode/QrCode';
 import { createClient } from '@/utils/supabase/server';
 import { getItem, updateItem } from '@utils/lib/item/services';
@@ -76,10 +78,17 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
         <div className='flex w-full flex-col items-center justify-center gap-5 md:flex-row'>
           <ItemInfo item={item} />
           {item.qrcode[0].barcode_data && (
-            <QrCode url={item.qrcode[0].barcode_data} download />
+            <div className='flex flex-col items-center gap-2'>
+              <Tag
+                className='text-center'
+                text={item.qrcode[0].name}
+                color='blue'
+              />
+              <QrCode url={item.qrcode[0].barcode_data} download />
+            </div>
           )}
         </div>
-
+        <ItemSettings item={item} />
         {item.qrcode_id ? (
           <ItemScanHistory item={item} />
         ) : (

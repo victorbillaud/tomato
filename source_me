@@ -1,0 +1,1 @@
+alias tmt="python3 $PWD/cli/tomato.py"

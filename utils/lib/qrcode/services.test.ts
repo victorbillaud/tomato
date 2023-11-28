@@ -21,6 +21,7 @@ describe('qrcode service module', () => {
         expect(qrCode.id).toBeDefined();
         expect(qrCode.user_id).toBeDefined();
         expect(qrCode.barcode_data).toBeDefined();
+        expect(qrCode.name).toBeDefined();
     });
 
     test('list qrcode object', async () => {
@@ -45,9 +46,11 @@ describe('qrcode service module', () => {
 
     test('get qrcode object', async () => {
         const data = await signInFakeUser(sp);
+        const qrCodeName = 'test name';
 
         const { data: qrCode } = await insertQRCode(sp, {
             user_id: data.user.id,
+            name: qrCodeName
         });
 
         const { data: qrCodeObject, error } = await getQRCode(sp, qrCode.id);
@@ -61,6 +64,7 @@ describe('qrcode service module', () => {
         expect(qrCodeObject.id).toBe(qrCode.id);
         expect(qrCodeObject.user_id).toBe(qrCode.user_id);
         expect(qrCodeObject.barcode_data).toBe(qrCode.barcode_data);
+        expect(qrCode.name).toBe(qrCodeName);
 
         await sp.auth.signOut();
     });
