@@ -7,4 +7,5 @@ export interface IIconProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: string;
   stroke?: number;
   fill?: boolean;
+  animateOnClick?: boolean;
 }

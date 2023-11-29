@@ -8,6 +8,7 @@ import {
 } from '@utils/lib/messaging/services';
 import { redirect } from 'next/navigation';
 import ChatList from '@/components/chat/ChatList';
+import MobileHeader from '@/components/chat/MobileHeader';
 
 export default async function Index(props: {
   params: { conversation_id: string };
@@ -40,6 +41,7 @@ export default async function Index(props: {
         <ChatList selectedConversationId={props.params.conversation_id} />
       </div>
       <div className='flex h-full w-full min-w-[66%] flex-col justify-end gap-2 '>
+        <MobileHeader />
         <Chat messages={messages} users={users} currentUser={user} />
         <Input conversation_id={props.params.conversation_id} />
       </div>
