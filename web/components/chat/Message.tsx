@@ -3,6 +3,7 @@ import dateFormat, { masks } from 'dateformat';
 
 masks.timeOnly = 'HH:MM';
 masks.dateOnly = 'dd mmm yyyy';
+masks.dateTime = 'dd mmm yyyy HH:MM';
 
 const Message = ({
   message,
@@ -76,7 +77,10 @@ const Message = ({
           {dateFormat(message.created_at, masks.dateOnly)}
         </div>
       ) : null}
-      <div className={`flex w-full flex-col font-light ${messageStyle}`}>
+      <div
+        className={`flex w-full flex-col font-light ${messageStyle}`}
+        title={dateFormat(message.created_at, masks.dateTime)}
+      >
         <div
           className={`mt-1 w-fit max-w-[60%] rounded-3xl px-4 py-2 text-white ${messageColor} ${messageBubbleStyle}`}
         >

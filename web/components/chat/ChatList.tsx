@@ -7,8 +7,13 @@ import { getItem } from '@utils/lib/item/services';
 import { getUserAvatarUrlById } from '@utils/lib/user/services';
 import Image from 'next/image';
 import { Icon } from '../common/icon';
+import dateFormat from 'dateformat';
+import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
+import { ChatListProps } from './types';
 
-export default async function ChatList() {
+export default async function ChatList({
+  selectedConversationId,
+}: ChatListProps) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -46,6 +51,31 @@ export default async function ChatList() {
     return item;
   }
 
+  const lastMsgDate = (conversation: TConversationWithLastMessage) => {
+    const today = new Date();
+    const lastMsgDate = new Date(
+      conversation.last_message?.created_at as string
+    );
+    const timeDifference = today.getTime() - lastMsgDate.getTime();
+
+    // Si le message a été envoyé aujourd'hui, afficher simplement l'heure
+    if (today.getDate() === lastMsgDate.getDate()) {
+      return dateFormat(conversation.last_message?.created_at, 'HH:MM');
+    }
+    // Si le message a été envoyé il y a moins de 7j, afficher le jour de la semaine et l'heure
+    else if (timeDifference < 7 * 24 * 60 * 60 * 1000) {
+      return dateFormat(conversation.last_message?.created_at, 'ddd HH:MM');
+    }
+    // Si il a été envoyé il y a moins de un an, afficher le jour et le mois
+    else if (timeDifference < 365 * 24 * 60 * 60 * 1000) {
+      return dateFormat(conversation.last_message?.created_at, 'dd mmm');
+    }
+    // sinon afficher le jour, le mois et l'année
+    else {
+      return dateFormat(conversation.last_message?.created_at, 'dd mmm yy');
+    }
+  };
+
   return (
     <div className='flex h-full w-full flex-col divide-y-[1px] divide-gray-700 dark:divide-white'>
       <Text variant={'h2'} className='pb-6 pt-2'>
@@ -58,30 +88,37 @@ export default async function ChatList() {
             conversation.finder_id
           );
 
+          const selectedStyle =
+            selectedConversationId === conversation?.id
+              ? ' bg-gray-700/10 dark:bg-white/20 '
+              : '';
+
           const itemInfo = await getItemInfo(conversation.item_id);
 
           return (
             <Link
               href={/chat/ + conversation.id}
               key={conversation.id}
-              className='flex items-center space-x-2 p-2 hover:bg-gray-700/10 dark:hover:bg-white/20'
+              className={`${selectedStyle} flex items-center gap-2 p-2 hover:bg-gray-700/10 dark:hover:bg-white/20`}
             >
-              {avatarUrl ? (
-                <Image
-                  src={avatarUrl}
-                  alt='avatar'
-                  width={40}
-                  height={40}
-                  className=' rounded-full'
-                />
-              ) : (
-                <Icon
-                  name='user-circle'
-                  size={44}
-                  stroke={1}
-                  color='dark:text-white text-black'
-                />
-              )}
+              <div>
+                {avatarUrl ? (
+                  <Image
+                    src={avatarUrl}
+                    alt='avatar'
+                    width={40}
+                    height={40}
+                    className=' rounded-full'
+                  />
+                ) : (
+                  <Icon
+                    name='user-circle'
+                    size={44}
+                    stroke={1}
+                    color='dark:text-white text-black'
+                  />
+                )}
+              </div>
 
               <div>
                 <Text variant={'h4'}>{itemInfo?.name}</Text>
@@ -93,6 +130,10 @@ export default async function ChatList() {
                     {conversation.last_message?.content}
                   </Text>
                 </Text>
+              </div>
+
+              <div className='ml-auto'>
+                <Text variant={'body'}>{lastMsgDate(conversation)}</Text>
               </div>
             </Link>
           );

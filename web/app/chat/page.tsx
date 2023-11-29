@@ -13,7 +13,7 @@ export default async function Index() {
   return (
     <>
       <div className='w-full'>
-        <ChatList />
+        <ChatList selectedConversationId={null} />
       </div>
       <div className='hidden h-full min-w-[66%] sm:flex'>
         <Chat messages={null} users={null} currentUser={user} />

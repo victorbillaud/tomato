@@ -1,6 +1,10 @@
 import { User } from '@supabase/supabase-js';
 import { Database } from '@utils/lib/supabase/supabase_types';
 
+export type ChatListProps = {
+  selectedConversationId: string | null;
+};
+
 export type ChatProps = {
   messages: Array<TMessage> | null;
   users: Array<TProfile> | null;

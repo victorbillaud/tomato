@@ -4,7 +4,7 @@ import { getUserDetails } from '../user/services';
 
 type ArrayElementType<T> = T extends (infer U)[] ? U : never;
 
-type TConversation = ArrayElementType<
+export type TConversationWithLastMessage = ArrayElementType<
   Database['public']['Functions']['get_user_conversations_with_last_message']['Returns']
 > & {
   last_message: {
@@ -17,7 +17,7 @@ type TConversation = ArrayElementType<
 export async function listUserConversations(
   supabaseInstance: SupabaseClient<Database>
 ): Promise<{
-  data: TConversation[];
+  data: TConversationWithLastMessage[];
   error: PostgrestError | null;
 }> {
   const {
@@ -32,7 +32,7 @@ export async function listUserConversations(
   );
 
   return { data, error } as {
-    data: TConversation[];
+    data: TConversationWithLastMessage[];
     error: PostgrestError | null;
   };
 }

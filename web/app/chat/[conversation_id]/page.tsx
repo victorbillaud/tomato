@@ -37,7 +37,7 @@ export default async function Index(props: {
   return (
     <>
       <div className='hidden w-full sm:block'>
-        <ChatList />
+        <ChatList selectedConversationId={props.params.conversation_id} />
       </div>
       <div className='flex h-full w-full min-w-[66%] flex-col justify-end gap-2 '>
         <Chat messages={messages} users={users} currentUser={user} />
