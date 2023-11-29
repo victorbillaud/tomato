@@ -6,20 +6,22 @@ export type ChatListProps = {
 };
 
 export type ChatProps = {
-  messages: Array<TMessage> | null;
-  users: Array<TProfile> | null;
+  messages: Array<DBMessage> | null;
   currentUser: User | null;
 };
 
 export type MessageProps = {
-  message: TMessage;
-  prevMessage: TMessage | null;
-  nextMessage: TMessage | null;
+  message: DBMessage;
+  prevMessage: DBMessage | null;
+  nextMessage: DBMessage | null;
   currentUser: User | null;
 };
 
-export type TConversation = Database['public']['Tables']['conversation']['Row'];
+// rename database types to be more readable
 
-export type TMessage = Database['public']['Tables']['message']['Row'];
+export type DBConversation =
+  Database['public']['Tables']['conversation']['Row'];
 
-export type TProfile = Database['public']['Tables']['profiles']['Row'];
+export type DBMessage = Database['public']['Tables']['message']['Row'];
+
+export type DBProfile = Database['public']['Tables']['profiles']['Row'];

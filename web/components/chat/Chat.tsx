@@ -1,10 +1,9 @@
 'use client';
-import { ChatProps, TMessage } from './types';
+import { ChatProps } from './types';
 import Message from './Message';
 import { useEffect, useRef } from 'react';
 
-// TODO: set this to a realtime
-const Chat = ({ messages, users, currentUser }: ChatProps) => {
+const Chat = ({ messages, currentUser }: ChatProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

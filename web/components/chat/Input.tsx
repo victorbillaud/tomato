@@ -18,6 +18,7 @@ const sendMessage = async (formData: FormData) => {
     return;
   }
 
+  // Insert the message in the database
   const { insertedMessage, error } = await insertMessage(supabase, {
     content: value as string,
     conversation_id: conversation_id as string,

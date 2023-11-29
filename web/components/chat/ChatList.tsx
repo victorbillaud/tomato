@@ -1,15 +1,17 @@
 import { cookies } from 'next/headers';
-import { Text } from '../common/text';
 import { createClient } from '@/utils/supabase/server';
-import Link from 'next/link';
-import { listUserConversations } from '@utils/lib/messaging/services';
+import {
+  listUserConversations,
+  TConversationWithLastMessage,
+} from '@utils/lib/messaging/services';
 import { getItem } from '@utils/lib/item/services';
 import { getUserAvatarUrlById } from '@utils/lib/user/services';
+import { ChatListProps } from './types';
+import Link from 'next/link';
 import Image from 'next/image';
+import { Text } from '../common/text';
 import { Icon } from '../common/icon';
 import dateFormat from 'dateformat';
-import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
-import { ChatListProps } from './types';
 
 export default async function ChatList({
   selectedConversationId,
@@ -127,7 +129,7 @@ export default async function ChatList({
 
               <div className='flex-grow truncate'>
                 <Text variant={'h4'}>
-                  {isOwner ? 'My ' : 'Found: ' + itemInfo?.name}
+                  {`${isOwner ? 'My ' : 'Found: '}${itemInfo?.name}`}
                 </Text>
                 <Text variant={'body'}>
                   <Text variant={'body'} className='truncate'>
