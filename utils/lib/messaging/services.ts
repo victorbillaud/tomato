@@ -71,6 +71,10 @@ export async function getConversationUsers(
     .select('owner_id, finder_id')
     .eq('id', conversationId);
 
+  if (error) {
+    return { users: null, error };
+  }
+
   let users: Database['public']['Tables']['profiles']['Row'][] = [];
 
   for (const user in data[0]) {

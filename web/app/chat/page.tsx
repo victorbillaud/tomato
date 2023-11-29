@@ -1,4 +1,5 @@
 import Chat from '@/components/chat/Chat';
+import ChatList from '@/components/chat/ChatList';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
@@ -10,8 +11,13 @@ export default async function Index() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className='flex h-full w-2/3'>
-      <Chat messages={null} currentUser={user} />
-    </div>
+    <>
+      <div className='w-full'>
+        <ChatList />
+      </div>
+      <div className='hidden h-full min-w-[66%] sm:flex'>
+        <Chat messages={null} users={null} currentUser={user} />
+      </div>
+    </>
   );
 }

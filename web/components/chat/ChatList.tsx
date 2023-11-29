@@ -47,7 +47,7 @@ export default async function ChatList() {
   }
 
   return (
-    <div className='flex h-full w-1/3 flex-col divide-y-[1px] divide-gray-700 dark:divide-white'>
+    <div className='flex h-full w-full flex-col divide-y-[1px] divide-gray-700 dark:divide-white'>
       <Text variant={'h2'} className='pb-6 pt-2'>
         Conversations
       </Text>
@@ -75,7 +75,12 @@ export default async function ChatList() {
                   className=' rounded-full'
                 />
               ) : (
-                <Icon name='user-circle' size={44} stroke={1} />
+                <Icon
+                  name='user-circle'
+                  size={44}
+                  stroke={1}
+                  color='dark:text-white text-black'
+                />
               )}
 
               <div>

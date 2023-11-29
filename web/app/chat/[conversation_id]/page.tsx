@@ -6,6 +6,8 @@ import {
   getConversationMessages,
   getConversationUsers,
 } from '@utils/lib/messaging/services';
+import { redirect } from 'next/navigation';
+import ChatList from '@/components/chat/ChatList';
 
 export default async function Index(props: {
   params: { conversation_id: string };
@@ -22,15 +24,25 @@ export default async function Index(props: {
     props.params.conversation_id
   );
 
+  // if can't get messages, redirect to chat page
+  if (messageError) {
+    redirect('/chat');
+  }
+
   const { users, error: usersError } = await getConversationUsers(
     supabase,
     props.params.conversation_id
   );
 
   return (
-    <div className='flex h-full w-2/3 flex-col justify-end space-y-2 '>
-      <Chat messages={messages} users={users} currentUser={user} />
-      <Input conversation_id={props.params.conversation_id} />
-    </div>
+    <>
+      <div className='hidden w-full sm:block'>
+        <ChatList />
+      </div>
+      <div className='flex h-full w-full min-w-[66%] flex-col justify-end gap-2 '>
+        <Chat messages={messages} users={users} currentUser={user} />
+        <Input conversation_id={props.params.conversation_id} />
+      </div>
+    </>
   );
 }
