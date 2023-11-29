@@ -35,7 +35,7 @@ const sendMessage = async (formData: FormData) => {
   revalidatePath('/chat/' + conversation_id);
 };
 
-async function Input(props: { conversation_id: string }) {
+const Input = (props: { conversation_id: string }) => {
   return (
     <form action={sendMessage} className='flex '>
       <InputText name='message' placeholder='Type a message' />
@@ -57,6 +57,6 @@ async function Input(props: { conversation_id: string }) {
       </div>
     </form>
   );
-}
+};
 
 export default Input;

@@ -22,12 +22,12 @@ export default async function ChatList({
     error,
   } = await supabase.auth.getUser();
 
-  const { data: conversations, error: conversationsError } =
-    await listUserConversations(supabase);
-
   if (error || !user) {
     throw new Error('User not found');
   }
+
+  const { data: conversations, error: conversationsError } =
+    await listUserConversations(supabase);
 
   if (conversationsError) {
     console.error(conversationsError);
@@ -42,6 +42,7 @@ export default async function ChatList({
       return dateB.getTime() - dateA.getTime();
     });
 
+  // ! Pour l'instant on ne peut pas récupérer les infos de l'item lorsque l'on est finder
   async function getItemInfo(itemId: string) {
     const { data: item, error } = await getItem(supabase, itemId);
     if (error) {
@@ -51,7 +52,9 @@ export default async function ChatList({
     return item;
   }
 
-  const lastMsgDate = (conversation: TConversationWithLastMessage) => {
+  const displayLastMessageDate = (
+    conversation: TConversationWithLastMessage
+  ) => {
     const today = new Date();
     const lastMsgDate = new Date(
       conversation.last_message?.created_at as string
@@ -83,17 +86,19 @@ export default async function ChatList({
       </Text>
       {conversations &&
         conversations.map(async (conversation) => {
+          let isOwner = conversation.owner_id === user?.id;
+
           const { avatarUrl, error: avatarError } = await getUserAvatarUrlById(
             supabase,
-            conversation.finder_id
+            isOwner ? conversation.finder_id : conversation.owner_id
           );
+
+          const itemInfo = await getItemInfo(conversation.item_id);
 
           const selectedStyle =
             selectedConversationId === conversation?.id
               ? ' bg-gray-700/10 dark:bg-white/20 '
               : '';
-
-          const itemInfo = await getItemInfo(conversation.item_id);
 
           return (
             <Link
@@ -101,7 +106,7 @@ export default async function ChatList({
               key={conversation.id}
               className={`${selectedStyle} flex items-center gap-2 p-2 hover:bg-gray-700/10 dark:hover:bg-white/20`}
             >
-              <div>
+              <div className='flex-shrink-0'>
                 {avatarUrl ? (
                   <Image
                     src={avatarUrl}
@@ -120,8 +125,10 @@ export default async function ChatList({
                 )}
               </div>
 
-              <div>
-                <Text variant={'h4'}>{itemInfo?.name}</Text>
+              <div className='flex-grow truncate'>
+                <Text variant={'h4'}>
+                  {isOwner ? 'My ' : 'Found: ' + itemInfo?.name}
+                </Text>
                 <Text variant={'body'}>
                   <Text variant={'body'} className='truncate'>
                     {conversation.last_message?.sender_id === user?.id
@@ -132,8 +139,10 @@ export default async function ChatList({
                 </Text>
               </div>
 
-              <div className='ml-auto'>
-                <Text variant={'body'}>{lastMsgDate(conversation)}</Text>
+              <div className='flex-shrink-0'>
+                <Text variant={'body'}>
+                  {displayLastMessageDate(conversation)}
+                </Text>
               </div>
             </Link>
           );

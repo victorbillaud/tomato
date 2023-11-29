@@ -12,7 +12,7 @@ export default async function Index() {
 
   return (
     <>
-      <div className='w-full'>
+      <div className='w-full sm:w-1/3'>
         <ChatList selectedConversationId={null} />
       </div>
       <div className='hidden h-full min-w-[66%] sm:flex'>
