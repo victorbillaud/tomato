@@ -159,6 +159,20 @@ def run_edge_function():
     )
 
 
+def deploy_edge_function():
+    """Deploy a supabase function"""
+    # Move to supabase directory
+    os.chdir("./supabase")
+    # Create a new supabase function
+    subprocess.run(
+        [
+            "supabase",
+            "functions",
+            "deploy",
+        ]
+    )
+
+
 COMMANDS = {
     "db_types": generate_supabase_types,
     "db_apply": apply_db_change_to_migration,
@@ -166,6 +180,7 @@ COMMANDS = {
     "db_migrate": migrate_db_changes,
     "fn_new": create_edge_function,
     "fn_run": run_edge_function,
+    "fn_deploy": deploy_edge_function,
     "setup": install_dependencies,
     "start": start_supabase,
     "stop": stop_supabase,

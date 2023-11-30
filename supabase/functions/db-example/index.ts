@@ -43,7 +43,7 @@ const handler = async (_request: Request): Promise<Response> => {
     const { data, error } = await supabase.from('profiles').select('*')
     if (error) throw error
 
-    return new Response(JSON.stringify({ user, data }), {
+    return new Response(JSON.stringify({ data }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
