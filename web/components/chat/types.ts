@@ -1,8 +1,16 @@
 import { User } from '@supabase/supabase-js';
+import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
 import { Database } from '@utils/lib/supabase/supabase_types';
 
 export type ChatListProps = {
   selectedConversationId: string | null;
+};
+
+export type ChatCardProps = {
+  conversation: TConversationWithLastMessage;
+  selectedConversationId: string | null;
+  user: User | null;
+  itemInfo: Database['public']['Tables']['item']['Row'] | null;
 };
 
 export type ChatProps = {

@@ -73,7 +73,7 @@ const Message = ({
   return (
     <>
       {displayDate ? (
-        <div className='text-center text-sm'>
+        <div className='py-2 text-center text-sm'>
           {dateFormat(message.created_at, masks.dateOnly)}
         </div>
       ) : null}

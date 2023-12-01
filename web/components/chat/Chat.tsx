@@ -56,7 +56,7 @@ const Chat = ({ messages, currentUser }: ChatProps) => {
 
   return (
     <div
-      className='h-full w-full overflow-y-scroll rounded-md px-2 py-2 dark:text-white sm:bg-slate-100 sm:px-6 sm:dark:bg-zinc-700'
+      className='h-full w-full overflow-y-scroll rounded-md px-2 py-2 dark:text-white sm:px-6 '
       ref={scrollContainerRef}
     >
       <>{renderMessages()}</>

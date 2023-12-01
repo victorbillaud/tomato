@@ -12,10 +12,10 @@ export default async function Index() {
 
   return (
     <>
-      <div className='w-full sm:w-1/3'>
+      <div className='w-full border-gray-700/10 dark:border-white/20 sm:w-1/3 sm:border-r-[1px]'>
         <ChatList selectedConversationId={null} />
       </div>
-      <div className='hidden h-full min-w-[66%] sm:block'>
+      <div className='hidden h-full w-full sm:flex sm:w-2/3'>
         <Chat messages={null} currentUser={user} />
       </div>
     </>
