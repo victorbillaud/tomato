@@ -141,6 +141,8 @@ def create_edge_function(function_name: str):
         # Create a new supabase function
         subprocess.run(["supabase", "functions", "new", function_name])
 
+    os.chdir("../")
+
 
 def run_edge_function():
     """Run a supabase function"""
@@ -158,6 +160,8 @@ def run_edge_function():
         ]
     )
 
+    os.chdir("../")
+
 
 def deploy_edge_function():
     """Deploy a supabase function"""
@@ -171,6 +175,8 @@ def deploy_edge_function():
             "deploy",
         ]
     )
+
+    os.chdir("../")
 
 
 COMMANDS = {
