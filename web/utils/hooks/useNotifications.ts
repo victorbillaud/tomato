@@ -15,7 +15,7 @@ type NotificationRecord = Database['public']['Tables']['notification']['Row'];
 export function useNotifications({
     client,
     user_id,
-}: TUseNotificationParams): [NonNullable<NotificationRecord>[], boolean] {
+}: TUseNotificationParams): [NotificationRecord[], boolean] {
     const [notifications, setNotifications] = useState<NotificationRecord[]>(
         []
     );
@@ -25,6 +25,7 @@ export function useNotifications({
         // Fetch initial messages
         const fetchMessages = async () => {
             const { data, error } = await listUserNotifications({
+                // @ts-ignore
                 client: client,
             });
 
@@ -38,22 +39,24 @@ export function useNotifications({
 
         // Set up real-time message subscription
         const notificatonChannel = client
-            .channel(`notification-inserts`)
+            .channel(`notification:${user_id}`)
             .on(
                 'postgres_changes',
                 {
-                    event: 'INSERT',
+                    event: "*",
                     schema: 'public',
                     table: 'notification',
                     filter: `user_id=eq.${user_id}`,
                 },
                 async (payload) => {
-                    const notification = payload.new;
+                    const notification = payload.new as NotificationRecord;
 
-                    if (!notification) {
-                        console.error('Error fetching messages');
-                    } else {
-                        setNotifications((notifications) => [...notifications, notification as NotificationRecord]);
+                    if (payload.eventType === "INSERT") {
+                        setNotifications((prevNotifications) => [...prevNotifications, notification as NotificationRecord]);
+                    } else if (payload.eventType === "UPDATE") {
+                        setNotifications((prevNotifications) => prevNotifications.map(n => n.id === notification.id ? notification as NotificationRecord : n));
+                    } else if (payload.eventType === "DELETE") {
+                        setNotifications((prevNotifications) => prevNotifications.filter(n => n.id !== notification.id));
                     }
                 }
             )
