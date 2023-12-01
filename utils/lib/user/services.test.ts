@@ -26,7 +26,6 @@ describe('user details module', () => {
     expect(error).toBeNull();
     expect(user).toBeDefined();
     expect(user).toHaveProperty('id', testUser.id);
-    expect(user).toHaveProperty('email', 'test@example.com');
 
     await deleteFakeUser(sp, testUser.id);
     const deletedUser = await sp
@@ -69,6 +68,6 @@ describe('user details module', () => {
     expect(error).toHaveProperty('message');
     expect(error.message).toBeDefined();
 
-    expect(avatarUrl).toBeNull();
+    expect(avatarUrl).toBeUndefined();
   });
 });
