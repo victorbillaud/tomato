@@ -84,7 +84,7 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
                 text={item.qrcode[0].name}
                 color='blue'
               />
-              <QrCode url={item.qrcode[0].barcode_data} download />
+              <QrCode url={item.qrcode[0].barcode_data} size={200} download />
             </div>
           )}
         </div>
