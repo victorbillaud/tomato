@@ -73,11 +73,11 @@ export default async function ChatList({
     }
     // Si il a été envoyé il y a moins de un an, afficher le jour et le mois
     else if (timeDifference < 365 * 24 * 60 * 60 * 1000) {
-      return dateFormat(conversation.last_message?.created_at, 'dd mmm');
+      return dateFormat(conversation.last_message?.created_at, 'd mmm');
     }
     // sinon afficher le jour, le mois et l'année
     else {
-      return dateFormat(conversation.last_message?.created_at, 'dd mmm yy');
+      return dateFormat(conversation.last_message?.created_at, 'd mmm yy');
     }
   };
 
@@ -131,13 +131,11 @@ export default async function ChatList({
                 <Text variant={'h4'}>
                   {`${isOwner ? 'My ' : 'Found: '}${itemInfo?.name}`}
                 </Text>
-                <Text variant={'body'}>
-                  <Text variant={'body'} className='truncate'>
-                    {conversation.last_message?.sender_id === user?.id
-                      ? 'You: '
-                      : ''}
-                    {conversation.last_message?.content}
-                  </Text>
+                <Text variant={'body'} className='truncate'>
+                  {conversation.last_message?.sender_id === user?.id
+                    ? 'You: '
+                    : ''}
+                  {conversation.last_message?.content}
                 </Text>
               </div>
 

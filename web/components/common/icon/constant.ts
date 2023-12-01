@@ -17,6 +17,9 @@ import {
   IconUserCircle,
   IconWritingSign,
   IconWritingSignOff,
+  IconCheck,
+  IconChevronDown,
+  IconChevronUp,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -38,29 +41,9 @@ const ICONS = {
   download: IconDownload,
   pencil: IconWritingSign,
   'pencil-off': IconWritingSignOff,
-    'arrow-left': IconArrowLeft,
-    'loader': IconLoader,
-    'discord': IconBrandDiscordFilled,
-    'google': IconBrandGoogleFilled,
-    'discount-check': IconDiscountCheckFilled,
-    'discount-check-outline': IconDiscountCheck,
-    'alert': IconAlertHexagon,
-    'chevron-compact-down': IconChevronCompactDown,
-    'lock': IconLock,
-    'at': IconAt,
-    'qrcode': IconQrcode,
-    'question-mark': IconQuestionMark,
-    'download': IconDownload,
-    'pencil': IconWritingSign,
-    'pencil-off': IconWritingSignOff,
-    'check': IconCheck,
-    'chevron-down': IconChevronDown,
-    'chevron-up': IconChevronUp,
-    'send': IconSend,
-    'user-circle': IconUserCircle,
-    'download': IconDownload,
-    'pencil': IconWritingSign,
-    'pencil-off': IconWritingSignOff,
+  check: IconCheck,
+  'chevron-down': IconChevronDown,
+  'chevron-up': IconChevronUp,
 };
 
 export default ICONS;

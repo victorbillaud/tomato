@@ -2,8 +2,8 @@ import { MessageProps } from './types';
 import dateFormat, { masks } from 'dateformat';
 
 masks.timeOnly = 'HH:MM';
-masks.dateOnly = 'dd mmm yyyy';
-masks.dateTime = 'dd mmm yyyy HH:MM';
+masks.dateOnly = 'd mmm yyyy';
+masks.dateTime = 'd mmm yyyy HH:MM';
 
 const Message = ({
   message,
