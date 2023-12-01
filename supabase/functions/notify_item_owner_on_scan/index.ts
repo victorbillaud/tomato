@@ -143,6 +143,7 @@ const handler = async (_request: Request): Promise<Response> => {
         user_id: item.user_id,
         type: "email",
         title: "Your item has been scanned",
+        link: "/dashboard/item/" + item.id,
         metadata: {
           scan_id: payload.record.id,
           item_id: item.id,

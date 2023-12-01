@@ -1,12 +1,11 @@
 import { createClient } from '@/utils/supabase/server';
-import {
-  getUserAvatarUrl
-} from '@utils/lib/common/user_helper';
+import { getUserAvatarUrl } from '@utils/lib/common/user_helper';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 import { StyledLink } from '../common/link';
 import { Text } from '../common/text';
+import { NotificationPin } from '../notification/NotificationPin';
 
 export default async function AuthButton() {
   const cookieStore = cookies();
@@ -30,25 +29,35 @@ export default async function AuthButton() {
           Dashboard
         </Text>
       </Link>
-      <div className='flex w-full items-center justify-end gap-1'>
+      <div className='flex flex-row w-full items-center justify-end gap-1'>
         {user ? (
-          <Link href='/user' className='flex flex-row items-center gap-1 px-2'>
-            {userAvatarUrl ? (
-              <Image
-                src={userAvatarUrl}
-                alt='avatar'
-                width={30}
-                height={30}
-                className='rounded-full'
-              />
-            ) : (
-              <div className='h-8 w-8 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center'>
-                <Text variant='caption' weight={600} className='text-center uppercase opacity-60'>
-                  {user.email ? user.email[0] : 'A'}
-                </Text>
-              </div>
-            )}
-          </Link>
+          <>
+            <Link
+              href='/user'
+              className='flex flex-row items-center gap-1 px-2'
+            >
+              {userAvatarUrl ? (
+                <Image
+                  src={userAvatarUrl}
+                  alt='avatar'
+                  width={30}
+                  height={30}
+                  className='rounded-full'
+                />
+              ) : (
+                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-stone-200 dark:bg-stone-700'>
+                  <Text
+                    variant='caption'
+                    weight={600}
+                    className='text-center uppercase opacity-60'
+                  >
+                    {user.email ? user.email[0] : 'A'}
+                  </Text>
+                </div>
+              )}
+            </Link>
+            <NotificationPin user_id={user.id} />
+          </>
         ) : (
           <StyledLink href='/auth/login' text='Login' size='small' />
         )}

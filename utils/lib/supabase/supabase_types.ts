@@ -91,6 +91,7 @@ export interface Database {
           created_at: string
           id: string
           is_read: boolean
+          link: string | null
           metadata: Json | null
           title: string
           type: Database["public"]["Enums"]["NotificationType"]
@@ -101,6 +102,7 @@ export interface Database {
           created_at?: string
           id?: string
           is_read?: boolean
+          link?: string | null
           metadata?: Json | null
           title?: string
           type?: Database["public"]["Enums"]["NotificationType"]
@@ -111,6 +113,7 @@ export interface Database {
           created_at?: string
           id?: string
           is_read?: boolean
+          link?: string | null
           metadata?: Json | null
           title?: string
           type?: Database["public"]["Enums"]["NotificationType"]
