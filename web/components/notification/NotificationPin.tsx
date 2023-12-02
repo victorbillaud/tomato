@@ -7,9 +7,8 @@ import { useNotifications } from '@/utils/hooks/useNotifications';
 import { createClient } from '@/utils/supabase/client';
 import { Database } from '@utils/lib/supabase/supabase_types';
 import dateFormat, { masks } from 'dateformat';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { Button } from '../common/button';
 
 export type NotificationPinProps = {
@@ -17,6 +16,9 @@ export type NotificationPinProps = {
 };
 
 export const NotificationPin = ({ user_id }: NotificationPinProps) => {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  const router = useRouter();
   const supabase = createClient();
   const [notifications, notificationsLoaded] = useNotifications({
     client: supabase,
@@ -45,9 +47,9 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
   return (
     notificationsLoaded && (
       <Popover.Root>
-        <Popover.Trigger asChild>
+        <Popover.Trigger asChild ref={triggerRef}>
           <button
-            className={`flex cursor-pointer flex-row items-center justify-center gap-1 rounded-lg border border-stone-300 p-1 px-2 dark:border-stone-700 ${
+            className={`flex cursor-pointer flex-row items-center justify-center gap-1 rounded-lg border border-stone-500 p-1 px-2 opacity-100 dark:border-stone-700 ${
               notifications.filter((notification) => !notification.is_read)
                 .length == 0 && 'opacity-50'
             }`}
@@ -56,12 +58,12 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
             <Icon
               name='bell'
               size={18}
-              color='text-stone-300 dark:text-stone-300'
+              color='text-stone-500 dark:text-stone-300'
             />
             <Text
               variant='caption'
               weight={400}
-              color='text-stone-300 dark:text-stone-300'
+              color='text-stone-500 dark:text-stone-300'
               className='text-center uppercase'
             >
               {
@@ -85,16 +87,15 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
               >
                 Notifications
               </Text>
-              <Link href='/user/notifications'>
-                <Text
-                  variant='caption'
-                  weight={400}
-                  color='text-primary-400'
-                  className='text-center first-letter:capitalize'
-                >
-                  See all
-                </Text>
-              </Link>
+              <Button
+                text='See All'
+                variant='tertiary'
+                size='small'
+                onClick={() => {
+                  router.replace('/user/notifications');
+                  triggerRef.current && triggerRef.current.setAttribute('data-state', 'closed');
+                }}
+              />
             </div>
             <div className='flex flex-col border-y border-stone-300 dark:border-stone-700'>
               {notifications.length > 0 ? (
@@ -149,7 +150,7 @@ const NotificationCard = ({
       className={`flex h-14 flex-row items-center justify-between border-b ${
         !notification.is_read &&
         'border-l-2 border-l-primary-500 bg-zinc-200/30 dark:bg-zinc-800/30'
-      } border-b-zinc-700 px-4 py-2 last:border-b-0`}
+      } border-b-zinc-300 px-4 py-2 last:border-b-0 dark:border-b-zinc-700`}
       style={{
         cursor: notification.link ? 'pointer' : 'default',
       }}

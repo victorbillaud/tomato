@@ -50,7 +50,7 @@ export function useNotifications({
                 },
                 async (payload) => {
                     const notification = payload.new as NotificationRecord;
-
+                    console.log(payload);
                     if (payload.eventType === "INSERT") {
                         setNotifications((prevNotifications) => [...prevNotifications, notification as NotificationRecord]);
                     } else if (payload.eventType === "UPDATE") {
