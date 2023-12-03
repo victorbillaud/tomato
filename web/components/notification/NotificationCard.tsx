@@ -1,7 +1,6 @@
 'use client';
 
 import { Database } from '@utils/lib/supabase/supabase_types';
-import dateFormat, { masks } from 'dateformat';
 import { Button } from '../common/button';
 import { Text } from '../common/text/Text';
 
@@ -38,7 +37,7 @@ export const NotificationCard = ({
           weight={400}
           className='text-center opacity-60 first-letter:capitalize'
         >
-          {dateFormat(notification.created_at, masks.shortTime)}
+          {notificationDate(new Date(notification.created_at))}
         </Text>
       </div>
       {!notification.is_read && (
@@ -58,3 +57,23 @@ export const NotificationCard = ({
     </div>
   );
 };
+
+function notificationDate(date: Date): string {
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+
+  const seconds = diff / 1000;
+  const minutes = seconds / 60;
+  const hours = minutes / 60;
+  const days = hours / 24;
+
+  if (minutes < 1) {
+    return 'just now';
+  } else if (minutes < 60) {
+    return `${Math.floor(minutes)} minutes ago`;
+  } else if (hours < 24) {
+    return `${Math.floor(hours)} hours ago`;
+  } else {
+    return `${Math.floor(days)} days ago`;
+  }
+}

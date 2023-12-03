@@ -47,8 +47,8 @@ export const NotificationList: React.FC<NotificationListProps> = ({
   }, [supabase, user_id]);
 
   return (
-    <div className='w-full flex flex-1 flex-col items-end justify-center gap-2'>
-      <div className='flex w-full flex-row items-center justify-end'>
+    <div className='flex w-full flex-1 flex-col items-end justify-center gap-2'>
+      <div className='flex w-full flex-row items-center justify-between'>
         <Button
           text='Mark all as read'
           className='opacity-80'
@@ -68,6 +68,13 @@ export const NotificationList: React.FC<NotificationListProps> = ({
               key={notification.id}
               notification={notification}
               markNotificationAsRead={handleMarkNotificationAsRead}
+              onClick={() => {
+                if (notification.link) {
+                  router.push(notification.link);
+                  !notification.is_read &&
+                    handleMarkNotificationAsRead(notification.id);
+                }
+              }}
             />
           ))}
         </div>

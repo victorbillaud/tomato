@@ -78,7 +78,7 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Content
-            className='overflow-hidden rounded-lg border border-stone-300 bg-zinc-100 dark:border-stone-700 dark:bg-zinc-900'
+            className='overflow-hidden rounded-lg border border-stone-300 bg-zinc-100/80 backdrop-blur-lg dark:border-stone-700 dark:bg-zinc-900/70'
             sideOffset={5}
             align='end'
           >
