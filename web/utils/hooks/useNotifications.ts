@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 export type TUseNotificationParams = {
     client: SupabaseClient<Database>;
     user_id: string;
+    onlyUnread?: boolean;
 };
 
 type NotificationRecord = Database['public']['Tables']['notification']['Row'];
@@ -15,6 +16,7 @@ type NotificationRecord = Database['public']['Tables']['notification']['Row'];
 export function useNotifications({
     client,
     user_id,
+    onlyUnread = true,
 }: TUseNotificationParams): [NotificationRecord[], boolean] {
     const [notifications, setNotifications] = useState<NotificationRecord[]>(
         []
@@ -27,6 +29,7 @@ export function useNotifications({
             const { data, error } = await listUserNotifications({
                 // @ts-ignore
                 client: client,
+                onlyUnread: onlyUnread,
             });
 
             if (error || !data) {
@@ -38,7 +41,7 @@ export function useNotifications({
         };
 
         // Set up real-time message subscription
-        const notificatonChannel = client
+        const notificationsChannel = client
             .channel(`notification:${user_id}`)
             .on(
                 'postgres_changes',
@@ -65,7 +68,7 @@ export function useNotifications({
         fetchMessages();
 
         return () => {
-            notificatonChannel.unsubscribe();
+            notificationsChannel.unsubscribe();
         };
     }, [user_id]);
 
