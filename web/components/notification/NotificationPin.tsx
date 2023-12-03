@@ -3,16 +3,16 @@
 import { Icon } from '@/components/common/icon';
 import { Text } from '@/components/common/text/Text';
 import * as Popover from '@/components/radix/PopOver';
-import { useNotifications } from '@/utils/hooks/useNotifications';
 import { createClient } from '@/utils/supabase/client';
 import {
   markAllNotificationsAsRead,
   markNotificationAsRead,
 } from '@utils/lib/notification/service';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Button } from '../common/button';
 import { NotificationCard } from './NotificationCard';
+import { useNotificationContext } from './NotificationContext';
 
 export type NotificationPinProps = {
   user_id: string;
@@ -23,10 +23,7 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
 
   const router = useRouter();
   const supabase = createClient();
-  const [notifications, notificationsLoaded] = useNotifications({
-    client: supabase,
-    user_id: user_id,
-  });
+  const { notifications, isNotificationsLoaded } = useNotificationContext();
 
   const handleMarkNotificationAsRead = useCallback(
     async (notification_id: string) => {
@@ -47,8 +44,12 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
     });
   }, [supabase, user_id]);
 
+  const filteredNotifications = useMemo(() => {
+    return notifications.filter((notification) => !notification.is_read);
+  }, [notifications]);
+
   return (
-    notificationsLoaded && (
+    isNotificationsLoaded && (
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
           <button
@@ -101,8 +102,8 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
               />
             </div>
             <div className='flex flex-col border-y border-stone-300 dark:border-stone-700'>
-              {notifications.length > 0 ? (
-                notifications.map((notification) => (
+              {filteredNotifications.length > 0 ? (
+                filteredNotifications.map((notification) => (
                   <NotificationCard
                     key={notification.id}
                     notification={notification}

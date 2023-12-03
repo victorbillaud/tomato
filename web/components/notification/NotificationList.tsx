@@ -1,16 +1,16 @@
 'use client';
 
 import { Text } from '@/components/common/text/Text';
-import { useNotifications } from '@/utils/hooks/useNotifications';
 import { createClient } from '@/utils/supabase/client';
 import {
-    markAllNotificationsAsRead,
-    markNotificationAsRead,
+  markAllNotificationsAsRead,
+  markNotificationAsRead,
 } from '@utils/lib/notification/service';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { Button } from '../common/button';
 import { NotificationCard } from './NotificationCard';
+import { useNotificationContext } from './NotificationContext';
 
 export type NotificationListProps = {
   user_id: string;
@@ -21,11 +21,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({
 }) => {
   const router = useRouter();
   const supabase = createClient();
-  const [notifications, notificationsLoaded] = useNotifications({
-    client: supabase,
-    user_id: user_id,
-    onlyUnread: false,
-  });
+  const { notifications, isNotificationsLoaded } = useNotificationContext();
 
   const handleMarkNotificationAsRead = useCallback(
     async (notification_id: string) => {
@@ -61,9 +57,10 @@ export const NotificationList: React.FC<NotificationListProps> = ({
           Notifications
         </Text>
       </div>
-      {notifications.length > 0 ? (
-        <div className='flex w-full flex-col overflow-hidden rounded-lg border border-stone-300 bg-zinc-100 dark:border-stone-700 dark:bg-zinc-900'>
-          {notifications.map((notification) => (
+
+      <div className='flex w-full flex-col overflow-hidden rounded-lg border border-stone-300 bg-zinc-100 dark:border-stone-700 dark:bg-zinc-900'>
+        {notifications.length > 0 ? (
+          notifications.map((notification) => (
             <NotificationCard
               key={notification.id}
               notification={notification}
@@ -76,19 +73,19 @@ export const NotificationList: React.FC<NotificationListProps> = ({
                 }
               }}
             />
-          ))}
-        </div>
-      ) : (
-        <div className='flex flex-row items-center justify-center p-4'>
-          <Text
-            variant='caption'
-            weight={400}
-            className='text-center opacity-50 first-letter:capitalize'
-          >
-            No notifications
-          </Text>
-        </div>
-      )}
+          ))
+        ) : (
+          <div className='flex flex-row items-center justify-center p-4'>
+            <Text
+              variant='caption'
+              weight={400}
+              className='text-center opacity-50 first-letter:capitalize'
+            >
+              No notifications
+            </Text>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

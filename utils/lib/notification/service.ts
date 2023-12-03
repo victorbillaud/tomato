@@ -8,17 +8,11 @@ export type TListUserNotificationsParams = {
 
 export async function listUserNotifications({
     client,
-    onlyUnread,
 }: TListUserNotificationsParams) {
-
     let query = client
         .from('notification')
         .select('*')
         .order('created_at', { ascending: false });
-
-    if (onlyUnread) {
-        query = query.eq('is_read', false);
-    }
 
     const { data, error } = await query
 
