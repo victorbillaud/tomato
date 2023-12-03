@@ -38,7 +38,7 @@ export function createScanAlertEmail(itemName: string, scanDateTime: string, ite
                 }
                 .item-link {
                     display: inline-block;
-                    color: #ffffff;
+                    color: blue;
                     padding: 10px 15px;
                     border-radius: 5px;
                     text-decoration: none;
