@@ -121,7 +121,7 @@ const sendEmail = async (scan: ScanRecord, item: ItemRecord) => {
         html: createScanAlertEmail(
           item.name,
           scan.created_at,
-          "https://tomato.victorbillaud.fr/dashboard/items/" + item.id,
+          "https://tomato.victorbillaud.fr/dashboard/item/" + item.id,
         ),
       }),
     });
@@ -142,7 +142,7 @@ const handler = async (_request: Request): Promise<Response> => {
       await insertNotification({
         user_id: item.user_id,
         type: "email",
-        title: "Your item has been scanned",
+        title: `Your item "${item.name}" has been scanned`,
         link: "/dashboard/item/" + item.id,
         metadata: {
           scan_id: payload.record.id,
