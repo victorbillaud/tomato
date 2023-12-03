@@ -53,7 +53,7 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
           <button
-            className={`flex cursor-pointer flex-row items-center justify-center gap-1 rounded-lg border border-stone-500 p-1 px-2 opacity-100 dark:border-stone-700 ${
+            className={`relative flex cursor-pointer flex-row items-center justify-center gap-1 rounded-lg border-stone-500 p-1 px-2 opacity-100 dark:border-stone-700 ${
               notifications.filter((notification) => !notification.is_read)
                 .length == 0 && 'opacity-50'
             }`}
@@ -61,20 +61,14 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
           >
             <Icon
               name='bell'
-              size={18}
-              color='text-stone-500 dark:text-stone-300'
+              size={22}
+              color={`text-stone-500 dark:text-stone-300`}
             />
-            <Text
-              variant='caption'
-              weight={400}
-              color='text-stone-500 dark:text-stone-300'
-              className='text-center uppercase'
-            >
-              {
-                notifications.filter((notification) => !notification.is_read)
-                  .length
-              }
-            </Text>
+            {filteredNotifications.length > 0 && (
+              <div className='absolute right-0 top-0 flex h-5 w-5 p-1 items-center justify-center rounded-full bg-red-500 font-semibold text-white'>
+                {filteredNotifications.length}
+              </div>
+            )}
           </button>
         </Popover.Trigger>
         <Popover.Portal>
