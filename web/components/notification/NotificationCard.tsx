@@ -35,7 +35,7 @@ export const NotificationCard = ({
         <Text
           variant='caption'
           weight={400}
-          className='text-center opacity-60 first-letter:capitalize'
+          className='text-center opacity-50 first-letter:capitalize'
         >
           {notificationDate(new Date(notification.created_at))}
         </Text>

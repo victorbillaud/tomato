@@ -59,7 +59,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
           async (payload) => {
             const notification = payload.new as NotificationRecord;
             if (payload.eventType === 'INSERT') {
-              setNotifications((prev) => [...prev, notification]);
+              setNotifications((prev) => [notification, ...prev]);
             } else if (payload.eventType === 'UPDATE') {
               setNotifications((prev) => {
                 const existingNotificationIndex = prev.findIndex(
@@ -72,7 +72,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
                   );
                 } else {
                   // If the notification does not exist, add it to the list
-                  return [...prev, notification];
+                  return [notification, ...prev];
                 }
               });
             } else if (payload.eventType === 'DELETE') {
