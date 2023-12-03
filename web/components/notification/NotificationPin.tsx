@@ -7,7 +7,7 @@ import { createClient } from '@/utils/supabase/client';
 import {
   markAllNotificationsAsRead,
   markNotificationAsRead,
-} from '@utils/lib/notification/service';
+} from '@utils/lib/notification/services';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import { Button } from '../common/button';
@@ -65,7 +65,7 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
               color={`text-stone-500 dark:text-stone-300`}
             />
             {filteredNotifications.length > 0 && (
-              <div className='absolute right-0 top-0 flex h-5 w-5 p-1 items-center justify-center rounded-full bg-red-500 font-semibold text-white'>
+              <div className='absolute right-0 top-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 p-1 font-semibold text-white'>
                 {filteredNotifications.length}
               </div>
             )}

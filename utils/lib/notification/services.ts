@@ -32,7 +32,9 @@ export async function markNotificationAsRead({
     const { data, error } = await client
         .from('notification')
         .update({ is_read: true })
-        .eq('id', notification_id);
+        .eq('id', notification_id)
+        .select()
+        .single();
 
     return { data, error };
 }
@@ -51,7 +53,8 @@ export async function markAllNotificationsAsRead({
     const { data, error } = await client
         .from('notification')
         .update({ is_read: true })
-        .eq('user_id', user_id);
+        .eq('user_id', user_id)
+
 
     return { data, error };
 }

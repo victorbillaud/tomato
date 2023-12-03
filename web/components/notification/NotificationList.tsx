@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/client';
 import {
   markAllNotificationsAsRead,
   markNotificationAsRead,
-} from '@utils/lib/notification/service';
+} from '@utils/lib/notification/services';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { Button } from '../common/button';

@@ -2,14 +2,14 @@
 
 import { createClient } from '@/utils/supabase/client';
 import { RealtimeChannel, User } from '@supabase/supabase-js';
-import { listUserNotifications } from '@utils/lib/notification/service';
+import { listUserNotifications } from '@utils/lib/notification/services';
 import { Database } from '@utils/lib/supabase/supabase_types';
 import {
-    ReactNode,
-    createContext,
-    useContext,
-    useEffect,
-    useState,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
 
 export type NotificationRecord =
