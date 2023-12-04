@@ -12,7 +12,9 @@ import { Tag } from '../common/tag';
 
 const displayLastMessageDate = (conversation: TConversationWithLastMessage) => {
   const today = new Date();
-  const lastMsgDate = new Date(conversation.last_message?.created_at as string);
+  const lastMsgDate = new Date(
+    conversation.last_message?.created_at || (conversation.created_at as string)
+  );
   const timeDifference = today.getTime() - lastMsgDate.getTime();
 
   // Si le message a été envoyé aujourd'hui, afficher simplement l'heure

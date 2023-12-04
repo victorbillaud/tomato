@@ -3,7 +3,7 @@ import { ChatProps } from './types';
 import Message from './Message';
 import { useEffect, useRef } from 'react';
 
-const Chat = ({ messages, currentUser }: ChatProps) => {
+const Chat = ({ conversationId, messages, currentUser }: ChatProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

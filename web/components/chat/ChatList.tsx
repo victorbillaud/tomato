@@ -85,7 +85,7 @@ export default async function ChatList({
         <>
           <Text
             variant={'h4'}
-            className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2'
+            className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
           >
             My items
           </Text>
@@ -96,7 +96,7 @@ export default async function ChatList({
         <>
           <Text
             variant={'h4'}
-            className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2'
+            className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
           >
             Items scanned
           </Text>

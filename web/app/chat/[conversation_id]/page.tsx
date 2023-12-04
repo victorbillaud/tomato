@@ -34,7 +34,11 @@ export default async function Index(props: {
       </div>
       <div className='flex h-full w-full flex-col justify-end gap-2 sm:w-2/3 sm:pl-2'>
         <MobileHeader />
-        <Chat messages={messages} currentUser={user} />
+        <Chat
+          conversationId={props.params.conversation_id}
+          messages={messages}
+          currentUser={user}
+        />
         <Input conversation_id={props.params.conversation_id} />
       </div>
     </>
