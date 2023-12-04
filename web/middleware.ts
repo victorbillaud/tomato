@@ -5,7 +5,11 @@ export async function middleware(request: NextRequest) {
   try {
     const { supabase, response } = createClient(request)
 
-    await supabase.auth.getSession()
+    try {
+      await supabase.auth.getSession()
+    } catch (e) {
+      throw new Error('Impossible to get session')
+    }
 
     const privatePathsPrefix = [
       '/dashboard',
