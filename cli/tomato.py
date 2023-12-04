@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import sys
 
 from dotenv import load_dotenv
 
@@ -50,6 +51,8 @@ def generate_supabase_types():
                 "types",
                 "typescript",
                 "--local",
+                "--schema",
+                "public,test",
             ],
             stdout=type_file,
         )
@@ -179,11 +182,71 @@ def deploy_edge_function():
     os.chdir("../")
 
 
+def setup_test_schema():
+    """Set up a test schema in the database replicating the public schema using Supabase CLI"""
+    dump_file = "supabase/public_schema_dump.sql"
+    test_schema_file = "supabase/test_schema.sql"
+
+    user_choice = input("This will reset your local database. Continue? (y/n): ")
+    if user_choice == "y":
+        subprocess.run(["supabase", "db", "reset"])
+
+    # Dump the public schema
+    with open(dump_file, "w") as file:
+        subprocess.run(
+            ["supabase", "db", "dump", "--local", "--schema", "public"], stdout=file
+        )
+
+    # Read the dump and replace 'public' with 'test'
+    with open(dump_file, "r") as file:
+        schema_sql = file.read().replace("public", "test")
+
+    with open(test_schema_file, "w") as file:
+        file.write(schema_sql)
+
+    docker_container_name = "supabase_db_tomato"
+
+    # Execute the modified dump to create the test schema within the Docker container
+    try:
+        subprocess.run(
+            [
+                "docker",
+                "exec",
+                "-i",
+                docker_container_name,
+                "psql",
+                "-U",
+                os.environ.get("SUPABASE_DB_USER", "root"),
+                "-d",
+                "postgres",
+                "-f",
+                "-",
+            ],  # Read SQL from stdin
+            input=open(test_schema_file, "rb").read(),
+            check=True,
+        )
+    except FileNotFoundError:
+        print("Docker is not found. Please ensure Docker is installed.")
+        sys.exit(1)
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command in Docker container: {e}")
+        sys.exit(1)
+    except KeyError as e:
+        print(f"Environment variable not set: {e}")
+        sys.exit(1)
+
+    # Clean up
+    os.remove(dump_file)
+    os.remove(test_schema_file)
+    print("Test schema set up successfully.")
+
+
 COMMANDS = {
     "db_types": generate_supabase_types,
     "db_apply": apply_db_change_to_migration,
     "db_reset": reset_database,
     "db_migrate": migrate_db_changes,
+    "db_setup_test": setup_test_schema,
     "fn_new": create_edge_function,
     "fn_run": run_edge_function,
     "fn_deploy": deploy_edge_function,

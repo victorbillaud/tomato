@@ -12,7 +12,11 @@ config({
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_KEY
 
-const supabase = createClient<Database>(supabaseUrl, supabaseKey)
+const supabase = createClient<Database,"test", "test">(supabaseUrl, supabaseKey, {
+    db: {
+        schema: 'test'
+    }
+})
 
 export function getSupabase() {
     return supabase
