@@ -15,7 +15,7 @@ export type ChatCardProps = {
 
 export type ChatProps = {
   conversationId: string | null;
-  messages: Array<DBMessage> | null;
+  oldMessages: Array<DBMessage> | null;
   currentUser: User | null;
 };
 

@@ -1,10 +1,19 @@
 'use client';
-import { ChatProps } from './types';
+import { ChatProps, DBMessage } from './types';
 import Message from './Message';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
 
-const Chat = ({ conversationId, messages, currentUser }: ChatProps) => {
+const Chat = ({ conversationId, oldMessages, currentUser }: ChatProps) => {
+  const supabase = createClient();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useState<DBMessage[]>(oldMessages || []);
+
+  useEffect(() => {
+    if (oldMessages) {
+      setMessages(oldMessages);
+    }
+  }, [oldMessages]);
 
   useEffect(() => {
     // Scroll to the bottom of the chat when a new message is sent
@@ -13,6 +22,35 @@ const Chat = ({ conversationId, messages, currentUser }: ChatProps) => {
         scrollContainerRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // TODO: set this to a realtime subscription
+  useEffect(() => {
+    // Listen for new messages inserted in the database
+    const changes = supabase
+      .channel('conversation:' + conversationId)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'message',
+          filter: 'conversation_id=eq.' + conversationId,
+        },
+        (payload: any) => {
+          const newMessage = payload.new;
+          // Check if the message is not already in the list to avoid duplicates
+          if (!messages.find((msg) => msg.id === newMessage.id)) {
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+          }
+        }
+      )
+      .subscribe();
+
+    // Unsubscribe from the channel when the component unmounts
+    return () => {
+      changes.unsubscribe();
+    };
+  }, [conversationId, messages, supabase]);
 
   const renderMessages = () => {
     // Check if there are any messages
@@ -30,7 +68,7 @@ const Chat = ({ conversationId, messages, currentUser }: ChatProps) => {
       );
     }
 
-    // sort the messages by date & time (oldest first)
+    // Sort the messages by date & time (oldest first)
     messages.sort((a, b) => {
       return a.created_at > b.created_at ? 1 : -1;
     });
