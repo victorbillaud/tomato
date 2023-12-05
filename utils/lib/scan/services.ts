@@ -14,6 +14,7 @@ export async function insertScan(
 
     const scanToInsert: Database["public"]["Tables"]["scan"]["Insert"] = {
         ...scan,
+        user_id: user?.id,
         type: scan.type ? [...scan.type, userType] : [userType],
     };
 

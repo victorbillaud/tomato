@@ -47,6 +47,7 @@ to authenticated, service_role
 using ((auth.uid() = user_id))
 with check ((auth.uid() = user_id));
 
+alter table "public"."scan" alter column "user_id" drop default;
 
 CREATE TRIGGER on_item_scanned AFTER INSERT ON public.scan FOR EACH ROW EXECUTE FUNCTION supabase_functions.http_request('https://nqhtfnmtcjxybsvxhqrh.supabase.co/functions/v1/notify_item_owner_on_scan', 'POST', '{"Content-type":"application/json","Authorization":"Bearer your_anon_key"}', '{}', '1000');
 
