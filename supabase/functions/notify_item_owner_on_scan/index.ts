@@ -1,6 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { createScanAlertEmail } from "../_shared/email_template.ts";
+import { middleware } from "../_shared/middleware.ts";
 import { Database } from "../_shared/supabase_types.ts";
+
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 type ScanRecord = Database["public"]["Tables"]["scan"]["Row"];
@@ -38,8 +40,8 @@ const shouldNotifyOwner = (scan: ScanRecord, item: ItemRecord) => {
   if (
     item.lost && scan.type &&
     scan.type?.filter((type) =>
-        type === "owner_scan" || type === "activation" || type === "creation"
-      ).length === 0
+      type === "owner_scan" || type === "activation" || type === "creation"
+    ).length === 0
   ) {
     return true;
   }
@@ -47,8 +49,8 @@ const shouldNotifyOwner = (scan: ScanRecord, item: ItemRecord) => {
   if (
     item.notify_anyway && scan.type &&
     scan.type?.filter((type) =>
-        type === "owner_scan" || type === "activation" || type === "creation"
-      ).length === 0
+      type === "owner_scan" || type === "activation" || type === "creation"
+    ).length === 0
   ) {
     return true;
   }
@@ -132,6 +134,13 @@ const sendEmail = async (scan: ScanRecord, item: ItemRecord) => {
 
 const handler = async (_request: Request): Promise<Response> => {
   try {
+
+    const response = middleware(_request);
+
+    if (response.status === 401) {
+      return response;
+    }
+
     const payload: WebhookPayload = await _request.json();
 
     verifyPayload(payload);
@@ -154,10 +163,12 @@ const handler = async (_request: Request): Promise<Response> => {
         },
       });
       await sendEmail(payload.record, item);
-      return new Response(JSON.stringify({ message: "Notify owner" }), {
+      
+      return new Response(JSON.stringify({ message: "OK" }), {
         headers: { "Content-Type": "application/json" },
         status: 200,
       });
+
     } else {
       throw new Error("No need to notify owner");
     }
