@@ -41,6 +41,7 @@ export interface Database {
           id: string
           item_id: string
           owner_id: string
+          token: string | null
           updated_at: string | null
         }
         Insert: {
@@ -49,6 +50,7 @@ export interface Database {
           id?: string
           item_id: string
           owner_id: string
+          token?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -57,6 +59,7 @@ export interface Database {
           id?: string
           item_id?: string
           owner_id?: string
+          token?: string | null
           updated_at?: string | null
         }
         Relationships: [
