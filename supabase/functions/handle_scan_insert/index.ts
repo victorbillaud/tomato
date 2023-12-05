@@ -162,6 +162,7 @@ const handler = async (_request: Request): Promise<Response> => {
           scan_created_at: payload.record.created_at,
         },
       });
+      
       await sendEmail(payload.record, item);
       
       return new Response(JSON.stringify({ message: "OK" }), {

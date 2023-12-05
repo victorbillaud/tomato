@@ -51,6 +51,6 @@ alter table "public"."scan" alter column "user_id" drop default;
 
 alter publication supabase_realtime add table notification;
 
-CREATE TRIGGER on_item_scanned AFTER INSERT ON public.scan FOR EACH ROW EXECUTE FUNCTION supabase_functions.http_request('https://nqhtfnmtcjxybsvxhqrh.supabase.co/functions/v1/notify_item_owner_on_scan', 'POST', '{"Content-type":"application/json","Authorization":"Bearer your_anon_key","x-tomato-edge-token":"your_tomato_edge_token"}', '{}', '1000');
+CREATE TRIGGER on_item_scanned AFTER INSERT ON public.scan FOR EACH ROW EXECUTE FUNCTION supabase_functions.http_request('https://nqhtfnmtcjxybsvxhqrh.supabase.co/functions/v1/handle_scan_insert', 'POST', '{"Content-type":"application/json","Authorization":"Bearer your_anon_key","x-tomato-edge-token":"your_tomato_edge_token"}', '{}', '1000');
 
 
