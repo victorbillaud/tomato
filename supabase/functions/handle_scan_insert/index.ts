@@ -134,13 +134,6 @@ const sendEmail = async (scan: ScanRecord, item: ItemRecord) => {
 
 const handler = async (_request: Request): Promise<Response> => {
   try {
-
-    const response = middleware(_request);
-
-    if (response.status === 401) {
-      return response;
-    }
-
     const payload: WebhookPayload = await _request.json();
 
     verifyPayload(payload);
@@ -162,9 +155,9 @@ const handler = async (_request: Request): Promise<Response> => {
           scan_created_at: payload.record.created_at,
         },
       });
-      
+
       await sendEmail(payload.record, item);
-      
+
       return new Response(JSON.stringify({ message: "OK" }), {
         headers: { "Content-Type": "application/json" },
         status: 200,
@@ -181,4 +174,6 @@ const handler = async (_request: Request): Promise<Response> => {
   }
 };
 
-Deno.serve(handler);
+
+
+Deno.serve((request: Request) => middleware(request, handler));

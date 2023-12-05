@@ -2,9 +2,8 @@ const TOMATO_EDGE_TOKEN = Deno.env.get("TOMATO_EDGE_TOKEN");
 
 export function middleware(
     _request: Request,
+    handler: (request: Request) => Promise<Response>,
 ) {
-    // Verify if the header 'x-tomato-edge-token' is present and valid
-
     const token = _request.headers.get("x-tomato-edge-token");
 
     if (!token) {
@@ -15,5 +14,5 @@ export function middleware(
         return new Response("Unauthorized", { status: 401 });
     }
 
-    return new Response("OK", { status: 200 });
+    return handler(_request);
 }
