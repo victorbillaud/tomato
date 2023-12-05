@@ -8,10 +8,10 @@ import {
 } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
 import {
+  getConversationMessages,
   insertConversation,
   insertMessage,
   listUserConversations,
-  getConversationMessages,
 } from './services';
 
 const sp = getSupabase();
