@@ -31,10 +31,18 @@ export async function listUserConversations(
     }
   );
 
-  return { data, error } as {
-    data: TConversationWithLastMessage[];
-    error: PostgrestError | null;
-  };
+  const conversations: TConversationWithLastMessage[] =
+    data as TConversationWithLastMessage[];
+
+  // sort conversations by last message date & time (newest first) (if there is no last message, use the conversation.created_at)
+  conversations.sort((a, b) => {
+    const aDate = a.last_message?.created_at || a.created_at;
+    const bDate = b.last_message?.created_at || b.created_at;
+
+    return new Date(bDate).getTime() - new Date(aDate).getTime();
+  });
+
+  return { data: conversations, error };
 }
 
 export async function insertConversation(

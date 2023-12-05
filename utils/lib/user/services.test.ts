@@ -5,7 +5,7 @@ import {
   deleteFakeUser,
 } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
-import { getUserAvatarUrlById, getUserDetails } from './services';
+import { getUserDetails } from './services';
 
 const sp = getSupabase();
 
@@ -45,29 +45,5 @@ describe('user details module', () => {
     expect(error.message).toBeDefined();
 
     expect(user).toBeNull();
-  });
-
-  test('get user avatar URL by ID', async () => {
-    const { user: testUser } = await createFakeUser(sp, 'test@example.com');
-
-    const { avatarUrl, error } = await getUserAvatarUrlById(sp, testUser.id);
-
-    expect(error).toBeNull();
-    expect(avatarUrl).toBeDefined();
-
-    await deleteFakeUser(sp, testUser.id);
-  });
-
-  test('get user avatar URL with invalid user ID', async () => {
-    const { avatarUrl, error } = await getUserAvatarUrlById(
-      sp,
-      'invalidUserId'
-    );
-
-    expect(error).toBeDefined();
-    expect(error).toHaveProperty('message');
-    expect(error.message).toBeDefined();
-
-    expect(avatarUrl).toBeUndefined();
   });
 });

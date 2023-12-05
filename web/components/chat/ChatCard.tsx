@@ -1,4 +1,4 @@
-import { getUserAvatarUrlById } from '@utils/lib/user/services';
+import { getUserDetails } from '@utils/lib/user/services';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from '../common/icon';
@@ -13,25 +13,25 @@ import { Tag } from '../common/tag';
 const displayLastMessageDate = (conversation: TConversationWithLastMessage) => {
   const today = new Date();
   const lastMsgDate = new Date(
-    conversation.last_message?.created_at || (conversation.created_at as string)
+    conversation.last_message?.created_at || conversation.created_at
   );
   const timeDifference = today.getTime() - lastMsgDate.getTime();
 
-  // Si le message a été envoyé aujourd'hui, afficher simplement l'heure
+  // If the message was sent today, display only the time
   if (today.getDate() === lastMsgDate.getDate()) {
-    return dateFormat(conversation.last_message?.created_at, 'HH:MM');
+    return dateFormat(lastMsgDate, 'HH:MM');
   }
-  // Si le message a été envoyé il y a moins de 7j, afficher le jour de la semaine et l'heure
+  // If the message was sent less than 7 days ago, display the day of the week and the time
   else if (timeDifference < 7 * 24 * 60 * 60 * 1000) {
-    return dateFormat(conversation.last_message?.created_at, 'ddd HH:MM');
+    return dateFormat(lastMsgDate, 'ddd HH:MM');
   }
-  // Si il a été envoyé il y a moins de un an, afficher le jour et le mois
+  // If it was sent less than a year ago, display the day and the month
   else if (timeDifference < 365 * 24 * 60 * 60 * 1000) {
-    return dateFormat(conversation.last_message?.created_at, 'd mmm');
+    return dateFormat(lastMsgDate, 'd mmm');
   }
-  // sinon afficher le jour, le mois et l'année
+  // else display the day, the month and the year
   else {
-    return dateFormat(conversation.last_message?.created_at, 'd mmm yy');
+    return dateFormat(lastMsgDate, 'd mmm yy');
   }
 };
 
@@ -45,17 +45,19 @@ export default async function ChatCard({
   const supabase = createClient(cookieStore);
   let isOwner = conversation.owner_id === user?.id;
 
-  const { avatarUrl, error: avatarError } = await getUserAvatarUrlById(
+  const { user: userDetails, error: avatarError } = await getUserDetails(
     supabase,
     isOwner ? conversation.finder_id : conversation.owner_id
   );
+
+  const avatarUrl = userDetails?.avatar_url;
 
   const selectedStyle =
     selectedConversationId === conversation?.id
       ? ' bg-gray-700/10 dark:bg-white/20 '
       : '';
 
-  // ! Pareil ici on ne peut pas récupérer les infos de l'item lorsque l'on est finder
+  // ! Same here, we can't get the item info when we are the finder
   const renderTag = () => {
     if (itemInfo) {
       if (itemInfo?.lost) {
@@ -79,7 +81,7 @@ export default async function ChatCard({
             alt='avatar'
             width={36}
             height={36}
-            className=' rounded-full'
+            className='rounded-full border-[1px] border-gray-700 dark:border-white/20'
           />
         ) : (
           <Icon
@@ -87,6 +89,7 @@ export default async function ChatCard({
             size={40}
             stroke={1}
             color='dark:text-white text-black'
+            className='border-[1px] border-gray-700 dark:border-white/20'
           />
         )}
       </div>

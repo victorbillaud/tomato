@@ -52,22 +52,22 @@ const Chat = ({ conversationId, oldMessages, currentUser }: ChatProps) => {
     };
   }, [conversationId, messages, supabase]);
 
-  const renderMessages = () => {
-    // Check if there are any messages
-    if (!messages) {
-      return (
-        <div className='flex h-full w-full items-center justify-center'>
-          Select a conversation
-        </div>
-      );
-    } else if (messages.length === 0) {
-      return (
-        <div className='flex h-full w-full items-center justify-center'>
-          No messages in this conversation.
-        </div>
-      );
-    }
+  // Check if there are any messages to display
+  if (!messages) {
+    return (
+      <div className='flex h-full w-full items-center justify-center dark:text-white'>
+        Select a conversation
+      </div>
+    );
+  } else if (messages.length === 0) {
+    return (
+      <div className='flex h-full w-full items-center justify-center dark:text-white'>
+        No messages in this conversation.
+      </div>
+    );
+  }
 
+  const renderMessages = () => {
     // Sort the messages by date & time (oldest first)
     messages.sort((a, b) => {
       return a.created_at > b.created_at ? 1 : -1;
@@ -80,10 +80,8 @@ const Chat = ({ conversationId, oldMessages, currentUser }: ChatProps) => {
             <Message
               key={message.id}
               message={message}
-              prevMessage={index !== 0 ? messages[index - 1] : null}
-              nextMessage={
-                index !== messages.length ? messages[index + 1] : null
-              }
+              prevMessage={messages[index - 1] ?? undefined}
+              nextMessage={messages[index + 1] ?? undefined}
               currentUser={currentUser}
             />
           );

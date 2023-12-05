@@ -82,7 +82,7 @@ const Message = ({
         title={dateFormat(message.created_at, masks.dateTime)}
       >
         <div
-          className={`mt-1 w-fit max-w-[60%] rounded-3xl px-4 py-2 text-white ${messageColor} ${messageBubbleStyle}`}
+          className={`mt-1 w-fit max-w-[60%] rounded-3xl px-4 py-2 text-white ${messageColor} ${messageBubbleStyle} break-words`}
         >
           <div>{message.content}</div>
         </div>

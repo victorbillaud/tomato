@@ -3,27 +3,27 @@ import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
 import { Database } from '@utils/lib/supabase/supabase_types';
 
 export type ChatListProps = {
-  selectedConversationId: string | null;
+  selectedConversationId?: string;
 };
 
 export type ChatCardProps = {
   conversation: TConversationWithLastMessage;
-  selectedConversationId: string | null;
-  user: User | null;
-  itemInfo: Database['public']['Tables']['item']['Row'] | null;
+  selectedConversationId?: string;
+  user?: User;
+  itemInfo?: Database['public']['Tables']['item']['Row'];
 };
 
 export type ChatProps = {
-  conversationId: string | null;
-  oldMessages: Array<DBMessage> | null;
-  currentUser: User | null;
+  conversationId?: string;
+  oldMessages?: Array<DBMessage>;
+  currentUser?: User;
 };
 
 export type MessageProps = {
   message: DBMessage;
-  prevMessage: DBMessage | null;
-  nextMessage: DBMessage | null;
-  currentUser: User | null;
+  prevMessage?: DBMessage;
+  nextMessage?: DBMessage;
+  currentUser?: User;
 };
 
 // rename database types to be more readable

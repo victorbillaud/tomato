@@ -28,17 +28,8 @@ export default async function ChatList({
     await listUserConversations(supabase);
 
   if (conversationsError) {
-    console.error(conversationsError);
-    return <div>Erreur de chargement des conversations</div>;
+    throw new Error("Couldn't fetch conversations");
   }
-
-  // sort conversations by last message date & time (newest first)
-  conversations &&
-    conversations.sort((a, b) => {
-      const dateA = new Date(a.updated_at);
-      const dateB = new Date(b.updated_at);
-      return dateB.getTime() - dateA.getTime();
-    });
 
   let ownedConversations = conversations?.filter(
     (conversation) => conversation.owner_id === user.id
@@ -48,7 +39,7 @@ export default async function ChatList({
     (conversation) => conversation.finder_id === user.id
   );
 
-  // ! Pour l'instant on ne peut pas récupérer les infos de l'item lorsque l'on est finder
+  // ! For now, the finder can't get the item info
   async function getItemInfo(itemId: string) {
     const { data: item, error } = await getItem(supabase, itemId);
     if (error) {
@@ -70,7 +61,7 @@ export default async function ChatList({
           conversation={conversation}
           selectedConversationId={selectedConversationId}
           user={user}
-          itemInfo={itemInfo}
+          itemInfo={itemInfo ?? undefined}
         />
       );
     });
@@ -81,7 +72,7 @@ export default async function ChatList({
       <Text variant={'h2'} className='p-2'>
         Conversations
       </Text>
-      {ownedConversations && (
+      {ownedConversations.length > 0 && (
         <>
           <Text
             variant={'h4'}
@@ -92,7 +83,7 @@ export default async function ChatList({
           {renderConversations(ownedConversations)}
         </>
       )}
-      {foundConversations && (
+      {foundConversations.length > 0 && (
         <>
           <Text
             variant={'h4'}

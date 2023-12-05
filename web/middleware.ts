@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
       throw new Error('Impossible to get session')
     }
 
-    const privatePathsPrefix = ['/dashboard', '/chat', '/chat/*', '/user'];
+    const privatePathsPrefix = ['/dashboard', '/chat', '/user'];
 
     const isPrivatePath = privatePathsPrefix.some(prefix => request.nextUrl.pathname.startsWith(prefix))
 

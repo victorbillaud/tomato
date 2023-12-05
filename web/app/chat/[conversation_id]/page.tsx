@@ -36,8 +36,8 @@ export default async function Index(props: {
         <MobileHeader />
         <Chat
           conversationId={props.params.conversation_id}
-          oldMessages={messages}
-          currentUser={user}
+          oldMessages={messages ?? undefined}
+          currentUser={user ?? undefined}
         />
         <Input conversation_id={props.params.conversation_id} />
       </div>
