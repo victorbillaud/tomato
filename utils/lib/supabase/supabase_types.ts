@@ -132,6 +132,43 @@ export interface Database {
           }
         ]
       }
+      message: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          sender_id: string | null
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          sender_id?: string | null
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_conversation_id_fkey"
+            columns: ["conversation_id"]
+            referencedRelation: "conversation"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_sender_id_fkey"
+            columns: ["sender_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       notification: {
         Row: {
           created_at: string
@@ -170,38 +207,6 @@ export interface Database {
           {
             foreignKeyName: "notification_user_id_fkey"
             columns: ["user_id"]
-      message: {
-        Row: {
-          content: string
-          conversation_id: string
-          created_at: string
-          id: string
-          sender_id: string | null
-        }
-        Insert: {
-          content: string
-          conversation_id: string
-          created_at?: string
-          id?: string
-          sender_id?: string | null
-        }
-        Update: {
-          content?: string
-          conversation_id?: string
-          created_at?: string
-          id?: string
-          sender_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "message_conversation_id_fkey"
-            columns: ["conversation_id"]
-            referencedRelation: "conversation"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "message_sender_id_fkey"
-            columns: ["sender_id"]
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
