@@ -32,7 +32,7 @@ INSERT INTO
             current_timestamp,
             current_timestamp,
             '{"provider":"email","providers":["email"]}',
-            format('{"full_name":"%s", "avatar_url":"%s"}', 'User ' || (ROW_NUMBER() OVER ()), 'https://avatars.dicebear.com/api/initials/' || (ROW_NUMBER() OVER ()) || '.svg') :: jsonb,
+            format('{"full_name":"%s", "avatar_url":"%s"}', 'User ' || (ROW_NUMBER() OVER ()), 'https://robohash.org/' || (ROW_NUMBER() OVER ()) || '.png') :: jsonb,
             current_timestamp,
             current_timestamp,
             '',
