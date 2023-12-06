@@ -20,3 +20,9 @@ export const generateConversationToken = async (conversationId: string) => {
 
     return token;
 };
+
+export const verifyConversationToken = async (token: string) => {
+    const payload = await djwt.verify(token, key);
+
+    return payload;
+}
