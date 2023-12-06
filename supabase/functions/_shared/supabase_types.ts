@@ -335,6 +335,18 @@ export interface Database {
           }
         ]
       }
+      secret_key: {
+        Row: {
+          decrypted_secret: string | null
+        }
+        Insert: {
+          decrypted_secret?: string | null
+        }
+        Update: {
+          decrypted_secret?: string | null
+        }
+        Relationships: []
+      }
       test_tenant: {
         Row: {
           details: string | null
@@ -355,6 +367,18 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      generate_conversation_token: {
+        Args: {
+          conversation_id: string
+        }
+        Returns: string
+      }
+      get_conversation_id_from_token: {
+        Args: {
+          token: string
+        }
+        Returns: string
+      }
       get_user_conversations_with_last_message: {
         Args: {
           user_id: string
@@ -368,6 +392,12 @@ export interface Database {
           finder_id: string
           last_message: Json
         }[]
+      }
+      verify_conversation_token: {
+        Args: {
+          expected_conversation_id: string
+        }
+        Returns: boolean
       }
     }
     Enums: {

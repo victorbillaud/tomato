@@ -1,9 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
 import { corsHeaders } from "../_shared/cors.ts";
-import {
-  generateConversationToken,
-  verifyConversationToken,
-} from "../_shared/jwt.ts";
 import { middleware } from "../_shared/middleware.ts";
 import { Database } from "../_shared/supabase_types.ts";
 
@@ -94,14 +90,16 @@ export const fetchConversation = async (itemId: string, finderId: string) => {
 };
 
 export const fetchConversationByToken = async (token: string) => {
-  const { conversation_id } = await verifyConversationToken(
-    token,
-  ) as { conversation_id: string };
-
   const supabaseClient = createClient<Database>(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
   );
+
+  const { data: conversation_id } = await supabaseClient.rpc("get_conversation_id_from_token", { token });
+
+  if (!conversation_id) {
+    return null;
+  }
 
   const { data: conversation } = await supabaseClient
     .from("conversation")
@@ -117,8 +115,6 @@ export const createConversation = async (
   itemId: string,
   ownerId: string,
   finderId?: string,
-  token?: string,
-  id?: string,
 ) => {
   const supabaseClient = createClient<Database>(
     Deno.env.get("SUPABASE_URL") ?? "",
@@ -128,16 +124,15 @@ export const createConversation = async (
   const { data: conversation, error } = await supabaseClient
     .from("conversation")
     .insert({
-      id: id,
       owner_id: ownerId,
       item_id: itemId,
       finder_id: finderId,
-      token: token,
     })
     .select("*")
     .single();
 
   if (error) {
+    console.error(error);
     throw new Error("Error creating conversation");
   }
 
@@ -247,13 +242,10 @@ const handle_finder_flow = async (_request: Request): Promise<Response> => {
       );
 
       if (!conversation) {
-        const id = crypto.randomUUID();
         conversation = await createConversation(
           payload.item_id,
           item.user_id,
           undefined,
-          await generateConversationToken(id),
-          id,
         );
       }
 
@@ -268,13 +260,10 @@ const handle_finder_flow = async (_request: Request): Promise<Response> => {
         },
       );
     } else {
-      const id = crypto.randomUUID();
       const conversation = await createConversation(
         payload.item_id,
         item.user_id,
         undefined,
-        await generateConversationToken(id),
-        id,
       );
 
       return new Response(
