@@ -242,12 +242,19 @@ const handle_finder_flow = async (_request: Request): Promise<Response> => {
     */
 
     if (conversation_token) {
-      const conversation = await fetchConversationByToken(
+      let conversation = await fetchConversationByToken(
         conversation_token,
       );
 
       if (!conversation) {
-        throw new Error("Conversation not found");
+        const id = crypto.randomUUID();
+        conversation = await createConversation(
+          payload.item_id,
+          item.user_id,
+          undefined,
+          await generateConversationToken(id),
+          id,
+        );
       }
 
       return new Response(
