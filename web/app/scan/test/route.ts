@@ -35,8 +35,8 @@ export async function GET(request: Request) {
     })
 
     if (!response.ok) {
-        console.error(await response.json())
-        return new Response('Error', { status: 500 })
+        const { error } = await response.json()
+        return new Response(error, { status: 500 })
     }
 
     const data: ResponseReturnType = await response.json()

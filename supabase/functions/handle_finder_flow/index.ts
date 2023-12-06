@@ -11,10 +11,30 @@ interface RequestPayload {
   item_id: string;
 }
 
+type NotificationInsert =
+  Database["public"]["Tables"]["notification"]["Insert"];
+
 const verifyPayload = (payload: RequestPayload) => {
   if (!payload.item_id) {
     throw new Error("Invalid item_id");
   }
+};
+
+const insertNotification = async (notification: NotificationInsert) => {
+  const supabaseClient = createClient<Database>(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+  );
+
+  const { data: notificationData, error } = await supabaseClient
+    .from("notification")
+    .insert(notification);
+
+  if (error) {
+    throw new Error("Error inserting notification");
+  }
+
+  return notificationData;
 };
 
 export const fetchItem = async (itemId: string) => {
@@ -83,9 +103,6 @@ export const fetchConversationByToken = async (token: string) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
   );
 
-  console.log(conversation_id);
-  console.log(token);
-
   const { data: conversation } = await supabaseClient
     .from("conversation")
     .select("*")
@@ -124,6 +141,35 @@ export const createConversation = async (
     throw new Error("Error creating conversation");
   }
 
+  // Notify the owner that a new conversation has been created for his item
+  await insertNotification({
+    user_id: ownerId,
+    type: "system",
+    title: finderId ? "A registered user found your item" : "A user found your item",
+    link: `/chat/${conversation.id}`,
+    metadata: {
+      conversation_id: conversation.id,
+      owner_id: ownerId,
+      item_id: itemId,
+      finder_id: finderId,
+    },
+  });
+
+  // Notify the finder that a new conversation has been created for his item
+  finderId &&
+    (await insertNotification({
+      user_id: finderId,
+      type: "system",
+      title: "You found an item",
+      link: `/chat/${conversation.id}`,
+      metadata: {
+        conversation_id: conversation.id,
+        owner_id: ownerId,
+        item_id: itemId,
+        finder_id: finderId,
+      },
+    }));
+
   return conversation;
 };
 
@@ -144,6 +190,8 @@ const handle_finder_flow = async (_request: Request): Promise<Response> => {
     const conversation_token = _request.headers.get(
       "x-tomato-conversation-token",
     );
+
+    console.log({ item, finder_id, conversation, conversation_token });
 
     /*
 
