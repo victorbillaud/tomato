@@ -1,3 +1,10 @@
+drop policy "Enable insert for everyone" on "public"."message";
+
+drop policy "Enable read access for member of the conversation" on "public"."message";
+
+drop policy "Enable select for authenticated users only" on "public"."conversation";
+
+alter table "public"."message" alter column "sender_id" set default auth.uid();
 
 set check_function_bodies = off;
 
@@ -63,20 +70,6 @@ END;
 $function$
 ;
 
-CREATE OR REPLACE FUNCTION public.message_insert_trigger()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-BEGIN
-    -- Verify the conversation token with the conversation_id of the new message
-    IF NOT verify_conversation_token(NEW.conversation_id) THEN
-        RAISE EXCEPTION 'Invalid conversation token';
-    END IF;
-    RETURN NEW;
-END;
-$function$
-;
-
 CREATE OR REPLACE FUNCTION public.verify_conversation_token(expected_conversation_id uuid)
  RETURNS boolean
  LANGUAGE plpgsql
@@ -110,6 +103,27 @@ to public
 using (verify_conversation_token(id));
 
 
+create policy "authenticated_message_policy"
+on "public"."message"
+as permissive
+for all
+to authenticated
+using ((EXISTS ( SELECT 1
+   FROM conversation c
+  WHERE ((c.id = message.conversation_id) AND ((c.owner_id = auth.uid()) OR (c.finder_id = auth.uid()))))))
+with check ((EXISTS ( SELECT 1
+   FROM conversation c
+  WHERE ((c.id = message.conversation_id) AND ((c.owner_id = auth.uid()) OR (c.finder_id = auth.uid()))))));
+
+
+create policy "insert_message_policy"
+on "public"."message"
+as permissive
+for insert
+to public
+with check (verify_conversation_token(conversation_id));
+
+
 create policy "select_message_policy"
 on "public"."message"
 as permissive
@@ -118,8 +132,14 @@ to public
 using (verify_conversation_token(conversation_id));
 
 
-CREATE TRIGGER trigger_generate_conversation_token BEFORE INSERT ON public.conversation FOR EACH ROW EXECUTE FUNCTION before_insert_conversation();
+create policy "Enable select for authenticated users only"
+on "public"."conversation"
+as permissive
+for select
+to authenticated
+using (((auth.uid() = owner_id) OR (auth.uid() = finder_id)));
 
-CREATE TRIGGER before_insert_message BEFORE INSERT ON public.message FOR EACH ROW EXECUTE FUNCTION message_insert_trigger();
+
+CREATE TRIGGER trigger_generate_conversation_token BEFORE INSERT ON public.conversation FOR EACH ROW EXECUTE FUNCTION before_insert_conversation();
 
 
