@@ -335,18 +335,6 @@ export interface Database {
           }
         ]
       }
-      secret_key: {
-        Row: {
-          decrypted_secret: string | null
-        }
-        Insert: {
-          decrypted_secret?: string | null
-        }
-        Update: {
-          decrypted_secret?: string | null
-        }
-        Relationships: []
-      }
       test_tenant: {
         Row: {
           details: string | null
@@ -392,6 +380,13 @@ export interface Database {
           finder_id: string
           last_message: Json
         }[]
+      }
+      update_user_conversations_and_messages: {
+        Args: {
+          tokens: string[]
+          user_id: string
+        }
+        Returns: undefined
       }
       verify_conversation_token: {
         Args: {

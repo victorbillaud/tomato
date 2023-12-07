@@ -70,6 +70,36 @@ END;
 $function$
 ;
 
+CREATE OR REPLACE FUNCTION public.update_user_conversations_and_messages(tokens text[], user_id uuid)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    conv_id UUID;
+    token text; -- Declare the loop variable
+BEGIN
+    -- Loop through each token
+    FOREACH token IN ARRAY tokens LOOP
+        -- Decode the token to get the conversation_id
+        conv_id := public.get_conversation_id_from_token(token);
+
+        IF conv_id IS NOT NULL THEN
+            -- Update the finder_id in the conversation table
+            UPDATE public.conversation
+            SET finder_id = user_id
+            WHERE conversation.id = conv_id;
+
+            -- Update the sender_id in the message table for messages in this conversation
+            -- where sender_id is NULL (messages sent by the anonymous user)
+            UPDATE public.message
+            SET sender_id = user_id
+            WHERE message.conversation_id = conv_id AND message.sender_id IS NULL;
+        END IF;
+    END LOOP;
+END;
+$function$
+;
+
 CREATE OR REPLACE FUNCTION public.verify_conversation_token(expected_conversation_id uuid)
  RETURNS boolean
  LANGUAGE plpgsql
@@ -141,5 +171,6 @@ using (((auth.uid() = owner_id) OR (auth.uid() = finder_id)));
 
 
 CREATE TRIGGER trigger_generate_conversation_token BEFORE INSERT ON public.conversation FOR EACH ROW EXECUTE FUNCTION before_insert_conversation();
+
 
 
