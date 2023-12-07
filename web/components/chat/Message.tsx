@@ -1,5 +1,6 @@
-import { MessageProps } from './types';
+'use client';
 import dateFormat, { masks } from 'dateformat';
+import { MessageProps } from './types';
 
 masks.timeOnly = 'HH:MM';
 masks.dateOnly = 'd mmm yyyy';

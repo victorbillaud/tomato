@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 import { Icon } from '../common/icon';
 import { Text } from '../common/text';
@@ -13,7 +14,7 @@ const MobileHeader = () => {
           color='text-black dark:text-white'
         />
       </Link>
-      <Text variant='h3' weight={600}>
+      <Text variant='h4' weight={600}>
         Mobile Header
       </Text>
     </div>

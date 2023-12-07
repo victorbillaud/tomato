@@ -1,13 +1,19 @@
 'use client';
-import { ChatProps, DBMessage } from './types';
-import Message from './Message';
 import { useEffect, useRef, useState } from 'react';
+import Message from './Message';
+import { ChatProps, DBMessage } from './types';
 import { createClient } from '@/utils/supabase/client';
 
-const Chat = ({ conversationId, oldMessages, currentUser }: ChatProps) => {
+export default function Chat({
+  conversationId,
+  oldMessages,
+  currentUser,
+}: ChatProps) {
   const supabase = createClient();
+  const [messages, setMessages] = useState<DBMessage[] | null>(
+    oldMessages ?? null
+  );
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<DBMessage[]>(oldMessages || []);
 
   useEffect(() => {
     if (oldMessages) {
@@ -37,10 +43,13 @@ const Chat = ({ conversationId, oldMessages, currentUser }: ChatProps) => {
           filter: 'conversation_id=eq.' + conversationId,
         },
         (payload: any) => {
-          const newMessage = payload.new;
+          const newMessage: DBMessage = payload.new;
           // Check if the message is not already in the list to avoid duplicates
-          if (!messages.find((msg) => msg.id === newMessage.id)) {
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
+          if (!messages?.find((msg) => msg.id === newMessage.id)) {
+            setMessages((prevMessages) => [
+              ...(prevMessages || []),
+              newMessage,
+            ]);
           }
         }
       )
@@ -98,6 +107,4 @@ const Chat = ({ conversationId, oldMessages, currentUser }: ChatProps) => {
       <>{renderMessages()}</>
     </div>
   );
-};
-
-export default Chat;
+}

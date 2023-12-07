@@ -2,15 +2,11 @@ import { User } from '@supabase/supabase-js';
 import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
 import { Database } from '@utils/lib/supabase/supabase_types';
 
-export type ChatListProps = {
-  selectedConversationId?: string;
-};
-
 export type ChatCardProps = {
   conversation: TConversationWithLastMessage;
   selectedConversationId?: string;
   user?: User;
-  itemInfo?: Database['public']['Tables']['item']['Row'];
+  itemId: string;
 };
 
 export type ChatProps = {
@@ -24,6 +20,10 @@ export type MessageProps = {
   prevMessage?: DBMessage;
   nextMessage?: DBMessage;
   currentUser?: User;
+};
+
+export type InputChatProps = {
+  conversationId: string;
 };
 
 // rename database types to be more readable

@@ -1,78 +1,98 @@
-import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server';
+'use client';
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import { Text } from '../common/text';
+import ChatCard from './ChatCard';
+import { createClient } from '@/utils/supabase/client';
+import { User } from '@supabase/supabase-js';
 import {
   TConversationWithLastMessage,
   listUserConversations,
 } from '@utils/lib/messaging/services';
-import { getItem } from '@utils/lib/item/services';
-import { ChatListProps } from './types';
-import { Text } from '../common/text';
-import ChatCard from './ChatCard';
 
-export default async function ChatList({
-  selectedConversationId,
-}: ChatListProps) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+export default function ChatList() {
+  const supabase = createClient();
+  const selectedConversationId = useParams().conversation_id as string;
+  const [user, setUser] = useState<User | null>(null);
+  const [conversations, setConversations] = useState<
+    TConversationWithLastMessage[] | null
+  >(null);
+  const [ownedConversations, setOwnedConversations] = useState<
+    TConversationWithLastMessage[] | null
+  >(null);
+  const [foundConversations, setFoundConversations] = useState<
+    TConversationWithLastMessage[] | null
+  >(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    throw new Error('User not found');
-  }
-
-  const { data: conversations, error: conversationsError } =
-    await listUserConversations(supabase);
-
-  if (conversationsError) {
-    throw new Error("Couldn't fetch conversations");
-  }
-
-  let ownedConversations = conversations?.filter(
-    (conversation) => conversation.owner_id === user.id
-  );
-
-  let foundConversations = conversations?.filter(
-    (conversation) => conversation.finder_id === user.id
-  );
-
-  // ! For now, the finder can't get the item info
-  async function getItemInfo(itemId: string) {
-    const { data: item, error } = await getItem(supabase, itemId);
-    if (error) {
-      console.error(error);
-      return null;
+  useEffect(() => {
+    async function fetchUser(supabase: any) {
+      const {
+        data: { user: userFetched },
+        error,
+      } = await supabase.auth.getUser();
+      if (error) {
+        throw new Error('User not found');
+      }
+      setUser(userFetched);
+      await fetchConversation(supabase, userFetched);
     }
-    return item;
-  }
+
+    async function fetchConversation(supabase: any, userFetched: User) {
+      const { data: conversationsFetched, error: conversationsError } =
+        await listUserConversations(supabase);
+
+      if (conversationsError) {
+        throw new Error("Couldn't fetch conversations");
+      }
+      setConversations(conversationsFetched);
+      setOwnedConversations(
+        conversationsFetched.filter((conv) => conv.owner_id === userFetched.id)
+      );
+      setFoundConversations(
+        conversationsFetched.filter((conv) => conv.finder_id === userFetched.id)
+      );
+      setLoading(false);
+    }
+
+    fetchUser(supabase);
+  }, [supabase]);
 
   const renderConversations = (
     conversationsList: TConversationWithLastMessage[]
   ) => {
-    return conversationsList.map(async (conversation) => {
-      const itemInfo = await getItemInfo(conversation.item_id);
-
+    return conversationsList.map((conversation) => {
       return (
         <ChatCard
           key={conversation.id}
           conversation={conversation}
           selectedConversationId={selectedConversationId}
-          user={user}
-          itemInfo={itemInfo ?? undefined}
+          user={user as User}
+          itemId={conversation.item_id}
         />
       );
     });
   };
+
+  if (!conversations || loading) {
+    return (
+      <div className='flex h-full w-full flex-col gap-6 p-4'>
+        {[...Array(8)].map((_, index) => (
+          <div
+            key={index}
+            className='h-16 animate-pulse rounded-lg bg-gray-300/20'
+          ></div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className='flex h-full w-full flex-col'>
       <Text variant={'h2'} className='p-2'>
         Conversations
       </Text>
-      {ownedConversations.length > 0 && (
+      {ownedConversations && ownedConversations.length > 0 && (
         <>
           <Text
             variant={'h4'}
@@ -83,7 +103,7 @@ export default async function ChatList({
           {renderConversations(ownedConversations)}
         </>
       )}
-      {foundConversations.length > 0 && (
+      {foundConversations && foundConversations.length > 0 && (
         <>
           <Text
             variant={'h4'}

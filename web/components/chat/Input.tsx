@@ -1,49 +1,58 @@
+'use client';
+import { useEffect, useState } from 'react';
 import { InputText } from '../common/input';
 import { Icon } from '../common/icon';
-import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server';
+import { InputChatProps } from './types';
+import { createClient } from '@/utils/supabase/client';
 import { insertMessage } from '@utils/lib/messaging/services';
-import { revalidatePath } from 'next/cache';
 
-const sendMessage = async (formData: FormData) => {
-  'use server';
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+const Input = ({ conversationId }: InputChatProps) => {
+  const supabase = createClient();
+  const [value, setValue] = useState('');
+  const [messageContent, setMessageContent] = useState('');
 
-  const value = formData.get('message') as string;
-  const conversation_id = formData.get('conversation_id') as string;
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setMessageContent(value);
+  };
 
-  // Check that the message is not empty
-  if (value.trim().length === 0) {
-    return;
-  }
+  useEffect(() => {
+    async function sendMessage() {
+      // Check that the message is not empty
+      if (messageContent.trim().length === 0) {
+        return;
+      }
 
-  // Insert the message in the database
-  const { insertedMessage, error } = await insertMessage(supabase, {
-    content: value as string,
-    conversation_id: conversation_id as string,
-  });
+      // Insert the message in the database
+      const { insertedMessage, error } = await insertMessage(supabase, {
+        content: messageContent as string,
+        conversation_id: conversationId as string,
+      });
 
-  if (error) {
-    console.error(error);
-    throw error;
-  }
+      if (error) {
+        console.error(error);
+        throw error;
+      }
 
-  if (!insertedMessage) {
-    throw new Error('Message not inserted');
-  }
+      if (!insertedMessage) {
+        throw new Error('Message not inserted');
+      }
 
-  revalidatePath('/chat/' + conversation_id);
-};
+      setValue('');
+    }
 
-const Input = (props: { conversation_id: string }) => {
+    sendMessage();
+  }, [supabase, conversationId, messageContent]);
+
   return (
-    <form action={sendMessage} className='flex '>
-      <InputText name='message' placeholder='Type a message' />
-      <input
-        name='conversation_id'
-        defaultValue={props.conversation_id}
-        hidden
+    <form onSubmit={handleSubmit} className='flex '>
+      <InputText
+        name='message'
+        placeholder='Type a message'
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
       />
       <div className='mx-2 flex h-10 w-10 cursor-pointer items-center justify-center'>
         <button type='submit'>
