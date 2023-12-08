@@ -5,12 +5,13 @@ import { View } from "../Themed"
 import { TextInput } from "react-native";
 import tw from "../../constants/tw"
 
-interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IProps {
 	labelText?: string
 	error?: string
 	children?: React.ReactNode
 	icon?: IconNames
 	onChangeText?: ((text: string) => void) | undefined;
+	placeholder?: string
 }
 
 export function InputText(props: IProps) {
@@ -50,6 +51,7 @@ export function InputText(props: IProps) {
 				<TextInput
 					onChangeText={props.onChangeText}
 					style={tw`w-full bg-transparent text-gray-700 placeholder:opacity-20 dark:text-gray-200`}
+					placeholder={props.placeholder}
 				/>
 
 				<View style={tw`flex`}>{props.children}</View>
