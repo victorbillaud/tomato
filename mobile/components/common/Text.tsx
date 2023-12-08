@@ -22,44 +22,44 @@ export interface ITextProps {
 }
 
 export function Text(props:ITextProps) {
-    const colorClass = `text-stone-900 dark:text-stone-100`;
+    const colorClass = tw`text-stone-900 dark:text-stone-100`;
 
     const children = props.children;
     const variant = props.variant;
 
     const weightClass = {
-        100: 'font-thin',
-        200: 'font-light',
-        300: 'font-normal',
-        400: 'font-medium',
-        500: 'font-semibold',
-        600: 'font-bold',
-        700: 'font-extrabold',
+        100: tw`font-thin`,
+        200: tw`font-light`,
+        300: tw`font-normal`,
+        400: tw`font-medium`,
+        500: tw`font-semibold`,
+        600: tw`font-bold`,
+        700: tw`font-extrabold`,
     };
 
     const weightVariantClass = {
-        h1: 'font-bold',
-        h2: 'font-bold',
-        h3: 'font-bold',
-        h4: 'font-bold',
-        title: 'font-semibold',
-        subtitle: 'font-semibold',
-        body: 'font-normal',
-        caption: 'font-normal',
-        overline: 'font-normal',
+        h1: tw`font-bold`,
+        h2: tw`font-bold`,
+        h3: tw`font-bold`,
+        h4: tw`font-bold`,
+        title: tw`font-semibold`,
+        subtitle: tw`font-semibold`,
+        body: tw`font-normal`,
+        caption: tw`font-normal`,
+        overline: tw`font-normal`,
     };
 
     const classNameString = [
-        props.color ? props.color : colorClass,
+        props.color ? tw`default` : colorClass,
         textConfig[variant],
         props.weight ? weightClass[props.weight] : weightVariantClass[variant],
-        tw`transition-all`,
-        props.style
+        props.style,
+        variant === 'body' ? tw`mx-0 my-0` : null,
     ];
-    /*
+
     if (variant === 'h1') {
         return (
-            <DefaultText style={[classNameString]} {...props}>
+            <DefaultText style={classNameString} {...props}>
                 {children}
             </DefaultText>
         );
@@ -67,54 +67,53 @@ export function Text(props:ITextProps) {
 
     if (variant === 'h2') {
         return (
-            <h2 className={classNameString} {...props}>
+            <DefaultText style={classNameString} {...props}>
                 {children}
-            </h2>
+            </DefaultText>
         );
     }
 
     if (variant === 'h3') {
         return (
-            <h3 className={classNameString} {...props}>
+            <DefaultText style={classNameString} {...props}>
                 {children}
-            </h3>
+            </DefaultText>
         );
     }
 
     if (variant === 'h4') {
         return (
-            <h4 className={classNameString} {...props}>
+            <DefaultText style={classNameString} {...props}>
                 {children}
-            </h4>
+            </DefaultText>
         );
     }
 
     if (variant == 'body') {
         return (
-            <p className={`mx-0 my-0 ${classNameString}`} {...props}>
+            <DefaultText style={classNameString} {...props}>
                 {children}
-            </p>
+            </DefaultText>
         );
     }
 
     return (
-        <span className={`${classNameString}`} {...props}>
-      {children}
-    </span>
+        <DefaultText style={classNameString} {...props}>
+            {children}
+        </DefaultText>
     );
-    */
 }
 
 export const textConfig = {
-    h1: 'text-3xl md:text-4xl font-sans',
-    h2: 'text-2xl md:text-3xl font-sans',
-    h3: 'text-1xl md:text-2xl font-sans',
-    h4: 'text-xl md:text-1xl font-sans',
-    title: 'text-l md:text-xl font-sans',
-    subtitle: 'text-base md:text-l font-sans',
-    body: 'text-sm md:text-base font-sans',
-    caption: 'text-xs md:text-sm font-sans',
-    overline: 'text-xs font-sans',
+    h1: tw`text-3xl md:text-4xl font-sans`,
+    h2: tw`text-2xl md:text-3xl font-sans`,
+    h3: tw`text-xl md:text-2xl font-sans`,
+    h4: tw`text-xl md:text-1xl font-sans`,
+    title: tw`text-lg md:text-xl font-sans`,
+    subtitle: tw`text-base md:text-lg font-sans`,
+    body: tw`text-sm md:text-base font-sans`,
+    caption: tw`text-xs md:text-sm font-sans`,
+    overline: tw`text-xs font-sans`,
 };
 
 
