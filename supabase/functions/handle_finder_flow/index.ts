@@ -261,7 +261,7 @@ const handle_finder_flow = async (_request: Request): Promise<Response> => {
       );
     } else {
       const conversation = await createConversation(
-        payload.item_id,
+        item.id,
         item.user_id,
         undefined,
       );
