@@ -83,7 +83,7 @@ export function Button(props: IButtonProps) {
 					<ActivityIndicator color={iconColor[variant]} size={iconSize[size]} />
 				</View>
 			) : (
-				<>
+				<View style={tw`flex flex-row`}>
 					{props.icon && (
 						<View style={tw`pr-2`}>
 							<Icon {...props.icon} />
@@ -94,7 +94,7 @@ export function Button(props: IButtonProps) {
 							{props.text}
 						</Text>
 					)}
-				</>
+				</View>
 			)}
 			{props.children}
 		</TouchableOpacity>
