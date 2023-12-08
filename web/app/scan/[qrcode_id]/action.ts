@@ -25,7 +25,7 @@ export async function edgeFinderFlow(itemId: string) {
     const supabase = createClient(cookieStore);
     const existingCookie = cookieStore.get('conversation_tokens')?.value;
     const conversationTokens = existingCookie ? JSON.parse(existingCookie) : {};
-    const specificToken = conversationTokens[itemId].token;
+    const specificToken = conversationTokens[itemId]?.token;
     const token = (await supabase.auth.getSession()).data.session?.access_token;
 
     const response = await fetch(
@@ -50,6 +50,8 @@ export async function edgeFinderFlow(itemId: string) {
     }
 
     const data: ResponseReturnType = await response.json();
+
+    console.log('data', data);
 
     if ('token' in data && 'conversation_id' in data) {
         conversationTokens[itemId] = {

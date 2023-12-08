@@ -5,7 +5,10 @@ import { Database } from "../_shared/supabase_types.ts";
 
 interface RequestPayload {
   email: string;
-  conversation_tokens?: Record<string, string>;
+  conversation_tokens?: Record<string, {
+    token: string;
+    conversation_id: string;
+  }>;
 }
 
 const verifyPayload = (payload: RequestPayload) => {
@@ -53,6 +56,11 @@ export const createUser = async (email: string, tokens: string[]) => {
       user_id: user.id,
       tokens: tokens,
     });
+
+    await supabaseClient.auth.signInWithOtp({
+      email: email,
+    });
+
   } catch {
     throw new Error("Error updating user conversations and messages");
   }
@@ -71,7 +79,11 @@ const handle_finder_registration = async (
     const payload: RequestPayload = await _request.json();
     verifyPayload(payload);
 
-    const tokens = payload.conversation_tokens ? Object.values(payload.conversation_tokens) : [];
+    const tokens = payload.conversation_tokens
+      ? Object.entries(payload.conversation_tokens).map(([_, value]) =>
+        value.token
+      )
+      : [];
 
     const user = await createUser(payload.email, tokens);
 

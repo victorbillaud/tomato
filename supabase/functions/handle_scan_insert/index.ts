@@ -156,7 +156,7 @@ const handler = async (_request: Request): Promise<Response> => {
         },
       });
 
-      // await sendEmail(payload.record, item);
+      await sendEmail(payload.record, item);
 
       return new Response(JSON.stringify({ message: "OK" }), {
         headers: { "Content-Type": "application/json" },
