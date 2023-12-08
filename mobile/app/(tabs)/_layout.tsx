@@ -3,7 +3,7 @@ import { useColorScheme } from 'react-native'
 
 import Colors from '../../constants/Colors'
 import React from "react";
-import { Icon } from "../../components/Icon";
+import Icon from "../../components/common/Icon";
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme()
@@ -15,14 +15,14 @@ export default function TabLayout() {
 				name="index"
 				options={{
 					title: 'Tab One',
-					tabBarIcon: ({ color }) => <Icon name="code" color={color} />,
+					tabBarIcon: ({ color }) => <Icon name="chevron-up" color={color} />,
 				}}
 			/>
 			<Tabs.Screen
 				name="two"
 				options={{
 					title: 'Tab Two',
-					tabBarIcon: ({ color }) => <Icon name="code" color={color} />,
+					tabBarIcon: ({ color }) => <Icon name="chevron-down" color={color} />,
 				}}
 			/>
 		</Tabs>
