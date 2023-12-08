@@ -12,7 +12,7 @@ export function TestComponents() {
 			<Text variant={"h1"}>Heading 1</Text>
 			<Text variant={"h2"}>Heading 2</Text>
 			<Text variant={'body'}>Body</Text>
-			<InputText labelText={"Input"} />
+			<InputText labelText={"Input"} placeholder={"test"} onChangeText={text => console.log(text)} />
 			<InputText labelText={"Input (with error)"} error={"Error!"} />
 			<Button text={"Button (primary)"} variant={"primary"} />
 			<Button text={"Button (secondary)"} variant={"secondary"} />
