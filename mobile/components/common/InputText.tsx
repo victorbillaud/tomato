@@ -2,7 +2,7 @@ import React from 'react'
 import { Icon, IconNames } from './Icon'
 import { Text } from './Text'
 import { View } from "../Themed"
-import { TextInput } from "react-native";
+import {TextInput, ViewStyle} from "react-native";
 import tw from "../../constants/tw"
 
 interface IProps {
@@ -12,11 +12,12 @@ interface IProps {
 	icon?: IconNames
 	onChangeText?: ((text: string) => void) | undefined;
 	placeholder?: string
+	style?: ViewStyle | ViewStyle[]
 }
 
 export function InputText(props: IProps) {
 	return (
-		<View style={tw`flex w-full flex-col gap-1`}>
+		<View style={[tw`flex w-full flex-col gap-1`, props.style]}>
 			{/* -------------------- LABEL & ERROR -------------------- */}
 			{props.labelText && (
 				<View style={tw`flex flex-row items-center justify-between gap-3`}>
