@@ -6,14 +6,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-select": "^2.0.0",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
-    "@tabler/icons-react": "^2.40.0",
+    "@tabler/icons-react": "^2.42.0",
     "autoprefixer": "10.4.15",
     "classnames": "^2.3.2",
     "dateformat": "^5.0.3",
-    "geist": "^1.0.0",
+    "geist": "^1.2.0",
     "next": "latest",
     "postcss": "8.4.29",
     "react": "18.2.0",
@@ -28,9 +29,9 @@
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "encoding": "^0.1.13",
-    "eslint": "^8.53.0",
-    "eslint-config-next": "^14.0.2",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint": "^8.55.0",
+    "eslint-config-next": "^14.0.3",
+    "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7"
   }

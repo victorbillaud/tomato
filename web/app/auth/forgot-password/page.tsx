@@ -44,7 +44,6 @@ export default function ForgotPassword({
   return (
     <form
       action={changePassword}
-      method='post'
       className='my-5 flex w-full flex-col items-center justify-between'
     >
       <div className='w-full space-y-3 rounded-lg'>

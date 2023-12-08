@@ -70,7 +70,7 @@ export default async function CreateItem({
               name: code.name,
               id: code.id.toString(),
             }))}
-            selectedValue={qrCode.id}
+            initalValue={qrCode.id}
           />
           {qrCode.barcode_data && <QrCode url={qrCode.barcode_data} />}
           <Text variant='body' className='text-center opacity-50'>
