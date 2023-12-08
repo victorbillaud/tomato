@@ -39,6 +39,8 @@ const handler = async (_request: Request): Promise<Response> => {
       data: { user },
     } = await supabase.auth.getUser()
 
+    console.log('user', user)
+
     // And we can run queries in the context of our authenticated user
     const { data, error } = await supabase.from('profiles').select('*')
     if (error) throw error

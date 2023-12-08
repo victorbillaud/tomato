@@ -25,19 +25,24 @@ export default async function UserPage() {
   const userAvatarUrl = user ? getUserAvatarUrl(user) : null;
 
   return (
-    <main className='flex w-full max-w-lg flex-1 flex-col items-center justify-center gap-20'>
-      {userAvatarUrl && (
-        <Image
-          src={userAvatarUrl}
-          alt='avatar'
-          width={100}
-          height={100}
-          className='rounded-full'
-        />
-      )}
-      <Text variant='h1' className='text-center'>
-        Welcome {user?.email}
+    <div className='flex flex-1 flex-col items-start justify-start gap-2'>
+      <Text variant='h4' className='text-center'>
+        User infos
       </Text>
+      <div className='flex flex-row items-center justify-center gap-2'>
+        {userAvatarUrl && (
+          <Image
+            src={userAvatarUrl}
+            alt='avatar'
+            width={60}
+            height={100}
+            className='rounded-full'
+          />
+        )}
+        <Text variant='h4' className='text-center'>
+          {user?.email}
+        </Text>
+      </div>
       <form action={signOut}>
         <Button
           text='Logout'
@@ -47,6 +52,6 @@ export default async function UserPage() {
           title='Logout'
         />
       </form>
-    </main>
+    </div>
   );
 }
