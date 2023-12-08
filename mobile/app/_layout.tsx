@@ -67,7 +67,6 @@ function AuthGuard() {
 				<Text>Logged in as {auth.user.email}</Text>
 			</>
 			: <View style={tw`flex-1 justify-center items-center`}>
-				<Text style={styles.title}>Not logged in</Text>
 				<AuthCard></AuthCard>
 			 </View>
 
