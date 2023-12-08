@@ -17,7 +17,6 @@
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-navigation/native": "^6.0.2",
     "@supabase/supabase-js": "^2.38.4",
-    "@tabler/icons-react": "^2.42.0",
     "classnames": "^2.3.2",
     "expo": "~49.0.15",
     "expo-font": "~11.4.0",
@@ -37,6 +36,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.6",
+    "tabler-icons-react-native": "^2.42.1",
     "twrnc": "^3.6.4"
   },
   "devDependencies": {

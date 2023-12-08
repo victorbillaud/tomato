@@ -15,7 +15,7 @@ import {
 	IconQuestionMark,
 	IconWritingSign,
 	IconWritingSignOff
-} from '@tabler/icons-react'
+} from 'tabler-icons-react-native'
 
 const ICONS = {
 	'alert': IconAlertHexagon,
