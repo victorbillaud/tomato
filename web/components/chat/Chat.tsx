@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Message from './Message';
 import { ChatProps, DBMessage } from './types';
 import { createClient } from '@/utils/supabase/client';
@@ -29,7 +29,8 @@ export default function Chat({
     }
   }, [messages]);
 
-  // TODO: set this to a realtime subscription
+  const memoMessages = useMemo(() => messages, [messages]);
+
   useEffect(() => {
     // Listen for new messages inserted in the database
     const changes = supabase
@@ -45,7 +46,7 @@ export default function Chat({
         (payload: any) => {
           const newMessage: DBMessage = payload.new;
           // Check if the message is not already in the list to avoid duplicates
-          if (!messages?.find((msg) => msg.id === newMessage.id)) {
+          if (!memoMessages?.find((msg) => msg.id === newMessage.id)) {
             setMessages((prevMessages) => [
               ...(prevMessages || []),
               newMessage,
@@ -59,16 +60,16 @@ export default function Chat({
     return () => {
       changes.unsubscribe();
     };
-  }, [conversationId, messages, supabase]);
+  }, [conversationId, memoMessages, supabase]);
 
   // Check if there are any messages to display
-  if (!messages) {
+  if (!memoMessages) {
     return (
       <div className='flex h-full w-full items-center justify-center dark:text-white'>
         Select a conversation
       </div>
     );
-  } else if (messages.length === 0) {
+  } else if (memoMessages.length === 0) {
     return (
       <div className='flex h-full w-full items-center justify-center dark:text-white'>
         No messages in this conversation.
@@ -78,19 +79,19 @@ export default function Chat({
 
   const renderMessages = () => {
     // Sort the messages by date & time (oldest first)
-    messages.sort((a, b) => {
+    memoMessages.sort((a, b) => {
       return a.created_at > b.created_at ? 1 : -1;
     });
 
     return (
       <>
-        {messages.map((message, index) => {
+        {memoMessages.map((message, index) => {
           return (
             <Message
               key={message.id}
               message={message}
-              prevMessage={messages[index - 1] ?? undefined}
-              nextMessage={messages[index + 1] ?? undefined}
+              prevMessage={memoMessages[index - 1] ?? undefined}
+              nextMessage={memoMessages[index + 1] ?? undefined}
               currentUser={currentUser}
             />
           );
