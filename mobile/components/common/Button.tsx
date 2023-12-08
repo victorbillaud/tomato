@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, ActivityIndicator, GestureResponderEvent } from 'react-native';
+import { TouchableOpacity, View, ActivityIndicator, GestureResponderEvent } from 'react-native';
 import { TextStyle, ViewStyle } from 'react-native';
 import {Icon, IconProps} from '../Icon';
 import { Style } from 'twrnc/dist/esm/types';
 import tw from "../../constants/tw";
+import { Text } from './Text';
 
 export type TButtonVariant = 'primary' | 'secondary' | 'tertiary';
 
@@ -90,7 +91,7 @@ export function Button (props: IButtonProps) {
                         </View>
                     )}
                     {!props.iconOnly && (
-                        <Text style={[sizeStyles[size], props.icon ? tw`pr-2` : tw`px-4`, textClasses]}>
+                        <Text style={[sizeStyles[size], props.icon ? tw`pr-2` : tw`px-4`, textClasses]} variant={'body'}>
                             {props.text}
                         </Text>
                     )}
