@@ -105,15 +105,15 @@ export function Text(props:ITextProps) {
 }
 
 export const textConfig = {
-    h1: tw`text-3xl md:text-4xl font-sans`,
-    h2: tw`text-2xl md:text-3xl font-sans`,
-    h3: tw`text-xl md:text-2xl font-sans`,
-    h4: tw`text-xl md:text-1xl font-sans`,
-    title: tw`text-lg md:text-xl font-sans`,
-    subtitle: tw`text-base md:text-lg font-sans`,
-    body: tw`text-sm md:text-base font-sans`,
-    caption: tw`text-xs md:text-sm font-sans`,
-    overline: tw`text-xs font-sans`,
+    h1: tw`text-3xl md:text-4xl`,
+    h2: tw`text-2xl md:text-3xl`,
+    h3: tw`text-xl md:text-2xl`,
+    h4: tw`text-xl md:text-1xl`,
+    title: tw`text-lg md:text-xl`,
+    subtitle: tw`text-base md:text-lg`,
+    body: tw`text-sm md:text-base`,
+    caption: tw`text-xs md:text-sm`,
+    overline: tw`text-xs`,
 };
 
 
