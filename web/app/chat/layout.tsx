@@ -13,7 +13,7 @@ export default function ChatLayout({
   return (
     <div className='flex h-[80vh] w-full overflow-hidden'>
       <div
-        className={`w-full border-gray-700/10 dark:border-white/20 sm:w-1/3 sm:border-r-[1px] ${mobileStyle}`}
+        className={`w-full border-gray-700/10 px-3 dark:border-white/20 sm:w-1/3 sm:border-r-[1px] sm:px-0 ${mobileStyle}`}
       >
         <ChatList />
       </div>

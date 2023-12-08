@@ -54,14 +54,16 @@ export default function Index() {
   }
 
   return (
-    <div className='flex h-full w-full flex-col justify-end gap-2 sm:w-2/3 sm:pl-2'>
-      <MobileHeader />
-      <Chat
-        conversationId={conversationId}
-        oldMessages={messages ?? undefined}
-        currentUser={user ?? undefined}
-      />
-      <Input conversationId={conversationId} />
+    <div className='flex h-full w-full flex-col justify-start sm:w-2/3 sm:pl-2'>
+      <MobileHeader conversationId={conversationId} />
+      <div className='flex h-full flex-col justify-end gap-2 overflow-y-scroll px-3 sm:px-0'>
+        <Chat
+          conversationId={conversationId}
+          oldMessages={messages ?? undefined}
+          currentUser={user ?? undefined}
+        />
+        <Input conversationId={conversationId} />
+      </div>
     </div>
   );
 }
