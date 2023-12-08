@@ -13,6 +13,7 @@ import { ItemType } from '../item';
 export default function MobileHeader({ conversationId }: MobileHeaderProps) {
   const supabase = createClient();
   const [item, setItem] = useState<ItemType | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchConversation() {
@@ -36,6 +37,7 @@ export default function MobileHeader({ conversationId }: MobileHeaderProps) {
         return null;
       }
       setItem(item);
+      setLoading(false);
     }
 
     fetchConversation();
@@ -50,6 +52,14 @@ export default function MobileHeader({ conversationId }: MobileHeaderProps) {
       return <Tag text='scanned' color='blue' size='small' />;
     }
   };
+
+  if (loading) {
+    return (
+      <div className='flex h-12 w-full flex-col px-2 sm:hidden'>
+        <div className='h-full animate-pulse rounded-lg bg-gray-300/20'></div>
+      </div>
+    );
+  }
 
   return (
     <div
