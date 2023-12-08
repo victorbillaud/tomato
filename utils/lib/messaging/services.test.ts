@@ -9,6 +9,7 @@ import {
 import { getSupabase } from '../supabase/services';
 import {
   getConversationMessages,
+  getConversation,
   insertConversation,
   insertMessage,
   listUserConversations,
@@ -248,6 +249,43 @@ describe('service messaging module', () => {
     expect(messages[1]).toHaveProperty('id');
     expect(messages[1]).toHaveProperty('content', 'test 2');
     expect(messages[1]).toHaveProperty('sender_id');
+
+    await sp.auth.signOut();
+    await deleteFakeUser(sp, finder.id);
+    const deletedConversation = await sp
+      .from('conversation')
+      .delete()
+      .eq('id', insertedConversation.id)
+      .select('*')
+      .single();
+    expect(deletedConversation.data).toBeDefined();
+  });
+
+  test('get conversation by id', async () => {
+    await signInFakeUser(sp);
+    const { user: finder } = await createFakeUser(sp, 'finder@example.com');
+
+    const { insertedConversation, error: insertConversationError } =
+      await insertConversation(sp, {
+        finder_id: finder.id,
+        item_id: globalThis.insertedItem.id,
+      });
+
+    if (insertConversationError) {
+      throw insertConversationError;
+    }
+
+    const { conversation, error } = await getConversation(
+      sp,
+      insertedConversation.id
+    );
+
+    expect(error).toBeNull();
+    expect(conversation).toBeDefined();
+    expect(conversation).toHaveProperty('id');
+    expect(conversation).toHaveProperty('finder_id');
+    expect(conversation).toHaveProperty('item_id');
+    expect(conversation).toHaveProperty('owner_id');
 
     await sp.auth.signOut();
     await deleteFakeUser(sp, finder.id);

@@ -103,6 +103,20 @@ export async function getConversationUsers(
   return { users, error };
 }
 
+export async function getConversation(
+  supabaseInstance: SupabaseClient<Database>,
+  conversationId: string
+) {
+  const { data: conversation, error } = await supabaseInstance
+    .from('conversation')
+    .select('*')
+    .eq('id', conversationId)
+    .limit(1)
+    .single();
+
+  return { conversation, error };
+}
+
 export async function getConversationMessages(
   supabaseInstance: SupabaseClient<Database>,
   conversationId: string
