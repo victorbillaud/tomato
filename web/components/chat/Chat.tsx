@@ -1,25 +1,45 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Message from './Message';
+import { useChatContext } from './ChatContext';
 import { ChatProps, DBMessage } from './types';
-import { createClient } from '@/utils/supabase/client';
 
 export default function Chat({
   conversationId,
   oldMessages,
   currentUser,
 }: ChatProps) {
-  const supabase = createClient();
   const [messages, setMessages] = useState<DBMessage[] | null>(
     oldMessages ?? null
   );
+  const { newMessages } = useChatContext();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const memoMessages = useMemo(() => messages, [messages]);
+
+  function addMessages(messages: DBMessage[]) {
+    // set messages with new messages but avoid duplicates
+    setMessages((prevMessages) => [
+      ...(prevMessages ?? []),
+      ...messages.filter((msg) => !prevMessages?.find((m) => m.id === msg.id)),
+    ]);
+  }
 
   useEffect(() => {
+    // initialize messages with old messages when fetched
     if (oldMessages) {
-      setMessages(oldMessages);
+      addMessages(oldMessages);
     }
   }, [oldMessages]);
+
+  useEffect(() => {
+    // add new messages of this conversation only
+    if (newMessages) {
+      const newMessagesFiltered = newMessages.filter(
+        (msg) => msg.conversation_id === conversationId
+      );
+      addMessages(newMessagesFiltered);
+    }
+  }, [newMessages, conversationId]);
 
   useEffect(() => {
     // Scroll to the bottom of the chat when a new message is sent
@@ -28,39 +48,6 @@ export default function Chat({
         scrollContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
-  const memoMessages = useMemo(() => messages, [messages]);
-
-  useEffect(() => {
-    // Listen for new messages inserted in the database
-    const changes = supabase
-      .channel('conversation:' + conversationId)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'message',
-          filter: 'conversation_id=eq.' + conversationId,
-        },
-        (payload: any) => {
-          const newMessage: DBMessage = payload.new;
-          // Check if the message is not already in the list to avoid duplicates
-          if (!memoMessages?.find((msg) => msg.id === newMessage.id)) {
-            setMessages((prevMessages) => [
-              ...(prevMessages || []),
-              newMessage,
-            ]);
-          }
-        }
-      )
-      .subscribe();
-
-    // Unsubscribe from the channel when the component unmounts
-    return () => {
-      changes.unsubscribe();
-    };
-  }, [conversationId, memoMessages, supabase]);
 
   // Check if there are any messages to display
   if (!memoMessages) {
