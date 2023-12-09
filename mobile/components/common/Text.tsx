@@ -116,4 +116,11 @@ export const textConfig = {
     overline: tw`text-xs`,
 };
 
+/* TODO: use theme like the following example :
+	export function Text(props: TextProps) {
+		const { style, lightColor, darkColor, ...otherProps } = props
+		const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
 
+		return <DefaultText style={[{ color }, style]} {...otherProps} />
+	}
+ */

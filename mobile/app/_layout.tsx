@@ -4,12 +4,11 @@ import { useFonts } from 'expo-font'
 import { SplashScreen, Stack, usePathname } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
-import { Text } from "../components/Themed";
 import { AuthProvider, useAuth } from "../components/auth/AuthProvider";
-import {styles} from "../constants/Styles";
 import tw from 'twrnc';
-import {AuthCard} from "../components/auth/AuthCard";
+import { AuthCard } from "../components/auth/AuthCard";
 import { View } from "../components/View";
+import { Text } from "../components/common/Text";
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -64,13 +63,13 @@ function AuthGuard() {
 				<Stack>
 					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 				</Stack>
-				<Text>Currently at: "{path}"</Text>
-				<Text>Logged in as {auth.user.email}</Text>
+				<Text variant={'body'}>Currently at: "{path}"</Text>
+				<Text variant={'body'}>Logged in as {auth.user.email}</Text>
 			</>
 			: <View style={tw`flex-1 justify-center items-center`}>
-				<Text style={styles.title}>Not logged in</Text>
+				<Text variant={'body'}>Not logged in</Text>
 				<AuthCard></AuthCard>
-			 </View>
+			</View>
 
 	)
 }
