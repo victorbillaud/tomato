@@ -33,11 +33,8 @@ export default function Chat({
 
   useEffect(() => {
     // add new messages of this conversation only
-    if (newMessages) {
-      const newMessagesFiltered = newMessages.filter(
-        (msg) => msg.conversation_id === conversationId
-      );
-      addMessages(newMessagesFiltered);
+    if (newMessages && conversationId) {
+      addMessages(newMessages[conversationId] ?? []);
     }
   }, [newMessages, conversationId]);
 

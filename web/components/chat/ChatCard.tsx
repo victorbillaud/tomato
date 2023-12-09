@@ -6,36 +6,11 @@ import Link from 'next/link';
 import { Icon } from '../common/icon';
 import { Text } from '../common/text';
 import { Tag } from '../common/tag';
-import { ChatCardProps, DBProfile } from './types';
+import { ChatCardProps, DBMessage, DBProfile } from './types';
 import { createClient } from '@/utils/supabase/client';
-import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
 import { getItem } from '@utils/lib/item/services';
 import { getUserDetails } from '@utils/lib/user/services';
-
-const displayLastMessageDate = (conversation: TConversationWithLastMessage) => {
-  const today = new Date();
-  const lastMsgDate = new Date(
-    conversation.last_message?.created_at || conversation.created_at
-  );
-  const timeDifference = today.getTime() - lastMsgDate.getTime();
-
-  // If the message was sent today, display only the time
-  if (today.getDate() === lastMsgDate.getDate()) {
-    return dateFormat(lastMsgDate, 'HH:MM');
-  }
-  // If the message was sent less than 7 days ago, display the day of the week and the time
-  else if (timeDifference < 7 * 24 * 60 * 60 * 1000) {
-    return dateFormat(lastMsgDate, 'ddd HH:MM');
-  }
-  // If it was sent less than a year ago, display the day and the month
-  else if (timeDifference < 365 * 24 * 60 * 60 * 1000) {
-    return dateFormat(lastMsgDate, 'd mmm');
-  }
-  // else display the day, the month and the year
-  else {
-    return dateFormat(lastMsgDate, 'd mmm yy');
-  }
-};
+import { useChatContext } from './ChatContext';
 
 export default function ChatCard({
   conversation,
@@ -44,6 +19,10 @@ export default function ChatCard({
   itemId,
 }: ChatCardProps) {
   const supabase = createClient();
+  const [lastMessage, setLastMessage] = useState<DBMessage | null>(
+    (conversation?.last_message as DBMessage) || null
+  );
+  const { newMessages } = useChatContext();
   let isOwner = conversation.owner_id === user?.id;
   const [userDetails, setUserDetails] = useState<DBProfile>();
   const [itemInfo, setItemInfo] = useState<any>();
@@ -81,6 +60,46 @@ export default function ChatCard({
   }, [isOwner, conversation, supabase, itemId]);
 
   const avatarUrl = userDetails?.avatar_url;
+
+  useEffect(() => {
+    // get messages of this conversation only
+    if (
+      newMessages[conversation.id] &&
+      newMessages[conversation.id].length > 0
+    ) {
+      // set last message with the most recent one
+      setLastMessage(
+        newMessages[conversation.id].reduce((prev, current) =>
+          prev.created_at > current.created_at ? prev : current
+        )
+      );
+    }
+  }, [newMessages, conversation, selectedConversationId, lastMessage, user]);
+
+  function displayLastMessageDate() {
+    const today = new Date();
+    const lastMsgDate = new Date(
+      lastMessage?.created_at || conversation.created_at
+    );
+    const timeDifference = today.getTime() - lastMsgDate.getTime();
+
+    // If the message was sent today, display only the time
+    if (today.getDate() === lastMsgDate.getDate()) {
+      return dateFormat(lastMsgDate, 'HH:MM');
+    }
+    // If the message was sent less than 7 days ago, display the day of the week and the time
+    else if (timeDifference < 7 * 24 * 60 * 60 * 1000) {
+      return dateFormat(lastMsgDate, 'ddd HH:MM');
+    }
+    // If it was sent less than a year ago, display the day and the month
+    else if (timeDifference < 365 * 24 * 60 * 60 * 1000) {
+      return dateFormat(lastMsgDate, 'd mmm');
+    }
+    // else display the day, the month and the year
+    else {
+      return dateFormat(lastMsgDate, 'd mmm yy');
+    }
+  }
 
   const selectedStyle =
     selectedConversationId === conversation?.id
@@ -126,15 +145,17 @@ export default function ChatCard({
         <Text variant={'h4'} className='truncate'>
           {itemInfo?.name || 'unknown'}
         </Text>
-        <Text variant={'body'} className='truncate'>
-          {conversation.last_message?.sender_id === user?.id ? 'You: ' : ''}
-          {conversation.last_message?.content || 'No messages yet'}
-        </Text>
+        <div className='flex items-center'>
+          <Text variant={'body'} className='truncate'>
+            {lastMessage?.sender_id === user?.id ? 'You: ' : ''}
+            {lastMessage?.content || 'No messages yet'}
+          </Text>
+        </div>
       </div>
 
       <div className='flex flex-shrink-0 flex-col items-end gap-1'>
         {renderTag()}
-        <Text variant={'caption'}>{displayLastMessageDate(conversation)}</Text>
+        <Text variant={'caption'}>{displayLastMessageDate()}</Text>
       </div>
     </Link>
   );
