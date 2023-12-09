@@ -26,7 +26,10 @@ def parse_command(commands):
 
 def generate_supabase_types():
     """Generates the supabase database types for typescript development"""
-    type_file = open("./utils/lib/supabase/supabase_types.ts", "w+")
+    utils_types_file_destination = open("./utils/lib/supabase/supabase_types.ts", "w+")
+    supabase_types_file_destination = open(
+        "./supabase/functions/_shared/supabase_types.ts", "w+"
+    )
 
     os.chdir("./web")
 
@@ -51,7 +54,20 @@ def generate_supabase_types():
                 "typescript",
                 "--local",
             ],
-            stdout=type_file,
+            stdout=utils_types_file_destination,
+        )
+
+        subprocess.run(
+            [
+                "pnpm",
+                "dlx",
+                "supabase",
+                "gen",
+                "types",
+                "typescript",
+                "--local",
+            ],
+            stdout=supabase_types_file_destination,
         )
     else:
         subprocess.run(
@@ -67,9 +83,25 @@ def generate_supabase_types():
                 "--schema",
                 "public",
             ],
-            stdout=type_file,
+            stdout=utils_types_file_destination,
         )
-    type_file.close()
+
+        subprocess.run(
+            [
+                "pnpm",
+                "dlx",
+                "supabase",
+                "gen",
+                "types",
+                "typescript",
+                "--project-id",
+                project_id,
+                "--schema",
+                "public",
+            ],
+            stdout=supabase_types_file_destination,
+        )
+    utils_types_file_destination.close()
     os.chdir("../")
 
 

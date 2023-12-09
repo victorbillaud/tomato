@@ -1,11 +1,18 @@
 import {
+  IconChevronLeft,
+  IconSend,
+  IconUserCircle,
   IconAlertHexagon,
   IconArrowLeft,
   IconAt,
+  IconBellFilled,
   IconBrandDiscordFilled,
   IconBrandGoogleFilled,
+  IconCheck,
+  IconChecks,
   IconChevronCompactDown,
-  IconChevronLeft,
+  IconChevronDown,
+  IconChevronUp,
   IconDiscountCheck,
   IconDiscountCheckFilled,
   IconDownload,
@@ -13,13 +20,8 @@ import {
   IconLock,
   IconQrcode,
   IconQuestionMark,
-  IconSend,
-  IconUserCircle,
   IconWritingSign,
   IconWritingSignOff,
-  IconCheck,
-  IconChevronDown,
-  IconChevronUp,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -44,6 +46,8 @@ const ICONS = {
   check: IconCheck,
   'chevron-down': IconChevronDown,
   'chevron-up': IconChevronUp,
+  bell: IconBellFilled,
+  checks: IconChecks,
 };
 
 export default ICONS;
