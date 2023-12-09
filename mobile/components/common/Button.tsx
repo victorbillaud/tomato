@@ -3,7 +3,7 @@ import { ActivityIndicator, GestureResponderEvent, TextStyle, TouchableOpacity, 
 import { Style } from 'twrnc/dist/esm/types';
 import tw from "../../constants/tw";
 import { Text } from './Text';
-import Icon, { IIconProps } from "./Icon";
+import { Icon, IIconProps } from "./Icon";
 
 export type TButtonVariant = 'primary' | 'secondary' | 'tertiary';
 

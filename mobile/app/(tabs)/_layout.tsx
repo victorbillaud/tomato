@@ -3,6 +3,7 @@ import { useColorScheme } from 'react-native'
 import { textConfig } from "../../components/common/Text";
 import { Icon } from "../../components/common/Icon";
 import Colors from '../../constants/Colors'
+import { IconListDetails, IconMessages, IconUser } from "tabler-icons-react-native";
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme()
@@ -13,7 +14,7 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="index"
 				options={{
-					tabBarIcon: ({ color }) => <Icon name="list-details" color={color} />,
+					tabBarIcon: ({ color }) => <Icon icon={IconListDetails} color={color} />,
 					tabBarShowLabel: false,
 					title: 'Items',
 					headerTitleStyle: [textConfig.h1]
@@ -24,7 +25,7 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="chats"
 				options={{
-					tabBarIcon: ({ color }) => <Icon name="messages" color={color} />,
+					tabBarIcon: ({ color }) => <Icon icon={IconMessages} color={color} />,
 					tabBarShowLabel: false,
 					title: 'Chats',
 					headerTitleStyle: [textConfig.h1]
@@ -35,7 +36,7 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="user"
 				options={{
-					tabBarIcon: ({ color }) => <Icon name="user" color={color} />,
+					tabBarIcon: ({ color }) => <Icon icon={IconUser} color={color} />,
 					tabBarShowLabel: false,
 					title: 'User',
 					headerTitleStyle: [textConfig.h1]

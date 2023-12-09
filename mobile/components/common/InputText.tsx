@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, IconNames } from './Icon'
+import { Icon, IIconProps } from './Icon'
 import { Text } from './Text'
 import { TextInput } from "react-native";
 import tw from "../../constants/tw"
@@ -9,7 +9,7 @@ interface IProps {
 	labelText?: string
 	error?: string
 	children?: React.ReactNode
-	icon?: IconNames
+	icon?: IIconProps
 	onChangeText?: ((text: string) => void) | undefined;
 	placeholder?: string
 }
@@ -46,7 +46,7 @@ export function InputText(props: IProps) {
 				tw`text-sm text-black dark:text-white-100 w-full px-2 py-2 lg:text-sm xl:text-base`,
 				props.children ? tw`rounded-r-md` : tw`rounded-md`
 			]}>
-				{props.icon && <Icon name={props.icon} size={20} />}
+				{props.icon && <Icon {...props.icon} size={20} />}
 
 				<TextInput
 					onChangeText={props.onChangeText}
