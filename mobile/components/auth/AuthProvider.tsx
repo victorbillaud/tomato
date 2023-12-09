@@ -8,6 +8,8 @@ interface AuthContextType {
 	user: User | null
 	loading: boolean
 	signIn: (email: string, password: string) => Promise<void>
+	sendOTP: (email: string) => Promise<void>
+	signInWithOTP: (email: string, otp: string) => Promise<void>
 	//signInWithProvider: (provider: Provider) => Promise<void>
 	signOut: () => Promise<void>
 }
@@ -42,8 +44,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		return () => { listener.subscription?.unsubscribe() }
 	}, [])
 
-	const InvalidCredentialsAlert = () =>
-		Alert.alert('Invalid credentials');
+	const InvalidCredentialsAlert = () => Alert.alert('Invalid credentials')
 
 	return (
 		<AuthContext.Provider value={{
@@ -53,6 +54,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
 				const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 				if (error) {
 					if (error.message === 'Invalid login credentials') {InvalidCredentialsAlert()} else {console.error(error)}
+					return
+				}
+				setUser(data?.user ?? null);
+			},
+			sendOTP: async (email: string) => {
+				const { data, error } = await supabase.auth.signInWithOtp({
+					email,
+					options: {
+						shouldCreateUser: true,
+					},
+				});
+				if (error) {
+					console.error(error)
+					return
+				}
+			},
+			signInWithOTP: async (email: string, otp: string) => {
+				const { data, error } = await supabase.auth.verifyOtp({
+					email,
+					token: otp,
+					type: 'email',
+				});
+				if (error) {
+					console.error(error)
 					return
 				}
 				setUser(data?.user ?? null);
