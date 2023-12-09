@@ -1,11 +1,18 @@
-import { View as DefaultView } from "react-native";
+import { ScrollView as RNScrollView, View as RNView } from "react-native";
 import { ThemeProps, useThemeColor } from "./Themed";
 
-export type ViewProps = ThemeProps & DefaultView['props']
+export type ViewProps = ThemeProps & RNView['props']
 
 export function View(props: ViewProps) {
 	const { style, lightColor, darkColor, ...otherProps } = props
 	const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
 
-	return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />
+	return <RNView style={[{ backgroundColor }, style]} {...otherProps} />
+}
+
+export function ScrollView(props: ViewProps) {
+	const { style, lightColor, darkColor, ...otherProps } = props
+	const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
+
+	return <RNScrollView style={[{ backgroundColor }, style]} {...otherProps} />
 }
