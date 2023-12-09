@@ -45,7 +45,7 @@ site_url = "http://localhost:3000"
 additional_redirect_urls = ["https://localhost:3000"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 seconds (one
 # week).
-jwt_expiry = 3600
+jwt_expiry = 604800
 # Allow/disallow new user signups to your project.
 enable_signup = true
 
@@ -70,7 +70,6 @@ redirect_uri = "http://localhost:54321/auth/v1/callback"
 # Overrides the default auth provider URL. Used to support self-hosted gitlab, single-tenant Azure,
 # or any other third-party OIDC providers.
 url = ""
-enable_signup = true
 
 [auth.external.discord]
 enabled = true
@@ -81,7 +80,6 @@ redirect_uri = "http://localhost:54321/auth/v1/callback"
 # Overrides the default auth provider URL. Used to support self-hosted gitlab, single-tenant Azure,
 # or any other third-party OIDC providers.
 url = ""
-enable_signup = true
 
 [analytics]
 enabled = false
@@ -92,3 +90,11 @@ vector_port = 54328
 gcp_project_id = ""
 gcp_project_number = ""
 gcp_jwt_path = "supabase/gcloud.json"
+
+[auth.email.template.magic_link]
+subject = "Your OTP for Tomato"
+content_path = "./supabase/templates/email-otp.html"
+
+[auth.email.template.confirmation]
+subject = "Welcome to Tomato"
+content_path = "./supabase/templates/confirmation.html"

@@ -28,4 +28,11 @@ describe('supabase fake module', () => {
         await sp.auth.signOut();
         await deleteFakeUser(sp, data.session.user.id);
     });
+
+    test('delete fake user', async () => {
+        const { user } = await createFakeUser(sp, FAKE_USER_EMAIL, FAKE_USER_PASSWORD);
+        const deletedUser = await deleteFakeUser(sp, user.id);
+
+        expect(deletedUser).toBeDefined();
+    });
 });

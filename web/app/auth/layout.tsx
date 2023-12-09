@@ -1,14 +1,19 @@
-import AuthProviders from '@/components/AuthProviders';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  
   return (
-    <main className='flex flex-1 flex-col items-center justify-center'>
-      <AuthProviders />
-      <div className='my-5 h-0.5 w-2/3 rounded-full border border-gray-200 dark:border-gray-700'></div>
+    <main className='flex w-full max-w-lg flex-1 flex-col items-center justify-center'>
       {children}
     </main>
   );

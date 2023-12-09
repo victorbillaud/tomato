@@ -1,24 +1,59 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
+import { Icon } from '../icon';
 import { ILinkProps, LinkVariant } from './types';
 
 export const StyledLink: FunctionComponent<ILinkProps> = ({
   variant = 'primary',
+  size = 'medium',
   ...props
 }) => {
   const buttonClasses = getLinkClass(variant);
+  const sizeClasses = getLinkSize(size);
   const linkClassName = classNames(
     buttonClasses.base,
+    sizeClasses,
     props.disabled ? 'opacity-50 cursor-default' : buttonClasses.interact,
-    'flex min-w-max items-center justify-center h-10 py-1 m-1 px-4',
-    'transition-all'
+    'flex min-w-max items-center justify-center',
+    'transition-all',
+    props.className
   );
   return (
-    <Link passHref {...props} className={linkClassName}>
+    <Link
+      passHref
+      {...props}
+      href={props.disabled ? '#' : props.href}
+      className={linkClassName}
+    >
+      {props.icon && (
+        <Icon name={props.icon} size={getIconSize(size)} className='mr-2' />
+      )}
       {props.text}
     </Link>
   );
+};
+
+const getLinkSize = (size: 'small' | 'medium' | 'large') => {
+  switch (size) {
+    case 'small':
+      return 'h-8 px-2 text-xs';
+    case 'medium':
+      return 'h-10 px-4 text-sm';
+    case 'large':
+      return 'h-12 px-6 text-base';
+  }
+};
+
+const getIconSize = (size: 'small' | 'medium' | 'large') => {
+  switch (size) {
+    case 'small':
+      return 18;
+    case 'medium':
+      return 20;
+    case 'large':
+      return 22;
+  }
 };
 
 const getLinkClass = (style: LinkVariant) => {

@@ -4,7 +4,7 @@ import { Database } from "../supabase/supabase_types";
 
 export async function insertItem(
     supabaseInstance: SupabaseClient<Database>,
-    item: Pick<Database["public"]["Tables"]["item"]["Insert"], "name" | "description" | "qrcode_id">
+    item: Pick<Database["public"]["Tables"]["item"]["Insert"], "name" | "description" | "qrcode_id" | "activated">
 ) {
 
     const { data: { user } } = await supabaseInstance.auth.getUser();
@@ -46,8 +46,69 @@ export async function listItems(supabaseInstance: SupabaseClient<Database>) {
     return { data, error }
 }
 
+export async function getItemFromQrCodeId(
+    supabaseInstance: SupabaseClient<Database>,
+    qrCodeId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .select(`
+            *,
+            qrcode!qrcode_item_id_fkey (
+                *
+            )
+        `)
+        .eq('qrcode_id', qrCodeId)
+        .limit(1)
+        .single();
 
-// TODO: Manage flow for item creations from QRCode.
+    return { data, error }
+}
 
+export async function getItem(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .select(`
+            *,
+            qrcode!qrcode_item_id_fkey (
+                *
+            )
+        `)
+        .eq('id', itemId)
+        .limit(1)
+        .single();
 
-// TODO: Random name for qrcode
+    return { data, error }
+}
+
+export async function activateItem(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .update({ activated: true })
+        .eq('id', itemId)
+        .select('*')
+        .single();
+
+    return { data, error }
+}
+
+export async function updateItem(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string,
+    item: Omit<Database["public"]["Tables"]["item"]["Update"], "id" | "created_at" | "user_id" | "activated">
+) {
+    const { data, error } = await supabaseInstance
+        .from('item')
+        .update(item)
+        .eq('id', itemId)
+        .select('*')
+        .single();
+
+    return { data, error }
+}

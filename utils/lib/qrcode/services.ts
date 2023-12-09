@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { getEnvVariable } from "../../lib/common/envService";
 import { Database } from "../supabase/supabase_types";
+import { generateQRCodeName } from "../common";
 
 export async function insertQRCode(
     supabaseInstance: SupabaseClient<Database>,
@@ -8,6 +8,7 @@ export async function insertQRCode(
 ): Promise<ReturnType<typeof createQrCodeImage>> {
     const qrCodeObject: Database["public"]["Tables"]["qrcode"]["Insert"] = {
         user_id: qrCode.user_id,
+        name: qrCode.name || generateQRCodeName()
     };
 
     const { data, error } = await supabaseInstance
@@ -42,10 +43,14 @@ async function createQrCodeImage(supabaseInstance: SupabaseClient<Database>, qrC
 }
 
 export async function listQRCode(supabaseInstance: SupabaseClient<Database>) {
+
+    const { data: { user } } = await supabaseInstance.auth.getUser();
+
     const { data, error } = await supabaseInstance
         .from('qrcode')
         .select('*')
-        .is('item_id', null);
+        .is('item_id', null)
+        .eq('user_id', user.id);
 
     return { data, error }
 }
@@ -55,6 +60,7 @@ export async function getQRCode(supabaseInstance: SupabaseClient<Database>, qrCo
         .from('qrcode')
         .select('*')
         .eq('id', qrCodeId)
+        .limit(1)
         .single();
 
     return { data, error }
@@ -72,13 +78,18 @@ export async function associateQRCodeToItem(supabaseInstance: SupabaseClient<Dat
 }
 
 function buildQRCodeURL(qrCodeId: string): string {
-    let baseURL =
-        getEnvVariable('NEXT_PUBLIC_SITE_URL') ?? // Set this to your site URL in production env.
-        getEnvVariable('NEXT_PUBLIC_VERCEL_URL') ?? // Automatically set by Vercel.
-        'http://localhost:3000/';
 
-    // Make sure to include `https://` when not localhost.
-    baseURL = baseURL.includes('http') ? baseURL : `https://${baseURL}`;
+
+    let baseURL = process.env.VERCEL_URL || 'http://localhost:3000';
+
+    if (process.env.NODE_ENV === 'production') {
+        baseURL = "tomato.victorbillaud.fr"
+    }
+
+    // Add protocol if not present
+    if (!baseURL.startsWith('http')) {
+        baseURL = `https://${baseURL}`;
+    }
 
     const qrCodeURL = `${baseURL}/scan/${qrCodeId}`;
 

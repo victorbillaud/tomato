@@ -1,10 +1,11 @@
-import { Text, View } from '../../components/Themed'
-import { styles } from "../../constants/Styles";
+import { Text } from "../../components/common/Text";
+import tw from "../../constants/tw"
+import { View } from "../../components/View";
 
-export default function TabOneScreen() {
+export default function ItemsTab() {
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>Tab One</Text>
+		<View style={tw`w-full h-full p-4`}>
+			<Text variant={"title"}>TODO: items tab</Text>
 		</View>
 	)
 }

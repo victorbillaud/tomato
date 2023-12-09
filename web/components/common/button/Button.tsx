@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import { FunctionComponent } from 'react';
 import { Icon } from '../icon';
 import { IButtonProps, TButtonVariant } from './types';
-import { get } from 'http';
 
 export const Button: FunctionComponent<IButtonProps> = ({
   size = 'medium',
@@ -32,9 +31,9 @@ export const Button: FunctionComponent<IButtonProps> = ({
   };
 
   const iconColor = {
-    primary: 'white',
-    secondary: 'gray',
-    tertiary: 'gray',
+    primary: 'text-gray-100',
+    secondary: 'text-gray-700 dark:text-gray-100',
+    tertiary: 'text-gray-700 dark:text-gray-200',
   };
 
   const buttonClasses = getButtonClass(variant);
@@ -57,7 +56,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
       {...props}
     >
       {isLoader ? (
-        <div className='flex h-full w-full items-center justify-center pr-1'>
+        <div className='flex h-full w-full items-center justify-center px-3'>
           <div className='animate-spin'>
             <Icon
               name='loader'
@@ -69,7 +68,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
       ) : (
         <>
           {icon && (
-            <div className='pr-2'>
+            <div className='px-1'>
               <Icon
                 name={icon}
                 size={iconSize[size]}
@@ -99,7 +98,7 @@ const getButtonClass = (style: TButtonVariant) => {
       };
     case 'secondary':
       return {
-        base: 'rounded-md border dark:border-gray-100 bg-gray-100 dark:bg-transparent font-medium text-gray-700 dark:text-gray-100 shadow-sm',
+        base: 'rounded-md border dark:border-stone-600 bg-gray-100 dark:bg-transparent font-medium text-gray-700 dark:text-gray-100 shadow-sm',
         interact:
           'hover:bg-gray-200 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200',
       };
