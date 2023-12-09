@@ -35,8 +35,9 @@ export function AuthCard() {
 							isLoader={sendingOTP}
 							onPress={async () => {
 								setSendingOTP(true)
-								await auth.sendOTP(email)
-								setLoginType('otp')
+								const success = await auth.sendOTP(email)
+								if (success)
+									setLoginType('otp')
 								setSendingOTP(false)
 							}}
 					/>

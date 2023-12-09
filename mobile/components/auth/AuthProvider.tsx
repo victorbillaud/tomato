@@ -8,7 +8,7 @@ interface AuthContextType {
 	user: User | null
 	loading: boolean
 	signIn: (email: string, password: string) => Promise<void>
-	sendOTP: (email: string) => Promise<void>
+	sendOTP: (email: string) => Promise<boolean>
 	signInWithOTP: (email: string, otp: string) => Promise<void>
 	//signInWithProvider: (provider: Provider) => Promise<void>
 	signOut: () => Promise<void>
@@ -67,8 +67,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 				});
 				if (error) {
 					console.error(error)
-					return
+					return false
 				}
+				return true
 			},
 			signInWithOTP: async (email: string, otp: string) => {
 				const { data, error } = await supabase.auth.verifyOtp({
