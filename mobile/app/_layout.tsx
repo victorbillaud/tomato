@@ -67,7 +67,7 @@ function AuthGuard() {
 				<Text variant={'body'}>Logged in as {auth.user.email}</Text>
 			</>
 			: <View style={tw`flex-1 justify-center items-center`}>
-				<Text variant={'body'}>Not logged in</Text>
+				<Text variant={'h1'} style={{ textDecorationLine: 'underline' }}>Not logged in</Text>
 				<AuthCard></AuthCard>
 			</View>
 
