@@ -12,6 +12,7 @@ interface IProps {
 	icon?: IIconProps
 	onChangeText?: ((text: string) => void) | undefined;
 	placeholder?: string
+	password?: boolean
 }
 
 export function InputText(props: IProps) {
@@ -52,6 +53,7 @@ export function InputText(props: IProps) {
 					onChangeText={props.onChangeText}
 					style={tw`w-full bg-transparent text-gray-700 placeholder:opacity-20 dark:text-gray-200`}
 					placeholder={props.placeholder}
+					secureTextEntry={props.password ?? false}
 				/>
 
 				<View style={tw`flex`}>{props.children}</View>

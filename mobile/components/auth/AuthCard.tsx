@@ -23,8 +23,9 @@ export function AuthCard() {
 					   onChangeText={handleEmailChange}
 			/>
 			<InputText labelText={"Password"}
-					   placeholder="greatpassword1234"
+					   placeholder="********"
 					   onChangeText={handlePasswordChange}
+					   password={true}
 			/>
 			<Button text={"Sign in"} onPress={() => signIn(email, password)} variant={"primary"} />
 		</View>
