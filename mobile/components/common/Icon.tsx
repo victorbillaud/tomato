@@ -9,10 +9,13 @@ import {
 	IconDiscountCheck,
 	IconDiscountCheckFilled,
 	IconDownload,
+	IconListDetails,
 	IconLoader,
 	IconLock,
+	IconMessages,
 	IconQrcode,
 	IconQuestionMark,
+	IconUser,
 	IconWritingSign,
 	IconWritingSignOff
 } from 'tabler-icons-react-native'
@@ -30,10 +33,13 @@ const ICONS = {
 	'download': IconDownload,
 	'qrcode': IconQrcode,
 	'question-mark': IconQuestionMark,
+	'list-details': IconListDetails,
 	'loader': IconLoader,
 	'lock': IconLock,
+	'messages': IconMessages,
 	'pencil': IconWritingSign,
 	'pencil-off': IconWritingSignOff,
+	'user': IconUser,
 }
 
 export type IconNames = keyof typeof ICONS
