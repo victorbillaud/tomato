@@ -27,7 +27,11 @@ export function AuthCard() {
 					   onChangeText={handlePasswordChange}
 					   password={true}
 			/>
-			<Button text={"Sign in"} onPress={() => signIn(email, password)} variant={"primary"} />
+			<Button text={"Sign in with password"}
+					variant={"primary"}
+					onPress={() => signIn(email, password)}
+			/>
+						disabled={!email || !password}
 		</View>
 	)
 }
