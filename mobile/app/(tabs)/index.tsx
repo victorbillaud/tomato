@@ -1,6 +1,6 @@
-import { View } from '../../components/Themed'
 import { Text } from "../../components/common/Text";
 import tw from "../../constants/tw"
+import { View } from "../../components/View";
 
 export default function ItemsTab() {
 	return (

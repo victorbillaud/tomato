@@ -4,11 +4,12 @@ import { useFonts } from 'expo-font'
 import { SplashScreen, Stack, usePathname } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
-import {Text, View} from "../components/Themed";
+import { Text } from "../components/Themed";
 import { AuthProvider, useAuth } from "../components/auth/AuthProvider";
 import {styles} from "../constants/Styles";
 import tw from 'twrnc';
 import {AuthCard} from "../components/auth/AuthCard";
+import { View } from "../components/View";
 
 export { ErrorBoundary } from 'expo-router'
 

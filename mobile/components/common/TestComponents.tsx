@@ -1,9 +1,9 @@
 import React from 'react'
-import { View } from "../Themed"
 import { Button } from "./Button"
 import { InputText } from "./InputText"
 import Icon from "./Icon"
 import { Text } from "./Text"
+import { View } from "../View";
 
 export function TestComponents() {
 	return (

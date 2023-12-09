@@ -1,8 +1,8 @@
-import { View } from '../../components/Themed'
 import { useAuth } from "../../components/auth/AuthProvider";
 import { Button } from "react-native";
 import { Text } from "../../components/common/Text";
 import tw from "../../constants/tw";
+import { View } from "../../components/View";
 
 export default function UserTab() {
 	const { signOut } = useAuth()
