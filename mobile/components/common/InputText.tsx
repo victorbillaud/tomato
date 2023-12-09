@@ -16,7 +16,7 @@ interface IProps {
 
 export function InputText(props: IProps) {
 	return (
-		<View style={tw`flex w-full flex-col gap-1`}>
+		<View style={tw`flex flex-col gap-1`}>
 			{/* -------------------- LABEL & ERROR -------------------- */}
 			{props.labelText && (
 				<View style={tw`flex flex-row items-center justify-between gap-3`}>
