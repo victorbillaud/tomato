@@ -53,14 +53,6 @@ export default function MobileHeader({ conversationId }: MobileHeaderProps) {
     }
   };
 
-  if (loading) {
-    return (
-      <div className='flex h-12 w-full flex-col px-2 sm:hidden'>
-        <div className='h-full animate-pulse rounded-lg bg-gray-300/20'></div>
-      </div>
-    );
-  }
-
   return (
     <div
       className='flex items-center gap-2 pb-2 sm:hidden'
@@ -75,11 +67,18 @@ export default function MobileHeader({ conversationId }: MobileHeaderProps) {
         />
       </Link>
 
-      <Text variant='h4' weight={600}>
-        {item?.name || 'unknown'}
-      </Text>
-
-      {renderTag()}
+      {loading ? (
+        <div className='flex h-12 w-2/3 flex-col p-2 sm:hidden'>
+          <div className='h-full animate-pulse rounded-lg bg-gray-300/20'></div>
+        </div>
+      ) : (
+        <>
+          <Text variant='h4' weight={600}>
+            {item?.name || 'unknown'}
+          </Text>
+          {renderTag()}
+        </>
+      )}
     </div>
   );
 }
