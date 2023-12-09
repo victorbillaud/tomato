@@ -29,14 +29,14 @@ export async function listUserConversations(
 
 export async function insertConversation(
     supabaseInstance: SupabaseClient<Database>,
-    conversation: Pick<Database["public"]["Tables"]["conversation"]["Insert"], "finder_id" | "item_id">
+    conversation: Pick<Database["public"]["Tables"]["conversation"]["Insert"], "owner_id" | "finder_id" | "item_id">
 ) {
 
-    const { data: { user } } = await supabaseInstance.auth.getUser();
+    // This function can only be called by a service role
 
     const conversationToInsert: Database["public"]["Tables"]["conversation"]["Insert"] = {
         ...conversation,
-        owner_id: user.id,
+        owner_id: conversation.owner_id,
     }
 
     const { data: insertedConversation, error } = await supabaseInstance
