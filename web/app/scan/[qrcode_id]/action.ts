@@ -51,8 +51,6 @@ export async function edgeFinderFlow(itemId: string) {
 
     const data: ResponseReturnType = await response.json();
 
-    console.log('data', data);
-
     if ('token' in data && 'conversation_id' in data) {
         conversationTokens[itemId] = {
             token: data.token,

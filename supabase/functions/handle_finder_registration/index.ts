@@ -43,7 +43,6 @@ export const fetchConversationByToken = async (token: string) => {
 };
 
 export const createUser = async (email: string, tokens: string[]) => {
-  console.log("Creating user", email, tokens);
   const { data: { user }, error } = await supabaseClient.auth.admin
     .inviteUserByEmail(email);
 
