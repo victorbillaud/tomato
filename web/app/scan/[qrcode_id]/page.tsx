@@ -31,10 +31,8 @@ export default async function Scan({
         {qrCode?.item_id ? (
           <>
             <Text variant='h4' className='text-center opacity-90'>
-              How it seems you found an item...
-            </Text>
-            <Text variant='body' className='text-center opacity-30'>
-              This page is not yet implemented
+              How it seems you found an item... let's start a conversation with
+              the owner !
             </Text>
             <form action={edgeFinderFlowWithItem}>
               <SubmitButton
