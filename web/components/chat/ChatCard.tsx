@@ -136,7 +136,6 @@ export default function ChatCard({
             size={40}
             stroke={1}
             color='dark:text-white text-black'
-            className='border-[1px] border-gray-700 dark:border-white/20'
           />
         )}
       </div>

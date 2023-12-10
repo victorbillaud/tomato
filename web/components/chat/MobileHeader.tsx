@@ -37,10 +37,9 @@ export default function MobileHeader({ conversationId }: MobileHeaderProps) {
         return null;
       }
       setItem(item);
-      setLoading(false);
     }
 
-    fetchConversation();
+    fetchConversation().then(() => setLoading(false));
   }, [supabase, conversationId]);
 
   const renderTag = () => {
@@ -71,7 +70,7 @@ export default function MobileHeader({ conversationId }: MobileHeaderProps) {
       ) : (
         <>
           <Text variant='h4' weight={600}>
-            {item?.name || 'unknown'}
+            {item?.name || 'Item found'}
           </Text>
           {renderTag()}
         </>
