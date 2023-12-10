@@ -37,7 +37,7 @@ const Input = ({ conversationId }: InputChatProps) => {
   }
 
   return (
-    <form onSubmit={sendMessage} className='flex '>
+    <form onSubmit={sendMessage} className='flex sm:pl-6'>
       <InputText
         name='message'
         placeholder='Type a message'

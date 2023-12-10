@@ -54,10 +54,7 @@ export default function MobileHeader({ conversationId }: MobileHeaderProps) {
   };
 
   return (
-    <div
-      className='flex items-center gap-2 pb-2 sm:hidden'
-      style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
-    >
+    <div className='flex items-center gap-2 pb-2 shadow-md dark:shadow-black/20 sm:hidden'>
       <Link href='/chat'>
         <Icon
           name={'chevron-left'}
@@ -68,7 +65,7 @@ export default function MobileHeader({ conversationId }: MobileHeaderProps) {
       </Link>
 
       {loading ? (
-        <div className='flex h-12 w-2/3 flex-col p-2 sm:hidden'>
+        <div className='flex h-8 w-2/3 flex-col px-2 sm:hidden'>
           <div className='h-full animate-pulse rounded-lg bg-gray-300/20'></div>
         </div>
       ) : (
