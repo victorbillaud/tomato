@@ -1,19 +1,20 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
-import { Provider, User } from '@supabase/gotrue-js'
-import {createSupabaseClient} from "../../utils/client"
-import { styles } from "../../constants/Styles";
-import { Text } from "../Themed";
-import {Alert} from "react-native";
+import { User } from '@supabase/gotrue-js'
+import { createSupabaseClient } from "../../utils/client"
+import { Alert } from "react-native";
+import { Text } from "../common/Text";
 
 interface AuthContextType {
 	user: User | null
 	loading: boolean
 	signIn: (email: string, password: string) => Promise<void>
+	sendOTP: (email: string) => Promise<boolean>
+	signInWithOTP: (email: string, otp: string) => Promise<void>
 	//signInWithProvider: (provider: Provider) => Promise<void>
 	signOut: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType> ({} as AuthContextType)
+const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 interface AuthProviderProps {
 	children: ReactNode
@@ -43,18 +44,41 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		return () => { listener.subscription?.unsubscribe() }
 	}, [])
 
-	const InvalidCredentialsAlert = () =>
-		Alert.alert('Invalid credentials');
+	const InvalidCredentialsAlert = () => Alert.alert('Invalid credentials')
 
 	return (
 		<AuthContext.Provider value={{
 			user,
 			loading,
 			signIn: async (email: string, password: string) => {
-				const {data, error} = await supabase.auth.signInWithPassword({ email, password });
+				const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 				if (error) {
-					if(error.message === 'Invalid login credentials') {InvalidCredentialsAlert()}
-					else{console.error(error)}
+					if (error.message === 'Invalid login credentials') {InvalidCredentialsAlert()} else {console.error(error)}
+					return
+				}
+				setUser(data?.user ?? null);
+			},
+			sendOTP: async (email: string) => {
+				const { data, error } = await supabase.auth.signInWithOtp({
+					email,
+					options: {
+						shouldCreateUser: true,
+					},
+				});
+				if (error) {
+					console.error(error)
+					return false
+				}
+				return true
+			},
+			signInWithOTP: async (email: string, otp: string) => {
+				const { data, error } = await supabase.auth.verifyOtp({
+					email,
+					token: otp,
+					type: 'email',
+				});
+				if (error) {
+					console.error(error)
 					return
 				}
 				setUser(data?.user ?? null);
@@ -72,7 +96,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			},
 		}}>
 			{loading ?
-				<Text style={styles.title}>Loading...</Text>
+				<Text variant={'caption'}>Loading...</Text>
 				: children
 			}
 		</AuthContext.Provider>

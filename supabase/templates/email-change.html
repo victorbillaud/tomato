@@ -31,20 +31,17 @@
 
         .content {
             padding: 20px;
-            text-align: center;
+            text-align: left;
             color: #333333;
         }
 
-        .otp {
-            font-size: 24px;
-            margin: 20px 0;
-            padding: 10px;
-            background-color: #f4f4f4;
+        .button {
+            background-color: #a11313;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
             border-radius: 5px;
             display: inline-block;
-            color: #e71b1b;
-            /* Tomato color */
-            font-weight: bold;
         }
 
         .footer {
@@ -64,15 +61,14 @@
 
 <body>
     <div class="email-container">
-        <div class="header">
-            <h1>Welcome to Tomato!</h1>
-        </div>
         <div class="content">
             <p>Hello,</p>
-            <p>Thanks for being a part of Tomato. We are excited to have you onboard.</p>
-            <div class="note">
-                <p>If you did not sign up for Tomato, please contact us immediately </p>
-            </div>
+            <p>Follow this link to confirm the update of your email from {{ .Email }} to <strong>{{ .NewEmail }}</strong>:</p>
+            <p>Follow the link below:</p>
+            <a class="button" href="{{ .ConfirmationURL }}">Change email</a>
+        </div>
+        <div class="note">
+            <p>If you did not request a email change, please ignore this email.</p>
         </div>
         <div class="footer">
             <p>&copy; 2023 Tomato. All rights reserved.</p>
