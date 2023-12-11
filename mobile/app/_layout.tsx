@@ -1,14 +1,11 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { SplashScreen, Stack, usePathname } from 'expo-router'
+import { SplashScreen } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
-import { AuthProvider, useAuth } from "../components/auth/AuthProvider";
-import tw from 'twrnc';
-import { AuthCard } from "../components/auth/AuthCard";
-import { View } from "../components/View";
-import { Text } from "../components/common/Text";
+import { AuthProvider } from "../components/auth/AuthProvider";
+import { AuthGuard } from "../components/auth/AuthGuard";
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -48,28 +45,5 @@ function RootLayoutNav() {
 				<AuthGuard />
 			</AuthProvider>
 		</ThemeProvider>
-	)
-}
-
-function AuthGuard() {
-	const auth = useAuth()
-	const path = usePathname()
-
-	console.log('auth guard', auth)
-
-	return (
-		auth?.user ?
-			<>
-				<Stack>
-					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-				</Stack>
-				<Text variant={'body'}>Currently at: "{path}"</Text>
-				<Text variant={'body'}>Logged in as {auth.user.email}</Text>
-			</>
-			: <View style={tw`flex-1 justify-center items-center`}>
-				<Text variant={'h1'} style={{ textDecorationLine: 'underline' }}>Not logged in</Text>
-				<AuthCard></AuthCard>
-			</View>
-
 	)
 }

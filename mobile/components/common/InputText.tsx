@@ -12,11 +12,12 @@ interface IProps {
 	iconProps?: IIconProps
 	onChangeText?: ((text: string) => void) | undefined;
 	placeholder?: string
+	password?: boolean
 }
 
 export function InputText(props: IProps) {
 	return (
-		<View style={tw`flex flex-col gap-1`}>
+		<View style={tw`w-full flex flex-col gap-1`}>
 			{/* -------------------- LABEL & ERROR -------------------- */}
 			{props.labelText && (
 				<View style={tw`flex flex-row items-center justify-between gap-3`}>
@@ -52,6 +53,7 @@ export function InputText(props: IProps) {
 					onChangeText={props.onChangeText}
 					style={tw`w-full bg-transparent text-gray-700 placeholder:opacity-20 dark:text-gray-200`}
 					placeholder={props.placeholder}
+					secureTextEntry={props.password ?? false}
 				/>
 
 				<View style={tw`flex`}>{props.children}</View>
