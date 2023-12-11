@@ -59,8 +59,8 @@ export default function Index() {
       <div className='flex h-full flex-col justify-end gap-2 overflow-y-scroll px-3 sm:px-0'>
         <Chat
           conversationId={conversationId}
-          oldMessages={messages ?? undefined}
-          currentUser={user ?? undefined}
+          oldMessages={messages as DBMessage[]}
+          currentUser={user as User}
         />
         <Input conversationId={conversationId} />
       </div>

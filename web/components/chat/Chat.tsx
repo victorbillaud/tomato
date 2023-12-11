@@ -9,12 +9,18 @@ export default function Chat({
   oldMessages,
   currentUser,
 }: ChatProps) {
-  const [messages, setMessages] = useState<DBMessage[] | null>(
-    oldMessages ?? null
+  const [messages, setMessages] = useState<DBMessage[]>(
+    oldMessages as DBMessage[]
   );
   const { newMessages } = useChatContext();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const memoMessages = useMemo(() => messages, [messages]);
+
+  const memoMessages = useMemo(() => {
+    // Sort the messages by date & time (oldest first)
+    return messages?.sort((a, b) => {
+      return a.created_at > b.created_at ? 1 : -1;
+    });
+  }, [messages]);
 
   function addMessages(messages: DBMessage[]) {
     // set messages with new messages but avoid duplicates
@@ -32,9 +38,14 @@ export default function Chat({
   }, [oldMessages]);
 
   useEffect(() => {
-    // add new messages of this conversation only
-    if (newMessages && conversationId) {
-      addMessages(newMessages[conversationId] ?? []);
+    // add potential new messages
+    if (
+      newMessages &&
+      conversationId &&
+      newMessages[conversationId] &&
+      newMessages[conversationId].length > 0
+    ) {
+      addMessages(newMessages[conversationId]);
     }
   }, [newMessages, conversationId]);
 
@@ -44,16 +55,27 @@ export default function Chat({
       scrollContainerRef.current.scrollTop =
         scrollContainerRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, memoMessages]);
 
   // Check if there are any messages to display
-  if (!memoMessages) {
+  if (!conversationId) {
     return (
       <div className='flex h-full w-full items-center justify-center dark:text-white'>
         Select a conversation
       </div>
     );
-  } else if (memoMessages.length === 0) {
+  }
+
+  if (!memoMessages) {
+    return (
+      <div className='flex h-full w-full flex-col gap-3 px-2 py-2 '>
+        <div className='h-full w-full animate-pulse rounded-lg bg-gray-300/20'></div>
+      </div>
+    );
+  }
+
+  // Check if there are any messages to display
+  if (memoMessages && memoMessages?.length === 0) {
     return (
       <div className='flex h-full w-full items-center justify-center dark:text-white'>
         No messages in this conversation.
@@ -74,8 +96,8 @@ export default function Chat({
             <Message
               key={message.id}
               message={message}
-              prevMessage={memoMessages[index - 1] ?? undefined}
-              nextMessage={memoMessages[index + 1] ?? undefined}
+              prevMessage={memoMessages[index - 1] as DBMessage}
+              nextMessage={memoMessages[index + 1] as DBMessage}
               currentUser={currentUser}
             />
           );
