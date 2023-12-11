@@ -9,6 +9,7 @@ import {
   TConversationWithLastMessage,
   listUserConversations,
 } from '@utils/lib/messaging/services';
+import { ChatListSkeleton } from './Skeletons';
 
 export default function ChatList() {
   const supabase = createClient();
@@ -75,17 +76,7 @@ export default function ChatList() {
   };
 
   if (!conversations || loading) {
-    return (
-      <div className='flex h-full w-full flex-col gap-6 p-4'>
-        <div className='h-8 w-1/2 animate-pulse rounded-lg bg-gray-300/20'></div>
-        {[...Array(8)].map((_, index) => (
-          <div
-            key={index}
-            className='h-16 w-full animate-pulse rounded-lg bg-gray-300/20'
-          ></div>
-        ))}
-      </div>
-    );
+    return <ChatListSkeleton />;
   }
 
   return (

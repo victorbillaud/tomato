@@ -8,6 +8,7 @@ import { DBMessage } from '@/components/chat/types';
 import { User } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/client';
 import { getConversationMessages } from '@utils/lib/messaging/services';
+import { ChatSkeleton, InputSkeleton } from '@/components/chat/Skeletons';
 
 export default function Index() {
   const supabase = createClient();
@@ -46,9 +47,9 @@ export default function Index() {
 
   if (!user && !messages) {
     return (
-      <div className='flex h-full w-full flex-col gap-6 p-4 sm:w-2/3'>
-        <div className='h-full animate-pulse rounded-lg bg-gray-300/20'></div>
-        <div className='h-16 animate-pulse rounded-lg bg-gray-300/20'></div>
+      <div className='flex h-full w-full flex-col justify-end overflow-hidden px-4 sm:w-2/3'>
+        <ChatSkeleton />
+        <InputSkeleton />
       </div>
     );
   }

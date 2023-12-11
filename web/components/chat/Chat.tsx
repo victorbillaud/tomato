@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Message from './Message';
 import { useChatContext } from './ChatContext';
 import { ChatProps, DBMessage } from './types';
+import { ChatSkeleton } from './Skeletons';
 
 export default function Chat({
   conversationId,
@@ -67,11 +68,7 @@ export default function Chat({
   }
 
   if (!memoMessages) {
-    return (
-      <div className='flex h-full w-full flex-col gap-3 px-2 py-2 '>
-        <div className='h-full w-full animate-pulse rounded-lg bg-gray-300/20'></div>
-      </div>
-    );
+    return <ChatSkeleton />;
   }
 
   // Check if there are any messages to display
