@@ -110,4 +110,3 @@ content_path = "./supabase/templates/email-otp.html"
 [auth.email.template.email_change]
 subject = "Confirm your new email address"  
 content_path = "./supabase/templates/email-change.html"
-
