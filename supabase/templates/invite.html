@@ -1,50 +1,41 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <style>
         body {
             font-family: Arial, sans-serif;
-            /* Light Tomato color */
             margin: 0;
             padding: 10;
         }
-
         .email-container {
             max-width: 600px;
-            margin: 20px auto;
+            margin: 0 auto;
             background-color: #ffffff;
             padding: 20px;
             border: 1px solid #a11313;
-            text-align: center;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-
         .header {
             background-color: #a11313;
-            /* Tomato color */
             color: white;
             padding: 10px;
             border-radius: 10px;
         }
-
         .content {
             padding: 20px;
             text-align: center;
             color: #333333;
         }
-
-        .otp {
-            font-size: 24px;
-            margin: 20px 0;
-            padding: 10px;
-            background-color: #f4f4f4;
+        .button {
+            background-color: #a11313;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
             border-radius: 5px;
             display: inline-block;
-            color: #e71b1b;
-            /* Tomato color */
-            font-weight: bold;
+            margin-top: 20px;
         }
 
         .footer {
@@ -61,7 +52,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="email-container">
         <div class="header">
@@ -69,15 +59,17 @@
         </div>
         <div class="content">
             <p>Hello,</p>
-            <p>Thanks for being a part of Tomato. We are excited to have you onboard.</p>
-            <div class="note">
-                <p>If you did not sign up for Tomato, please contact us immediately </p>
-            </div>
+            <p>We're excited to invite you to join Tomato</p>
+            <a href="{{ .ConfirmationURL }}" class="button">Accept invitation</a>
+            <p>If you have any questions, feel free to reach out to our support team.</p>
+            <p>Thank you,<br>Tomato Team</p> 
+        </div>
+        <div class="note">
+            <p>If you did not request an OTP, please ignore this email or contact support for assistance.</p>
         </div>
         <div class="footer">
             <p>&copy; 2023 Tomato. All rights reserved.</p>
         </div>
     </div>
 </body>
-
 </html>
