@@ -1,22 +1,22 @@
 import React from 'react'
-import { Icon, IconNames } from './Icon'
+import { Icon, IIconProps } from './Icon'
 import { Text } from './Text'
-import { View } from "../Themed"
 import { TextInput } from "react-native";
 import tw from "../../constants/tw"
+import { View } from "../View";
 
 interface IProps {
 	labelText?: string
 	error?: string
 	children?: React.ReactNode
-	icon?: IconNames
+	iconProps?: IIconProps
 	onChangeText?: ((text: string) => void) | undefined;
 	placeholder?: string
 }
 
 export function InputText(props: IProps) {
 	return (
-		<View style={tw`flex w-full flex-col gap-1`}>
+		<View style={tw`flex flex-col gap-1`}>
 			{/* -------------------- LABEL & ERROR -------------------- */}
 			{props.labelText && (
 				<View style={tw`flex flex-row items-center justify-between gap-3`}>
@@ -46,7 +46,7 @@ export function InputText(props: IProps) {
 				tw`text-sm text-black dark:text-white-100 w-full px-2 py-2 lg:text-sm xl:text-base`,
 				props.children ? tw`rounded-r-md` : tw`rounded-md`
 			]}>
-				{props.icon && <Icon name={props.icon} size={20} />}
+				{props.iconProps && <Icon {...props.iconProps} size={20} />}
 
 				<TextInput
 					onChangeText={props.onChangeText}

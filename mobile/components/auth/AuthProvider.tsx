@@ -1,9 +1,8 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
-import { Provider, User } from '@supabase/gotrue-js'
-import {createSupabaseClient} from "../../utils/client"
-import { styles } from "../../constants/Styles";
-import { Text } from "../Themed";
-import {Alert} from "react-native";
+import { User } from '@supabase/gotrue-js'
+import { createSupabaseClient } from "../../utils/client"
+import { Alert } from "react-native";
+import { Text } from "../common/Text";
 
 interface AuthContextType {
 	user: User | null
@@ -13,7 +12,7 @@ interface AuthContextType {
 	signOut: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType> ({} as AuthContextType)
+const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 interface AuthProviderProps {
 	children: ReactNode
@@ -51,10 +50,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			user,
 			loading,
 			signIn: async (email: string, password: string) => {
-				const {data, error} = await supabase.auth.signInWithPassword({ email, password });
+				const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 				if (error) {
-					if(error.message === 'Invalid login credentials') {InvalidCredentialsAlert()}
-					else{console.error(error)}
+					if (error.message === 'Invalid login credentials') {InvalidCredentialsAlert()} else {console.error(error)}
 					return
 				}
 				setUser(data?.user ?? null);
@@ -72,7 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			},
 		}}>
 			{loading ?
-				<Text style={styles.title}>Loading...</Text>
+				<Text variant={'caption'}>Loading...</Text>
 				: children
 			}
 		</AuthContext.Provider>
