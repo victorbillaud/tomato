@@ -22,6 +22,7 @@ import {
   IconQuestionMark,
   IconWritingSign,
   IconWritingSignOff,
+  IconExternalLink,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -48,6 +49,7 @@ const ICONS = {
   'chevron-up': IconChevronUp,
   bell: IconBellFilled,
   checks: IconChecks,
+  'external-link': IconExternalLink,
 };
 
 export default ICONS;

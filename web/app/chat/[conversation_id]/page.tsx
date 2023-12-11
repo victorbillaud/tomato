@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Chat from '@/components/chat/Chat';
 import Input from '@/components/chat/Input';
-import MobileHeader from '@/components/chat/MobileHeader';
+import ChatHeader from '@/components/chat/ChatHeader';
 import { DBMessage } from '@/components/chat/types';
 import { User } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/client';
@@ -55,7 +55,7 @@ export default function Index() {
 
   return (
     <div className='flex h-full w-full flex-col justify-start sm:w-2/3 sm:pl-2'>
-      <MobileHeader conversationId={conversationId} />
+      <ChatHeader conversationId={conversationId} currentUser={user as User} />
       <div className='flex h-full flex-col justify-end gap-2 overflow-y-scroll px-3 sm:px-0'>
         <Chat
           conversationId={conversationId}

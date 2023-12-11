@@ -28,6 +28,7 @@ export type InputChatProps = {
 
 export type MobileHeaderProps = {
   conversationId: string;
+  currentUser: User;
 };
 
 // rename database types to be more readable
