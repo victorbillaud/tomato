@@ -78,7 +78,7 @@ export default function ChatHeader({
       return (
         <Link
           href={item ? `../dashboard/item/${item?.id}` : ''}
-          className='flex w-full items-center gap-2 dark:text-white'
+          className='flex items-center gap-2 dark:text-white'
           onMouseOver={() => setShowLinkIcon(true)}
           onMouseLeave={() => setShowLinkIcon(false)}
         >
@@ -89,13 +89,14 @@ export default function ChatHeader({
               size={20}
               animateOnClick
               color='text-black dark:text-white'
+              className='hidden sm:block'
             />
           )}
         </Link>
       );
     } else {
       return (
-        <div className='flex w-full items-center gap-2 dark:text-white'>
+        <div className='flex items-center gap-2 dark:text-white'>
           {renderHeaderContent()}
         </div>
       );

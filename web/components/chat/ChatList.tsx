@@ -36,10 +36,10 @@ export default function ChatList() {
         throw new Error('User not found');
       }
       setUser(userFetched);
-      await fetchConversation(supabase, userFetched);
+      await fetchConversations(supabase, userFetched);
     }
 
-    async function fetchConversation(supabase: any, userFetched: User) {
+    async function fetchConversations(supabase: any, userFetched: User) {
       const { data: conversationsFetched, error: conversationsError } =
         await listUserConversations(supabase);
 
