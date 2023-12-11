@@ -15,6 +15,7 @@ export default function Chat({
   );
   const { newMessages } = useChatContext();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
 
   const memoMessages = useMemo(() => {
     // Sort the messages by date & time (oldest first)
@@ -32,33 +33,36 @@ export default function Chat({
   }
 
   useEffect(() => {
-    // initialize messages with old messages when fetched
+    // initialize messages with old messages
     if (oldMessages) {
       addMessages(oldMessages);
     }
   }, [oldMessages]);
 
   useEffect(() => {
-    // add potential new messages
-    if (
-      newMessages &&
-      conversationId &&
-      newMessages[conversationId] &&
-      newMessages[conversationId].length > 0
-    ) {
-      addMessages(newMessages[conversationId]);
+    // add new messages to the list when fetched
+    if (newMessages && conversationId) {
+      const conversationNewMessages = newMessages[conversationId];
+
+      if (conversationNewMessages) {
+        if (conversationNewMessages.length > 0) {
+          addMessages(conversationNewMessages);
+        }
+        // stop loading when new messages are fetched
+        setLoading(false);
+      }
     }
   }, [newMessages, conversationId]);
 
   useEffect(() => {
-    // Scroll to the bottom of the chat when a new message is sent
+    // Scroll to the bottom of the chat when loading is done
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop =
         scrollContainerRef.current.scrollHeight;
     }
-  }, [messages, memoMessages]);
+  }, [loading]);
 
-  // Check if there are any messages to display
+  // Check if there is a conversation selected
   if (!conversationId) {
     return (
       <div className='flex h-full w-full items-center justify-center dark:text-white'>
@@ -67,7 +71,8 @@ export default function Chat({
     );
   }
 
-  if (!memoMessages) {
+  // Display loading skeleton when loading
+  if (loading) {
     return <ChatSkeleton />;
   }
 
@@ -81,11 +86,6 @@ export default function Chat({
   }
 
   const renderMessages = () => {
-    // Sort the messages by date & time (oldest first)
-    memoMessages.sort((a, b) => {
-      return a.created_at > b.created_at ? 1 : -1;
-    });
-
     return (
       <>
         {memoMessages.map((message, index) => {

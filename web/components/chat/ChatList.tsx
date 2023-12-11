@@ -75,35 +75,42 @@ export default function ChatList() {
     });
   };
 
-  if (!conversations || loading) {
-    return <ChatListSkeleton />;
-  }
+  const mobileStyle = selectedConversationId ? ' hidden sm:block ' : '';
 
   return (
-    <div className='flex h-full w-full flex-col'>
+    <div
+      className={`flex h-full w-full flex-col border-gray-700/10 px-3 dark:border-white/20 sm:w-1/3 sm:border-r-[1px] sm:px-0 ${mobileStyle}`}
+    >
       <Text variant={'h2'} className='p-2'>
         Conversations
       </Text>
-      {ownedConversations && ownedConversations.length > 0 && (
+
+      {!conversations || loading ? (
+        <ChatListSkeleton />
+      ) : (
         <>
-          <Text
-            variant={'h4'}
-            className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
-          >
-            My items
-          </Text>
-          {renderConversations(ownedConversations)}
-        </>
-      )}
-      {foundConversations && foundConversations.length > 0 && (
-        <>
-          <Text
-            variant={'h4'}
-            className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
-          >
-            Items scanned
-          </Text>
-          {renderConversations(foundConversations)}
+          {ownedConversations && ownedConversations.length > 0 && (
+            <>
+              <Text
+                variant={'h4'}
+                className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
+              >
+                My items
+              </Text>
+              {renderConversations(ownedConversations)}
+            </>
+          )}
+          {foundConversations && foundConversations.length > 0 && (
+            <>
+              <Text
+                variant={'h4'}
+                className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
+              >
+                Items scanned
+              </Text>
+              {renderConversations(foundConversations)}
+            </>
+          )}
         </>
       )}
     </div>
