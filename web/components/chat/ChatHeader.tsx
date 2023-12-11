@@ -4,50 +4,17 @@ import { Icon } from '../common/icon';
 import { Text } from '../common/text';
 import { MobileHeaderProps } from './types';
 import { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import { getConversation } from '@utils/lib/messaging/services';
-import { getItem } from '@utils/lib/item/services';
 import { Tag } from '../common/tag';
-import { ItemType } from '../item';
 
-export default function ChatHeader({
-  conversationId,
-  currentUser,
-}: MobileHeaderProps) {
-  const supabase = createClient();
-  const [item, setItem] = useState<ItemType | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
   const [showLinkIcon, setShowLinkIcon] = useState<boolean>(false);
   const [isOwner, setIsOwner] = useState<boolean>(false);
 
   useEffect(() => {
-    async function fetchConversation() {
-      const { conversation, error: conversationError } = await getConversation(
-        supabase,
-        conversationId
-      );
-
-      if (conversationError) {
-        console.error(conversationError);
-        return null;
-      }
-
-      fetchItem(conversation?.item_id as string);
+    if (currentUser && item) {
+      setIsOwner(currentUser.id === item?.user_id);
     }
-
-    async function fetchItem(itemId: string) {
-      const { data: item, error: itemError } = await getItem(supabase, itemId);
-      if (itemError) {
-        console.error(itemError);
-        return null;
-      }
-      setItem(item);
-      console.log(item?.user_id, currentUser?.id);
-      setIsOwner(item?.user_id === currentUser?.id);
-    }
-
-    fetchConversation().then(() => setLoading(false));
-  }, [supabase, conversationId, currentUser]);
+  }, [currentUser, item]);
 
   const renderTag = () => {
     if (item && item.lost) {
@@ -115,13 +82,7 @@ export default function ChatHeader({
           />
         </Link>
 
-        {loading ? (
-          <div className='flex h-8 w-2/3 flex-col px-2 sm:hidden sm:h-10'>
-            <div className='h-full animate-pulse rounded-lg bg-gray-300/20'></div>
-          </div>
-        ) : (
-          <>{renderHeader()}</>
-        )}
+        <>{renderHeader()}</>
       </div>
     </>
   );

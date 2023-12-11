@@ -70,39 +70,6 @@ export async function insertConversation(
   return { insertedConversation, error };
 }
 
-export async function getConversationUsers(
-  supabaseInstance: SupabaseClient<Database>,
-  conversationId: string
-) {
-  const { data, error } = await supabaseInstance
-    .from('conversation')
-    .select('owner_id, finder_id')
-    .eq('id', conversationId);
-
-  if (error) {
-    return { users: null, error };
-  }
-
-  let users: Database['public']['Tables']['profiles']['Row'][] = [];
-
-  for (const user in data[0]) {
-    const userId = data[0][user];
-
-    const { user: userDetails, error: userError } = await getUserDetails(
-      supabaseInstance,
-      userId
-    );
-
-    if (userError) {
-      return { users: null, error: userError };
-    }
-
-    users.push(userDetails);
-  }
-
-  return { users, error };
-}
-
 export async function getConversation(
   supabaseInstance: SupabaseClient<Database>,
   conversationId: string
@@ -127,6 +94,22 @@ export async function getConversationMessages(
     .eq('conversation_id', conversationId);
 
   return { messages, error };
+}
+
+export async function getConversationWithItem(
+  supabaseInstance: SupabaseClient<Database>,
+  conversationId: string
+) {
+  const { data, error } = await supabaseInstance
+    .from('conversation')
+    .select('item (*)')
+    .eq('id', conversationId)
+    .limit(1)
+    .single();
+
+  const item = data?.item;
+
+  return { item, error };
 }
 
 export async function insertMessage(

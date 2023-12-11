@@ -1,3 +1,4 @@
+'use client';
 import {
   ReactNode,
   createContext,
@@ -41,6 +42,20 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
 
     fetchConversations();
   }, [supabase]);
+
+  useEffect(() => {
+    // initialize newMessages with the conversations ids and an empty array
+    if (conversationsIds.length > 0) {
+      setNewMessages(
+        conversationsIds.reduce((acc, id) => {
+          return {
+            ...acc,
+            [id]: [],
+          };
+        }, {})
+      );
+    }
+  }, [conversationsIds]);
 
   useEffect(() => {
     // Listen for new messages inserted in the database

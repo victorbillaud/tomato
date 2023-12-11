@@ -27,8 +27,8 @@ export type InputChatProps = {
 };
 
 export type MobileHeaderProps = {
-  conversationId: string;
   currentUser: User;
+  item?: DBItem;
 };
 
 // rename database types to be more readable
@@ -39,3 +39,5 @@ export type DBConversation =
 export type DBMessage = Database['public']['Tables']['message']['Row'];
 
 export type DBProfile = Database['public']['Tables']['profiles']['Row'];
+
+export type DBItem = Database['public']['Tables']['item']['Row'];
