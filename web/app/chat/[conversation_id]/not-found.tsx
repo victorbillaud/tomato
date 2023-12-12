@@ -22,7 +22,12 @@ export default function NotFound() {
             Please select another conversation or return home.
           </Text>
         </div>
-        <Icon name='alert-triangle' size={50} color='text-yellow-700' />
+        <Icon
+          name='alert-triangle'
+          size={50}
+          color='text-yellow-700'
+          className='opacity-70'
+        />
       </div>
 
       <StyledLink variant='secondary' text='Return home' href='/'></StyledLink>

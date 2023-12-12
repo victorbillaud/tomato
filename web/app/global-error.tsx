@@ -24,7 +24,12 @@ export default function GlobalError({
           </Text>
           <span className='text-red-700'>{error.message}</span>
         </div>
-        <Icon name='exclamation-circle' size={50} color='text-red-700' />
+        <Icon
+          name='exclamation-circle'
+          size={50}
+          color='text-red-700'
+          className='opacity-70'
+        />
       </div>
 
       <Button variant='secondary' text='Try again' onClick={reset} />
