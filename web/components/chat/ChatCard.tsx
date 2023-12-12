@@ -11,6 +11,7 @@ import { createClient } from '@/utils/supabase/client';
 import { getItem } from '@utils/lib/item/services';
 import { getUserDetails } from '@utils/lib/user/services';
 import { useChatContext } from './ChatContext';
+import { ChatCardSkeleton } from './Skeletons';
 
 export default function ChatCard({
   conversation,
@@ -26,6 +27,8 @@ export default function ChatCard({
   let isOwner = conversation.owner_id === currentUser?.id;
   const [userDetails, setUserDetails] = useState<DBProfile>();
   const [itemInfo, setItemInfo] = useState<DBItem>();
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [loadingItem, setLoadingItem] = useState(true);
 
   useEffect(() => {
     async function fetchUserDetails() {
@@ -34,6 +37,8 @@ export default function ChatCard({
           supabase,
           isOwner ? conversation.finder_id : conversation.owner_id
         );
+
+      setLoadingUser(false);
 
       if (avatarError) {
         console.error(avatarError);
@@ -46,6 +51,8 @@ export default function ChatCard({
     // ! For now, the finder can't get the item info
     async function getItemInfo() {
       const { data: item, error: itemError } = await getItem(supabase, itemId);
+
+      setLoadingItem(false);
 
       if (itemError) {
         console.error(itemError);
@@ -120,6 +127,10 @@ export default function ChatCard({
       return <Tag text='found' color='green' size='small' />;
     }
   };
+
+  if (loadingUser || loadingItem) {
+    return <ChatCardSkeleton />;
+  }
 
   return (
     <Link
