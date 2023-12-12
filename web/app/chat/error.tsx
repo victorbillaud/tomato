@@ -20,7 +20,7 @@ export default function Error({
             className='text-left opacity-50 dark:opacity-80'
             color=' text-red-700'
           >
-            Oops ! Something went wrong :
+            Oops ! Something went wrong when loading your conversations:
           </Text>
           <span className='text-red-700'>{error.message}</span>
         </div>

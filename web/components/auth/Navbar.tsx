@@ -7,7 +7,7 @@ import { StyledLink } from '../common/link';
 import { Text } from '../common/text';
 import { NotificationPin } from '../notification/NotificationPin';
 
-export default async function AuthButton() {
+export default async function Navbar() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -29,7 +29,12 @@ export default async function AuthButton() {
           Dashboard
         </Text>
       </Link>
-      <div className='flex flex-row w-full items-center justify-end gap-1'>
+      <Link href='/chat'>
+        <Text variant={'caption'} className='text-center'>
+          Chat
+        </Text>
+      </Link>
+      <div className='flex w-full flex-row items-center justify-end gap-1'>
         {user ? (
           <>
             <Link

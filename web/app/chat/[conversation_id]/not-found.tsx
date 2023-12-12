@@ -12,13 +12,14 @@ export default function NotFound() {
             className='text-left opacity-60 dark:opacity-80'
             color='text-yellow-700'
           >
-            Oops ! 404 not found
+            Oops ! Conversation not found
           </Text>
           <Text variant='body' color='text-yellow-700'>
-            It seems like the page you&apos;re looking for doesn&apos;t exist.
+            It seems like the conversation you&apos;re looking for doesn&apos;t
+            exist.
           </Text>
           <Text variant='body' color='text-yellow-700'>
-            Please select another page or return home.
+            Please select another conversation or return home.
           </Text>
         </div>
         <Icon

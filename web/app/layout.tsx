@@ -1,4 +1,4 @@
-import AuthButton from '@/components/auth/AuthButton';
+import Navbar from '@/components/auth/Navbar';
 import { Text } from '@/components/common/text';
 import { GeistSans } from 'geist/font';
 
@@ -23,14 +23,14 @@ export default function RootLayout({
   return (
     <html lang='en' className={GeistSans.className}>
       <NotificationProvider>
-        <body className='flex h-screen w-full flex-col items-center justify-between gap-5 bg-zinc-50 dark:bg-zinc-800'>
+        <body className='flex h-screen w-full flex-col items-center justify-between gap-2 bg-zinc-50 dark:bg-zinc-800 sm:gap-5'>
           <nav className='dark:bg-dark-200 flex h-16 w-full justify-center border-b border-b-stone-300 bg-zinc-100 dark:border-b-stone-700 dark:bg-zinc-900'>
             <div className='flex w-full max-w-4xl items-center justify-between p-3 text-sm'>
-              <AuthButton />
+              <Navbar />
             </div>
           </nav>
 
-          <main className='animate-in flex w-full max-w-4xl flex-1 flex-col items-center gap-20 px-3 opacity-0'>
+          <main className='animate-in flex w-full max-w-4xl flex-1 flex-col items-center gap-20 px-0 opacity-0 sm:px-3'>
             {children}
           </main>
 

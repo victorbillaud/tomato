@@ -4,7 +4,7 @@ import { Button } from '@/components/common/button';
 import { Icon } from '@/components/common/icon';
 import { Text } from '@/components/common/text';
 
-export default function Error({
+export default function GlobalError({
   error,
   reset,
 }: {
