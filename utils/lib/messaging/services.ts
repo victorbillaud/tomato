@@ -26,7 +26,7 @@ export async function listUserConversations(
   const { data, error } = await supabaseInstance.rpc(
     'get_user_conversations_with_last_message',
     {
-      user_id: user.id,
+      user_id: user ? user.id : null,
     }
   );
 
@@ -56,10 +56,10 @@ export async function insertConversation(
   } = await supabaseInstance.auth.getUser();
 
   const conversationToInsert: Database['public']['Tables']['conversation']['Insert'] =
-    {
-      ...conversation,
-      owner_id: user.id,
-    };
+  {
+    ...conversation,
+    owner_id: user.id,
+  };
 
   const { data: insertedConversation, error } = await supabaseInstance
     .from('conversation')
@@ -121,7 +121,7 @@ export async function insertMessage(
 
   const messageToInsert: Database['public']['Tables']['message']['Insert'] = {
     ...message,
-    sender_id: sender.id,
+    sender_id: sender ? sender.id : null,
   };
 
   const { data: insertedMessage, error } = await supabaseInstance

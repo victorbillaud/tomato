@@ -1,7 +1,7 @@
 import VerifyOTPForm from '@/components/auth/otp/VerifyOTPForm';
 import Chat from '@/components/chat/Chat';
 import ChatHeader from '@/components/chat/ChatHeader';
-import Input from '@/components/chat/Input';
+import ChatInput from '@/components/chat/ChatInput';
 import { ChatSkeleton, InputSkeleton } from '@/components/chat/Skeletons';
 import { DBItem, DBMessage } from '@/components/chat/types';
 import { SubmitButton } from '@/components/common/button';
@@ -32,7 +32,9 @@ export default async function Conversation({
   );
 
   const supabase = createClient(cookieStore, {
-    'conversation-token': specificToken?.token,
+    'conversation-tokens': Object.values(conversationTokens)
+      .map((token: any) => token.token)
+      .join(','),
   });
 
   const handleFinderRegistrationBindRedirection = handleFinderRegistration.bind(
@@ -42,17 +44,14 @@ export default async function Conversation({
 
   const {
     data: { user },
-    error: userError,
   } = await supabase.auth.getUser();
-
-  if (userError) {
-    throw new Error('User not found');
-  }
 
   const { messages, error: messageError } = await getConversationMessages(
     supabase,
     params.conversation_id
   );
+
+  console.log(messages);
 
   if (messageError) {
     redirect('/chat');
@@ -62,12 +61,15 @@ export default async function Conversation({
     supabase,
     params.conversation_id
   );
+
+  console.log(item);
+
   if (itemError) {
     console.error(itemError);
     return null;
   }
 
-  if (!user && !messages && !item) {
+  if (!messages && !item) {
     return (
       <div className='flex h-full w-full flex-col justify-end overflow-hidden px-4 sm:w-2/3'>
         <ChatSkeleton />
@@ -138,7 +140,7 @@ export default async function Conversation({
           oldMessages={messages as DBMessage[]}
           currentUser={user as User}
         />
-        <Input conversationId={params.conversation_id} />
+        <ChatInput conversationId={params.conversation_id} />
       </div>
     </div>
   );

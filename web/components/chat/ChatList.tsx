@@ -1,10 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { Text } from '../common/text';
-import ChatCard from './ChatCard';
 import { User } from '@supabase/supabase-js';
 import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Text } from '../common/text';
+import ChatCard from './ChatCard';
 import { ChatListSkeleton } from './Skeletons';
 import { ChatListProps } from './types';
 
@@ -26,7 +26,7 @@ export default function ChatList({
       conversations.filter((conv) => conv.owner_id === currentUser?.id)
     );
     setFoundConversations(
-      conversations.filter((conv) => conv.finder_id === currentUser?.id)
+      conversations.filter((conv) => conv.finder_id === (currentUser?.id || null))
     );
     setLoading(false);
   }, [conversations, currentUser]);

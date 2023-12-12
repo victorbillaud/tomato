@@ -17,7 +17,7 @@ const Message = ({
   let firstMessage = false;
   let lastMessage = false;
 
-  const isCurrentUser = message.sender_id === currentUser?.id;
+  const isCurrentUser = message.sender_id === (currentUser?.id || null)
   const isSameUserThanPrevious = message.sender_id === prevMessage?.sender_id;
   const isSameUserThanNext = message.sender_id === nextMessage?.sender_id;
   const currentDate = new Date(message.created_at);

@@ -1,4 +1,8 @@
 'use client';
+
+import { createClient } from '@/utils/supabase/client';
+import { listUserConversations } from '@utils/lib/messaging/services';
+import Cookies from 'js-cookie';
 import {
   ReactNode,
   createContext,
@@ -7,8 +11,6 @@ import {
   useState,
 } from 'react';
 import { DBMessage } from './types';
-import { createClient } from '@/utils/supabase/client';
-import { listUserConversations } from '@utils/lib/messaging/services';
 
 type ChatContextProps = {
   newMessages: Record<string, DBMessage[]>;
@@ -20,6 +22,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const supabase = createClient();
+
   const [newMessages, setNewMessages] = useState<Record<string, DBMessage[]>>(
     {}
   ); // conversationId: [message, message, ...]
@@ -28,6 +31,8 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     // fetch the conversations of the user to get the ids
     async function fetchConversations() {
+      // Console headers in the client
+
       const { data: conversationsFetched, error: conversationsError } =
         await listUserConversations(supabase);
 
@@ -41,7 +46,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
     }
 
     fetchConversations();
-  }, [supabase]);
+  }, []);
 
   useEffect(() => {
     // initialize newMessages with the conversations ids and an empty array
@@ -59,6 +64,16 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     // Listen for new messages inserted in the database
+    const existingCookie = Cookies.get('conversation_tokens');
+    const conversationTokens = existingCookie ? JSON.parse(existingCookie) : {};
+    // supabase.realtime.setAuth(
+    //   Object.values(conversationTokens)
+    //     .map((token: any) => token.token)
+    //     .join(',')
+    // );
+
+    console.log(supabase);
+
     const changes = supabase
       .channel('messages')
       .on(
@@ -72,6 +87,8 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
         (payload: any) => {
           const newMessage: DBMessage = payload.new;
           const messageConvId = newMessage.conversation_id;
+
+          console.log('new message', newMessage);
 
           // Check if the message belongs to one of the conversations of the user
           if (messageConvId && conversationsIds.includes(messageConvId)) {
@@ -96,9 +113,9 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
 
     // Unsubscribe from the channel when the component unmounts
     return () => {
-      changes.unsubscribe();
+      supabase.removeChannel(changes);
     };
-  }, [supabase, conversationsIds, newMessages]);
+  }, [conversationsIds, newMessages]);
 
   return (
     <ChatContext.Provider value={{ newMessages }}>

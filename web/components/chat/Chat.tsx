@@ -1,10 +1,10 @@
 'use client';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import Message from './Message';
-import { useChatContext } from './ChatContext';
-import { ChatProps, DBMessage } from './types';
-import { ChatSkeleton } from './Skeletons';
 import { notFound } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useChatContext } from './ChatContext';
+import Message from './Message';
+import { ChatSkeleton } from './Skeletons';
+import { ChatProps, DBMessage } from './types';
 
 export default function Chat({
   conversationId,

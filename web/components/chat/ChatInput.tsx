@@ -1,13 +1,14 @@
 'use client';
-import { useState } from 'react';
-import { InputText } from '../common/input';
-import { Icon } from '../common/icon';
-import { InputChatProps } from './types';
 import { createClient } from '@/utils/supabase/client';
 import { insertMessage } from '@utils/lib/messaging/services';
+import { useState } from 'react';
+import { Icon } from '../common/icon';
+import { InputText } from '../common/input';
+import { InputChatProps } from './types';
 
-const Input = ({ conversationId }: InputChatProps) => {
+const ChatInput = ({ conversationId }: InputChatProps) => {
   const supabase = createClient();
+
   const [value, setValue] = useState('');
 
   async function sendMessage(e: any) {
@@ -62,4 +63,4 @@ const Input = ({ conversationId }: InputChatProps) => {
   );
 };
 
-export default Input;
+export default ChatInput;
