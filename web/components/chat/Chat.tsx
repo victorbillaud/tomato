@@ -4,6 +4,7 @@ import Message from './Message';
 import { useChatContext } from './ChatContext';
 import { ChatProps, DBMessage } from './types';
 import { ChatSkeleton } from './Skeletons';
+import { notFound } from 'next/navigation';
 
 export default function Chat({
   conversationId,
@@ -64,11 +65,7 @@ export default function Chat({
 
   // Check if there is a conversation selected
   if (!conversationId) {
-    return (
-      <div className='flex h-full w-full items-center justify-center dark:text-white'>
-        Select a conversation
-      </div>
-    );
+    notFound();
   }
 
   // Display loading skeleton when loading

@@ -23,6 +23,8 @@ import {
   IconWritingSign,
   IconWritingSignOff,
   IconExternalLink,
+  IconExclamationCircle,
+  IconAlertTriangle,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -50,6 +52,8 @@ const ICONS = {
   bell: IconBellFilled,
   checks: IconChecks,
   'external-link': IconExternalLink,
+  'exclamation-circle': IconExclamationCircle,
+  'alert-triangle': IconAlertTriangle,
 };
 
 export default ICONS;

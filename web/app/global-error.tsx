@@ -4,7 +4,7 @@ import { Button } from '@/components/common/button';
 import { Icon } from '@/components/common/icon';
 import { Text } from '@/components/common/text';
 
-export default function Error({
+export default function GlobalError({
   error,
   reset,
 }: {
@@ -20,7 +20,7 @@ export default function Error({
             className='text-left opacity-50 dark:opacity-80'
             color=' text-red-700'
           >
-            Oops ! Something went wrong when loading this segment:
+            Oops ! Something went wrong :
           </Text>
           <span className='text-red-700'>{error.message}</span>
         </div>
