@@ -59,8 +59,13 @@ DECLARE
     decoded JSON;
     is_valid BOOLEAN;
 BEGIN
-    -- Extract the conversation-tokens from the request headers and split them into an array
+    -- Extract the conversation-tokens from the request headers
     tokens := string_to_array(current_setting('request.headers', true)::json->>'conversation-tokens', ',');
+
+    -- Check if tokens are null or empty
+    IF tokens IS NULL OR array_length(tokens, 1) IS NULL THEN
+        RETURN FALSE;
+    END IF;
 
     -- Get the secret key from the vault
     SELECT decrypted_secret INTO secret_key FROM vault.decrypted_secrets WHERE name = 'tomato-jwt-token';

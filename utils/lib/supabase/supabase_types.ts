@@ -383,7 +383,7 @@ export interface Database {
       }
       get_user_conversations_with_last_message: {
         Args: {
-          user_id: string
+          user_id?: string
         }
         Returns: {
           id: string

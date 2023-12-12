@@ -2,10 +2,14 @@
 
 import { createClient } from '@/utils/supabase/client';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { listUserConversations } from '@utils/lib/messaging/services';
+import {
+  insertMessage as insertMessageService,
+  listUserConversations,
+} from '@utils/lib/messaging/services';
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -14,6 +18,10 @@ import { DBMessage } from './types';
 
 type ChatContextProps = {
   newMessages: Record<string, DBMessage[]>;
+  insertMessage: (
+    content: string,
+    conversationId: string
+  ) => Promise<DBMessage>;
 };
 
 const ChatContext = createContext<ChatContextProps | null>(null);
@@ -27,6 +35,34 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
     {}
   );
   const [conversationsIds, setConversationsIds] = useState<string[]>([]);
+
+  const insertMessage = useCallback(
+    async (content: string, conversationId: string) => {
+      const { insertedMessage, error } = await insertMessageService(supabase, {
+        content: content,
+        conversation_id: conversationId as string,
+      });
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+
+      if (!insertedMessage) {
+        throw new Error('Message not inserted');
+      }
+
+      setNewMessages((prevMessages) => ({
+        ...prevMessages,
+        [conversationId]: [
+          ...(prevMessages?.[conversationId] || []),
+          insertedMessage,
+        ],
+      }));
+      return insertedMessage;
+    },
+    [supabase]
+  );
 
   useEffect(() => {
     // initialize newMessages with the conversations ids and an empty array
@@ -62,19 +98,37 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
   }, [supabase]);
 
   useEffect(() => {
-    let messagesChannel: RealtimeChannel;
+    let messagesChannel: RealtimeChannel = supabase.channel(`messages`, {
+      config: {
+        broadcast: { self: true },
+      },
+    });
 
     if (!authToken) {
-      return;
-    }
+      conversationsIds.forEach((conversationId) => {
+        messagesChannel.on(
+          'broadcast',
+          { event: conversationId },
+          (payload) => {
+            const newMessage: DBMessage = payload.payload;
+            if (newMessage && newMessage.conversation_id === conversationId) {
+              setNewMessages((prevMessages) => ({
+                ...prevMessages,
+                [conversationId]: [
+                  ...(prevMessages?.[conversationId] || []),
+                  newMessage,
+                ],
+              }));
+            }
+          }
+        );
+      });
+    } else {
+      supabase.realtime.setAuth(
+        authToken ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+      );
 
-    supabase.realtime.setAuth(
-      authToken ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-    );
-
-    messagesChannel = supabase
-      .channel('messages')
-      .on(
+      messagesChannel.on(
         'postgres_changes',
         {
           event: 'INSERT',
@@ -85,6 +139,13 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
         (payload: any) => {
           const newMessage: DBMessage = payload.new;
           const messageConvId = newMessage.conversation_id;
+
+          // Send message to the public channel
+          messagesChannel.send({
+            type: 'broadcast',
+            event: messageConvId,
+            payload: newMessage,
+          });
 
           // Check if the message belongs to one of the conversations of the user
           if (messageConvId && conversationsIds.includes(messageConvId)) {
@@ -104,8 +165,10 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
             }
           }
         }
-      )
-      .subscribe();
+      );
+    }
+
+    messagesChannel.subscribe();
 
     return () => {
       if (messagesChannel) {
@@ -128,7 +191,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
   }, [supabase]);
 
   return (
-    <ChatContext.Provider value={{ newMessages }}>
+    <ChatContext.Provider value={{ newMessages, insertMessage }}>
       {children}
     </ChatContext.Provider>
   );
