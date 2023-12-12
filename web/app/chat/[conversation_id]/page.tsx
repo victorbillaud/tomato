@@ -1,9 +1,20 @@
 import VerifyOTPForm from '@/components/auth/otp/VerifyOTPForm';
+import Chat from '@/components/chat/Chat';
+import ChatHeader from '@/components/chat/ChatHeader';
+import Input from '@/components/chat/Input';
+import { ChatSkeleton, InputSkeleton } from '@/components/chat/Skeletons';
+import { DBItem, DBMessage } from '@/components/chat/types';
 import { SubmitButton } from '@/components/common/button';
 import { InputText } from '@/components/common/input';
 import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
+import { User } from '@supabase/supabase-js';
+import {
+  getConversationItem,
+  getConversationMessages,
+} from '@utils/lib/messaging/services';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { handleFinderRegistration } from './action';
 
 export default async function Conversation({
@@ -24,19 +35,50 @@ export default async function Conversation({
     'conversation-token': specificToken?.token,
   });
 
-  const { data, error } = await supabase
-    .from('conversation')
-    .select('*')
-    .eq('id', params.conversation_id)
-    .single();
-
   const handleFinderRegistrationBindRedirection = handleFinderRegistration.bind(
     null,
     `/chat/${params.conversation_id}`
   );
 
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw new Error('User not found');
+  }
+
+  const { messages, error: messageError } = await getConversationMessages(
+    supabase,
+    params.conversation_id
+  );
+
+  if (messageError) {
+    redirect('/chat');
+  }
+
+  const { item, error: itemError } = await getConversationItem(
+    supabase,
+    params.conversation_id
+  );
+  if (itemError) {
+    console.error(itemError);
+    return null;
+  }
+
+  if (!user && !messages && !item) {
+    return (
+      <div className='flex h-full w-full flex-col justify-end overflow-hidden px-4 sm:w-2/3'>
+        <ChatSkeleton />
+        <InputSkeleton />
+      </div>
+    );
+  }
+
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-start gap-20'>
+    <div className='flex h-full w-full flex-col justify-start sm:w-2/3 sm:pl-2'>
+      <ChatHeader currentUser={user as User} item={item as DBItem} />
       {specificToken?.token && (
         <div className='flex w-full flex-col gap-2 rounded-md border border-orange-300 bg-orange-200/60 p-2 shadow-sm'>
           <Text
@@ -90,10 +132,14 @@ export default async function Conversation({
           )}
         </div>
       )}
-      <Text variant='h4' className='text-center opacity-90'>
-        How it seems you found an item... {params.conversation_id}
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      </Text>
+      <div className='flex h-full flex-col justify-end gap-2 overflow-y-scroll px-3 sm:px-0'>
+        <Chat
+          conversationId={params.conversation_id}
+          oldMessages={messages as DBMessage[]}
+          currentUser={user as User}
+        />
+        <Input conversationId={params.conversation_id} />
+      </div>
     </div>
   );
 }

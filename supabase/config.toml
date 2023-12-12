@@ -91,10 +91,22 @@ gcp_project_id = ""
 gcp_project_number = ""
 gcp_jwt_path = "supabase/gcloud.json"
 
-[auth.email.template.magic_link]
-subject = "Your OTP for Tomato"
-content_path = "./supabase/templates/email-otp.html"
+[auth.email.template.invite]
+subject = "You have been invited to Tomato"
+content_path = "./supabase/templates/invite.html"
 
 [auth.email.template.confirmation]
 subject = "Welcome to Tomato"
 content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your password"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "Your OTP for Tomato"
+content_path = "./supabase/templates/email-otp.html"
+
+[auth.email.template.email_change]
+subject = "Confirm your new email address"  
+content_path = "./supabase/templates/email-change.html"

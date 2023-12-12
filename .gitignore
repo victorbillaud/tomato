@@ -1,2 +1,8 @@
 *.env
 .DS_Store
+
+# WebStorm
+**/.idea/
+
+# Node modules
+**/node_modules/

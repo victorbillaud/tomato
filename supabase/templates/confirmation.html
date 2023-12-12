@@ -1,5 +1,83 @@
-<h2>Welcome to Tomato</h2>
+<!DOCTYPE html>
+<html>
 
-<p>Thank you for signing up. Please click the link below to activate your account.</p>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            /* Light Tomato color */
+            margin: 0;
+            padding: 10;
+        }
 
-<p>Please enter your OTP: {{ .Token }}</p>
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #a11313;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #a11313;
+            /* Tomato color */
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+            color: #333333;
+        }
+
+        .otp {
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            display: inline-block;
+            color: #e71b1b;
+            /* Tomato color */
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #666666;
+            text-align: center;
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Welcome to Tomato!</h1>
+        </div>
+        <div class="content">
+            <p>Hello,</p>
+            <p>Thanks for being a part of Tomato. We are excited to have you onboard.</p>
+            <div class="note">
+                <p>If you did not sign up for Tomato, please contact us immediately </p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2023 Tomato. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>
