@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Icon } from '../common/icon';
 import { Text } from '../common/text';
 import { Tag } from '../common/tag';
-import { ChatCardProps, DBMessage, DBProfile } from './types';
+import { ChatCardProps, DBItem, DBMessage, DBProfile } from './types';
 import { createClient } from '@/utils/supabase/client';
 import { getItem } from '@utils/lib/item/services';
 import { getUserDetails } from '@utils/lib/user/services';
@@ -15,7 +15,7 @@ import { useChatContext } from './ChatContext';
 export default function ChatCard({
   conversation,
   selectedConversationId,
-  user,
+  currentUser,
   itemId,
 }: ChatCardProps) {
   const supabase = createClient();
@@ -23,9 +23,9 @@ export default function ChatCard({
     (conversation?.last_message as DBMessage) || null
   );
   const { newMessages } = useChatContext();
-  let isOwner = conversation.owner_id === user?.id;
+  let isOwner = conversation.owner_id === currentUser?.id;
   const [userDetails, setUserDetails] = useState<DBProfile>();
-  const [itemInfo, setItemInfo] = useState<any>();
+  const [itemInfo, setItemInfo] = useState<DBItem>();
 
   useEffect(() => {
     async function fetchUserDetails() {
@@ -52,7 +52,7 @@ export default function ChatCard({
         return null;
       }
 
-      setItemInfo(item);
+      setItemInfo(item as DBItem);
     }
 
     fetchUserDetails();
@@ -74,7 +74,13 @@ export default function ChatCard({
         )
       );
     }
-  }, [newMessages, conversation, selectedConversationId, lastMessage, user]);
+  }, [
+    newMessages,
+    conversation,
+    selectedConversationId,
+    lastMessage,
+    currentUser,
+  ]);
 
   function displayLastMessageDate() {
     const today = new Date();
@@ -146,7 +152,7 @@ export default function ChatCard({
         </Text>
         <div className='flex items-center'>
           <Text variant={'body'} className='truncate'>
-            {lastMessage?.sender_id === user?.id ? 'You: ' : ''}
+            {lastMessage?.sender_id === currentUser?.id ? 'You: ' : ''}
             {lastMessage?.content || 'No messages yet'}
           </Text>
         </div>

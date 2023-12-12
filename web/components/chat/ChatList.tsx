@@ -3,21 +3,16 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Text } from '../common/text';
 import ChatCard from './ChatCard';
-import { createClient } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
-import {
-  TConversationWithLastMessage,
-  listUserConversations,
-} from '@utils/lib/messaging/services';
+import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
 import { ChatListSkeleton } from './Skeletons';
+import { ChatListProps } from './types';
 
-export default function ChatList() {
-  const supabase = createClient();
+export default function ChatList({
+  conversations,
+  currentUser,
+}: ChatListProps) {
   const selectedConversationId = useParams().conversation_id as string;
-  const [user, setUser] = useState<User | null>(null);
-  const [conversations, setConversations] = useState<
-    TConversationWithLastMessage[] | null
-  >(null);
   const [ownedConversations, setOwnedConversations] = useState<
     TConversationWithLastMessage[] | null
   >(null);
@@ -27,37 +22,14 @@ export default function ChatList() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function fetchUser(supabase: any) {
-      const {
-        data: { user: userFetched },
-        error,
-      } = await supabase.auth.getUser();
-      if (error) {
-        throw new Error('User not found');
-      }
-      setUser(userFetched);
-      await fetchConversations(supabase, userFetched);
-    }
-
-    async function fetchConversations(supabase: any, userFetched: User) {
-      const { data: conversationsFetched, error: conversationsError } =
-        await listUserConversations(supabase);
-
-      if (conversationsError) {
-        throw new Error("Couldn't fetch conversations");
-      }
-      setConversations(conversationsFetched);
-      setOwnedConversations(
-        conversationsFetched.filter((conv) => conv.owner_id === userFetched.id)
-      );
-      setFoundConversations(
-        conversationsFetched.filter((conv) => conv.finder_id === userFetched.id)
-      );
-      setLoading(false);
-    }
-
-    fetchUser(supabase);
-  }, [supabase]);
+    setOwnedConversations(
+      conversations.filter((conv) => conv.owner_id === currentUser?.id)
+    );
+    setFoundConversations(
+      conversations.filter((conv) => conv.finder_id === currentUser?.id)
+    );
+    setLoading(false);
+  }, [conversations, currentUser]);
 
   const renderConversations = (
     conversationsList: TConversationWithLastMessage[]
@@ -68,7 +40,7 @@ export default function ChatList() {
           key={conversation.id}
           conversation={conversation}
           selectedConversationId={selectedConversationId}
-          user={user as User}
+          currentUser={currentUser as User}
           itemId={conversation.item_id}
         />
       );
