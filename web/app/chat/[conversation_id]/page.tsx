@@ -80,9 +80,8 @@ export default async function Conversation({
 
   return (
     <div className='flex h-full w-full flex-col justify-start sm:w-2/3 sm:pl-2'>
-      <ChatHeader currentUser={user as User} item={item as DBItem} />
       {specificToken?.token && (
-        <div className='flex w-full flex-col gap-2 rounded-md border border-orange-300 bg-orange-200/60 p-2 shadow-sm'>
+        <div className='flex w-full flex-col gap-2 rounded-md border border-orange-300 bg-orange-200/60 p-2 shadow-sm dark:bg-orange-200/20'>
           <Text
             variant='caption'
             color='text-orange-500'
@@ -107,7 +106,7 @@ export default async function Conversation({
                 name='email'
                 type='email'
                 placeholder='Email'
-                className='border-orange-300 bg-orange-200/60'
+                className='border-orange-300 bg-orange-200/60 dark:bg-orange-200/10'
               />
               <SubmitButton
                 variant='tertiary'
@@ -134,6 +133,7 @@ export default async function Conversation({
           )}
         </div>
       )}
+      <ChatHeader currentUser={user as User} item={item as DBItem} />
       <div className='flex h-full flex-col justify-end gap-2 overflow-y-scroll px-3 sm:px-0'>
         <Chat
           conversationId={params.conversation_id}

@@ -21,6 +21,7 @@ export async function listUserConversations(
 }> {
   const {
     data: { user },
+    error: getUserError,
   } = await supabaseInstance.auth.getUser();
 
   const { data, error } = await supabaseInstance.rpc(

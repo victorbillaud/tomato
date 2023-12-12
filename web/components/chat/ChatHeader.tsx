@@ -1,10 +1,10 @@
 'use client';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Icon } from '../common/icon';
+import { Tag } from '../common/tag';
 import { Text } from '../common/text';
 import { MobileHeaderProps } from './types';
-import { useEffect, useState } from 'react';
-import { Tag } from '../common/tag';
 
 export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
   const [showLinkIcon, setShowLinkIcon] = useState<boolean>(false);
@@ -72,7 +72,7 @@ export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
 
   return (
     <>
-      <div className='flex items-center gap-2 pb-2 shadow-md dark:shadow-black/20 sm:pl-6 sm:shadow-none'>
+      <div className='flex items-center gap-2 py-2 shadow-md dark:shadow-black/20 sm:pl-6 sm:shadow-none'>
         <Link href='/chat' className='flex sm:hidden'>
           <Icon
             name={'chevron-left'}

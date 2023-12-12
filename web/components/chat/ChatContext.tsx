@@ -1,8 +1,8 @@
 'use client';
 
 import { createClient } from '@/utils/supabase/client';
+import { RealtimeChannel } from '@supabase/supabase-js';
 import { listUserConversations } from '@utils/lib/messaging/services';
-import Cookies from 'js-cookie';
 import {
   ReactNode,
   createContext,
@@ -22,31 +22,11 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const supabase = createClient();
-
+  const [authToken, setAuthToken] = useState<string | null>(null);
   const [newMessages, setNewMessages] = useState<Record<string, DBMessage[]>>(
     {}
-  ); // conversationId: [message, message, ...]
+  );
   const [conversationsIds, setConversationsIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    // fetch the conversations of the user to get the ids
-    async function fetchConversations() {
-      // Console headers in the client
-
-      const { data: conversationsFetched, error: conversationsError } =
-        await listUserConversations(supabase);
-
-      if (conversationsError) {
-        throw new Error("Couldn't fetch conversations");
-      }
-
-      setConversationsIds(
-        conversationsFetched.map((conversation) => conversation.id)
-      );
-    }
-
-    fetchConversations();
-  }, []);
 
   useEffect(() => {
     // initialize newMessages with the conversations ids and an empty array
@@ -63,18 +43,36 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
   }, [conversationsIds]);
 
   useEffect(() => {
-    // Listen for new messages inserted in the database
-    const existingCookie = Cookies.get('conversation_tokens');
-    const conversationTokens = existingCookie ? JSON.parse(existingCookie) : {};
-    // supabase.realtime.setAuth(
-    //   Object.values(conversationTokens)
-    //     .map((token: any) => token.token)
-    //     .join(',')
-    // );
+    async function fetchConversations() {
+      // Console headers in the client
 
-    console.log(supabase);
+      const { data: conversationsFetched, error: conversationsError } =
+        await listUserConversations(supabase);
 
-    const changes = supabase
+      if (conversationsError) {
+        throw new Error("Couldn't fetch conversations");
+      }
+
+      setConversationsIds(
+        conversationsFetched.map((conversation) => conversation.id)
+      );
+    }
+
+    fetchConversations();
+  }, [supabase]);
+
+  useEffect(() => {
+    let messagesChannel: RealtimeChannel;
+
+    if (!authToken) {
+      return;
+    }
+
+    supabase.realtime.setAuth(
+      authToken ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+    );
+
+    messagesChannel = supabase
       .channel('messages')
       .on(
         'postgres_changes',
@@ -87,8 +85,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
         (payload: any) => {
           const newMessage: DBMessage = payload.new;
           const messageConvId = newMessage.conversation_id;
-
-          console.log('new message', newMessage);
 
           // Check if the message belongs to one of the conversations of the user
           if (messageConvId && conversationsIds.includes(messageConvId)) {
@@ -111,11 +107,25 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
       )
       .subscribe();
 
-    // Unsubscribe from the channel when the component unmounts
     return () => {
-      supabase.removeChannel(changes);
+      if (messagesChannel) {
+        supabase.removeChannel(messagesChannel);
+      }
     };
-  }, [conversationsIds, newMessages]);
+  }, [conversationsIds, authToken]);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data) {
+        console.error('Error fetching user:', error);
+      } else {
+        setAuthToken(data.session?.access_token || null);
+      }
+    };
+
+    fetchSession();
+  }, [supabase]);
 
   return (
     <ChatContext.Provider value={{ newMessages }}>
