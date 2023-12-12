@@ -96,7 +96,7 @@ export async function getConversationMessages(
   return { messages, error };
 }
 
-export async function getConversationWithItem(
+export async function getConversationItem(
   supabaseInstance: SupabaseClient<Database>,
   conversationId: string
 ) {

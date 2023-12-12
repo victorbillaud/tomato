@@ -9,7 +9,7 @@ import { User } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/server';
 import {
   getConversationMessages,
-  getConversationWithItem,
+  getConversationItem,
 } from '@utils/lib/messaging/services';
 
 export default async function Index({
@@ -39,7 +39,7 @@ export default async function Index({
     redirect('/chat');
   }
 
-  const { item, error: itemError } = await getConversationWithItem(
+  const { item, error: itemError } = await getConversationItem(
     supabase,
     conversationId
   );
