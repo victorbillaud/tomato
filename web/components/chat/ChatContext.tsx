@@ -67,7 +67,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
           event: 'INSERT',
           schema: 'public',
           table: 'message',
-          filter: 'conversation_id=in.(' + conversationsIds.join(',') + ')',
+          filter: `conversation_id=in.(${conversationsIds.join(',')})`,
         },
         (payload: any) => {
           const newMessage: DBMessage = payload.new;

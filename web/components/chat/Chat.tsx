@@ -55,12 +55,12 @@ export default function Chat({
   }, [newMessages, conversationId]);
 
   useEffect(() => {
-    // Scroll to the bottom of the chat when loading is done
+    // Scroll to the bottom of the chat when loading is done or when new messages are sent
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop =
         scrollContainerRef.current.scrollHeight;
     }
-  }, [loading]);
+  }, [loading, messages]);
 
   // Check if there is a conversation selected
   if (!conversationId) {
