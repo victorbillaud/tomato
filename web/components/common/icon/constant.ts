@@ -25,6 +25,7 @@ import {
   IconExternalLink,
   IconExclamationCircle,
   IconAlertTriangle,
+  IconUser,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -54,6 +55,7 @@ const ICONS = {
   'external-link': IconExternalLink,
   'exclamation-circle': IconExclamationCircle,
   'alert-triangle': IconAlertTriangle,
+  user: IconUser,
 };
 
 export default ICONS;

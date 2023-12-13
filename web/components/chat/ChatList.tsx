@@ -7,6 +7,7 @@ import { Text } from '../common/text';
 import ChatCard from './ChatCard';
 import { ChatListSkeleton } from './Skeletons';
 import { ChatListProps } from './types';
+import { Icon } from '../common/icon';
 
 export default function ChatList({
   conversations,
@@ -47,44 +48,48 @@ export default function ChatList({
     });
   };
 
-  const mobileStyle = selectedConversationId ? ' hidden sm:block ' : '';
+  const mobileStyle = selectedConversationId ? ' hidden sm:flex ' : '';
 
   return (
     <div
-      className={`flex h-full w-full flex-col border-gray-700/10 px-3 dark:border-white/20 sm:w-1/3 sm:border-r-[1px] sm:px-0 ${mobileStyle}`}
+      className={`${mobileStyle} flex w-full flex-1 flex-col gap-3 px-5 sm:w-1/3 sm:px-2`}
     >
-      <Text variant={'h2'} className='p-2'>
-        Conversations
-      </Text>
+      <div className='my-5 ml-3 flex justify-start'>
+        <Text variant={'h2'}>Conversations</Text>
+      </div>
 
-      {!conversations || loading ? (
-        <ChatListSkeleton />
-      ) : (
-        <>
-          {ownedConversations && ownedConversations.length > 0 && (
-            <>
-              <Text
-                variant={'h4'}
-                className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
-              >
-                My items
-              </Text>
-              {renderConversations(ownedConversations)}
-            </>
-          )}
-          {foundConversations && foundConversations.length > 0 && (
-            <>
-              <Text
-                variant={'h4'}
-                className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
-              >
-                Items scanned
-              </Text>
-              {renderConversations(foundConversations)}
-            </>
-          )}
-        </>
-      )}
+      <div className='flex h-full w-full flex-col gap-3 overflow-y-auto rounded-3xl bg-white py-4 dark:bg-zinc-700'>
+        {!conversations || loading ? (
+          <ChatListSkeleton />
+        ) : (
+          <>
+            {ownedConversations && ownedConversations.length > 0 && (
+              <div className='flex flex-col gap-1'>
+                <Text
+                  variant={'subtitle'}
+                  className='flex items-center gap-2 py-2 pl-3'
+                >
+                  <Icon name='user' size={20} />
+                  My items
+                </Text>
+                {renderConversations(ownedConversations)}
+              </div>
+            )}
+            {foundConversations && foundConversations.length > 0 && (
+              <div className='flex flex-col gap-1'>
+                <Text
+                  variant={'subtitle'}
+                  className='flex items-center gap-2 py-2 pl-3'
+                >
+                  <Icon name='qrcode' size={20} />
+                  Items scanned
+                </Text>
+                {renderConversations(foundConversations)}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

@@ -11,9 +11,9 @@ export default async function AuthLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  
+
   return (
-    <main className='flex w-full max-w-lg flex-1 flex-col items-center justify-center'>
+    <main className='flex w-full max-w-lg flex-1 flex-col items-center justify-center px-3'>
       {children}
     </main>
   );

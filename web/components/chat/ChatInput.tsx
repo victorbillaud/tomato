@@ -31,14 +31,18 @@ const ChatInput = ({ conversationId }: InputChatProps) => {
   }
 
   return (
-    <form onSubmit={sendMessage} className='flex sm:pl-6'>
-      <InputText
+    <form
+      onSubmit={sendMessage}
+      className='flex w-full rounded-full bg-white py-1 pl-6 pr-2 dark:bg-zinc-700'
+    >
+      <input
         name='message'
         placeholder='Type a message'
         value={value}
         onChange={(e) => {
           setValue(e.target.value);
         }}
+        className='w-full bg-transparent focus:outline-none'
       />
 
       <div className='mx-2 flex h-10 w-10 cursor-pointer items-center justify-center'>
