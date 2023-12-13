@@ -58,9 +58,9 @@ export default async function Index({
   }
 
   return (
-    <div className='flex h-full w-full flex-col justify-start sm:w-2/3 sm:pl-2'>
+    <div className='flex h-full w-full flex-col justify-start gap-1 sm:w-2/3 sm:pl-4'>
       <ChatHeader currentUser={user as User} item={item as DBItem} />
-      <div className='flex h-full flex-col justify-end gap-2 overflow-y-scroll px-3 sm:px-0'>
+      <div className='flex h-full flex-col justify-end gap-1 overflow-hidden px-3 sm:px-0'>
         <Chat
           conversationId={conversationId}
           oldMessages={messages as DBMessage[]}

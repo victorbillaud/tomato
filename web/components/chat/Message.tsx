@@ -1,6 +1,7 @@
 'use client';
 import dateFormat, { masks } from 'dateformat';
 import { MessageProps } from './types';
+import { Text } from '../common/text';
 
 masks.timeOnly = 'HH:MM';
 masks.dateOnly = 'd mmm yyyy';
@@ -88,9 +89,9 @@ const Message = ({
           <div>{message.content}</div>
         </div>
         {lastMessage ? (
-          <div className='px-2 pt-1 text-sm font-light'>
+          <Text variant={'caption'} className='px-2 pt-1 text-black/70'>
             {dateFormat(message.created_at, masks.timeOnly)}
-          </div>
+          </Text>
         ) : null}
       </div>
     </>

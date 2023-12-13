@@ -72,7 +72,7 @@ export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
 
   return (
     <>
-      <div className='flex items-center gap-2 pb-2 shadow-md dark:shadow-black/20 sm:pl-6 sm:shadow-none'>
+      <div className='mx-3 flex items-center gap-2 rounded-2xl bg-zinc-100 py-3 shadow-md dark:bg-zinc-700 dark:shadow-black/20 sm:mx-0 sm:pl-6 sm:shadow-none'>
         <Link href='/chat' className='flex sm:hidden'>
           <Icon
             name={'chevron-left'}
