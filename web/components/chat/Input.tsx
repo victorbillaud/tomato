@@ -48,7 +48,7 @@ const Input = ({ conversationId }: InputChatProps) => {
         onChange={(e) => {
           setValue(e.target.value);
         }}
-        className='w-full bg-transparent focus:outline-none'
+        className='w-full bg-transparent text-black focus:outline-none dark:text-white'
       />
 
       <div className='mx-2 flex h-10 w-10 cursor-pointer items-center justify-center'>
