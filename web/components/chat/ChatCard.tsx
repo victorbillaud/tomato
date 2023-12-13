@@ -159,7 +159,7 @@ export default function ChatCard({
 
       <div className='flex-grow truncate'>
         <Text variant={'h4'} className='truncate'>
-          {itemInfo?.name || 'unknown'}
+          {itemInfo?.name || 'Item found'}
         </Text>
         <div className='flex items-center'>
           <Text variant={'body'} className='truncate'>
