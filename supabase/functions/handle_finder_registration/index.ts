@@ -56,10 +56,6 @@ export const createUser = async (email: string, tokens: string[]) => {
       tokens: tokens,
     });
 
-    await supabaseClient.auth.signInWithOtp({
-      email: email,
-    });
-
   } catch {
     throw new Error("Error updating user conversations and messages");
   }

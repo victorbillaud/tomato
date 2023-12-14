@@ -43,7 +43,7 @@ const VerifyOTPForm = (props: IVerifyOTPFormProps) => {
 
       if (user && session) {
         props.clearConversationTokens && Cookies.remove('conversation_tokens');
-        router.refresh();
+        window.location.reload();
       }
     } catch (err) {
       props.setMessage && props.setMessage(err);
