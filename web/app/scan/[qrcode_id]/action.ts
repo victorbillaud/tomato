@@ -61,7 +61,9 @@ export async function edgeFinderFlow(itemId: string) {
             path: '/',
         });
 
-        redirect(`/chat/${data.conversation_id}`)
+
+        redirect(`/chat/${data.conversation_id}?token=${data.token}`)
+
     } else {
         redirect(`/chat/${data.conversation.id}`)
     }

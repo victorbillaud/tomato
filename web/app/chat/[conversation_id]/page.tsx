@@ -46,12 +46,9 @@ export default async function Conversation({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { messages, error: messageError } = await getMessages(
-    supabase,
-    [params.conversation_id]
-  );
-
-  console.log(messages);
+  const { messages, error: messageError } = await getMessages(supabase, [
+    params.conversation_id,
+  ]);
 
   if (messageError) {
     redirect('/chat');
@@ -61,8 +58,6 @@ export default async function Conversation({
     supabase,
     params.conversation_id
   );
-
-  console.log(item);
 
   if (itemError) {
     console.error(itemError);
