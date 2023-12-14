@@ -2,17 +2,17 @@ import { describe, test } from '@jest/globals';
 import { insertItem } from '../item/services';
 import { insertQRCode } from '../qrcode/services';
 import {
-  createFakeUser,
-  deleteFakeUser,
-  signInFakeUser,
+    createFakeUser,
+    deleteFakeUser,
+    signInFakeUser,
 } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
 import {
-  getConversation,
-  getConversationMessages,
-  insertConversation,
-  insertMessage,
-  listUserConversations,
+    getConversation,
+    getMessages,
+    insertConversation,
+    insertMessage,
+    listUserConversations,
 } from './services';
 
 const sp = getSupabase();
@@ -235,7 +235,7 @@ describe('service messaging module', () => {
       content: 'test 2',
     });
 
-    const { messages, error } = await getConversationMessages(
+    const { messages, error } = await getMessages(
       sp,
       insertedConversation.id
     );

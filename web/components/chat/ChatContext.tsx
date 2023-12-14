@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/client';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import {
+  getMessages,
   insertMessage as insertMessageService,
   listUserConversations,
 } from '@utils/lib/messaging/services';
@@ -78,24 +79,47 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [conversationsIds]);
 
-  useEffect(() => {
-    async function fetchConversations() {
-      // Console headers in the client
+  const fetchConversations = useCallback(async () => {
+    const { data: conversationsFetched, error: conversationsError } =
+      await listUserConversations(supabase);
 
-      const { data: conversationsFetched, error: conversationsError } =
-        await listUserConversations(supabase);
-
-      if (conversationsError) {
-        throw new Error("Couldn't fetch conversations");
-      }
-
-      setConversationsIds(
-        conversationsFetched.map((conversation) => conversation.id)
-      );
+    if (conversationsError) {
+      throw new Error("Couldn't fetch conversations");
     }
 
-    fetchConversations();
+    setConversationsIds(
+      conversationsFetched.map((conversation) => conversation.id)
+    );
   }, [supabase]);
+
+  const fetchMessages = useCallback(async () => {
+    let currentDateTime = new Date();
+    currentDateTime.setSeconds(currentDateTime.getSeconds() - 5);
+    const { messages, error: messagesError } = await getMessages(
+      supabase,
+      conversationsIds,
+      currentDateTime.toISOString()
+    );
+
+    if (messagesError) {
+      throw new Error("Couldn't fetch new messages");
+    }
+
+    messages &&
+      messages.forEach((message) => {
+        setNewMessages((prevMessages) => ({
+          ...prevMessages,
+          [message.conversation_id]: [
+            ...(prevMessages?.[message.conversation_id] || []),
+            message,
+          ],
+        }));
+      });
+  }, [conversationsIds, supabase]);
+
+  useEffect(() => {
+    fetchConversations();
+  }, [fetchConversations]);
 
   useEffect(() => {
     let messagesChannel: RealtimeChannel = supabase.channel(`messages`, {
@@ -105,24 +129,13 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
     });
 
     if (!authToken) {
-      conversationsIds.forEach((conversationId) => {
-        messagesChannel.on(
-          'broadcast',
-          { event: conversationId },
-          (payload) => {
-            const newMessage: DBMessage = payload.payload;
-            if (newMessage && newMessage.conversation_id === conversationId) {
-              setNewMessages((prevMessages) => ({
-                ...prevMessages,
-                [conversationId]: [
-                  ...(prevMessages?.[conversationId] || []),
-                  newMessage,
-                ],
-              }));
-            }
-          }
-        );
-      });
+      const interval = setInterval(() => {
+        fetchMessages();
+      }, 5000);
+
+      return () => {
+        clearInterval(interval);
+      };
     } else {
       supabase.realtime.setAuth(
         authToken ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
@@ -139,13 +152,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
         (payload: any) => {
           const newMessage: DBMessage = payload.new;
           const messageConvId = newMessage.conversation_id;
-
-          // Send message to the public channel
-          messagesChannel.send({
-            type: 'broadcast',
-            event: messageConvId,
-            payload: newMessage,
-          });
 
           // Check if the message belongs to one of the conversations of the user
           if (messageConvId && conversationsIds.includes(messageConvId)) {
@@ -175,7 +181,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({
         supabase.removeChannel(messagesChannel);
       }
     };
-  }, [conversationsIds, authToken]);
+  }, [conversationsIds, authToken, supabase, fetchMessages, newMessages]);
 
   useEffect(() => {
     const fetchSession = async () => {

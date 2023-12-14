@@ -84,14 +84,23 @@ export async function getConversation(
   return { conversation, error };
 }
 
-export async function getConversationMessages(
+export async function getMessages(
   supabaseInstance: SupabaseClient<Database>,
-  conversationId: string
+  conversationIds: string[],
+  gteDate?: string
 ) {
-  const { data: messages, error } = await supabaseInstance
+  const query = supabaseInstance
     .from('message')
     .select('*')
-    .eq('conversation_id', conversationId);
+    .in('conversation_id', conversationIds);
+
+  if (gteDate) {
+    query.gte('created_at', gteDate);
+  }
+
+  const { data: messages, error } = await query.order('created_at', {
+    ascending: true,
+  });
 
   return { messages, error };
 }

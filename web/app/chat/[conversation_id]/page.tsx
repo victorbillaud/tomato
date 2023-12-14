@@ -11,7 +11,7 @@ import { createClient } from '@/utils/supabase/server';
 import { User } from '@supabase/supabase-js';
 import {
   getConversationItem,
-  getConversationMessages,
+  getMessages,
 } from '@utils/lib/messaging/services';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -46,9 +46,9 @@ export default async function Conversation({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { messages, error: messageError } = await getConversationMessages(
+  const { messages, error: messageError } = await getMessages(
     supabase,
-    params.conversation_id
+    [params.conversation_id]
   );
 
   console.log(messages);
