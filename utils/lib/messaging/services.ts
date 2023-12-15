@@ -49,22 +49,12 @@ export async function insertConversation(
   supabaseInstance: SupabaseClient<Database>,
   conversation: Pick<
     Database['public']['Tables']['conversation']['Insert'],
-    'finder_id' | 'item_id'
+    'finder_id' | 'item_id' | 'owner_id'
   >
 ) {
-  const {
-    data: { user },
-  } = await supabaseInstance.auth.getUser();
-
-  const conversationToInsert: Database['public']['Tables']['conversation']['Insert'] =
-  {
-    ...conversation,
-    owner_id: user.id,
-  };
-
   const { data: insertedConversation, error } = await supabaseInstance
     .from('conversation')
-    .insert(conversationToInsert)
+    .insert(conversation)
     .select('*')
     .single();
   return { insertedConversation, error };
