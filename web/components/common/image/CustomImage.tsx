@@ -47,13 +47,13 @@ export function CustomImage({
         src={src}
         alt={alt}
         fill={true}
-        objectFit={cover ? 'cover' : 'default'}
+        sizes='100%'
         priority={priority}
         placeholder={loader ? 'blur' : 'empty'}
         blurDataURL={`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=`}
-        className={`absolute left-0 top-0 h-full w-full  ${
-          roundedClass[props.rounded || '']
-        } `}
+        className={`absolute left-0 top-0 h-full w-full ${
+          cover ? 'object-cover' : ''
+        } ${roundedClass[props.rounded || '']} `}
         {...props}
       />
     </div>
