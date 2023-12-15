@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import { updateItem } from '@utils/lib/item/services';
+import { updateItem, updateItemImage } from '@utils/lib/item/services';
 import dateFormat, { masks } from 'dateformat';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -7,10 +7,25 @@ import { redirect } from 'next/navigation';
 import { InputTextForm } from '../common/input';
 import { Text } from '../common/text';
 import { IItemInfoProps } from './types';
-import { CustomImage } from '../common/image';
-import { Icon } from '../common/icon';
+import { InputFileForm } from '../common/input/InputFileForm';
 
-// TODO: actually update the image with handleUpdate
+const DEFAULT_ITEM_IMAGE = '/default-item.jpg';
+
+async function handleImageUpdate(itemId: string, oldImage: string, userId: string, formData: FormData) {
+  'use server';
+
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const imageValue: File = formData.get('picture') as File;
+  const { imagePath, error } = await updateItemImage(supabase, itemId, imageValue, oldImage, userId);
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/item/${itemId}`);
+  redirect(`/dashboard/item/${itemId}`);
+}
 
 async function handleUpdate(formData: FormData) {
   'use server';
@@ -38,31 +53,15 @@ async function handleUpdate(formData: FormData) {
 }
 
 export function ItemInfo({ item }: IItemInfoProps) {
+  const handleImageUpdateBind = handleImageUpdate.bind(null, item.id, item.image_path?.split('/').pop() || '', item.user_id);
+
   return (
     <div className='flex w-full flex-row-reverse justify-between gap-6 md:flex-row md:justify-start'>
-      <form className='group relative mt-2'>
-        <input
-          type='file'
-          accept='image/jpeg,image/png,image/webp'
-          className='absolute z-20 h-full w-full cursor-pointer bg-transparent opacity-0'
-        />
-        <Icon
-          name='photo-edit'
-          size={30}
-          className='absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 group-hover:block'
-          color='text-stone-900 dark:text-white'
-        />
-        <CustomImage
-          alt='item'
-          className='group-hover:opacity-70'
-          src='/test.jpeg'
-          shadow='md'
-          rounded='md'
-          height={150}
-          width={150}
-          cover={true}
-        />
-      </form>
+      <InputFileForm
+        imgSource={item.image_path || DEFAULT_ITEM_IMAGE}
+        iconName='photo-edit'
+        callback={handleImageUpdateBind}
+      />
       <div className='flex w-2/3 flex-col items-center justify-start gap-3'>
         <div className='flex w-full flex-row items-center justify-start'>
           <InputTextForm
