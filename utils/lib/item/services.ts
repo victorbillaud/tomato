@@ -142,8 +142,6 @@ export async function updateItem(
     return { data, error }
 }
 
-// TODO: create one subfolder per user ID and give full access to it to the user
-// TODO: in order to allow deletion only by the concerned user
 export async function updateItemImage(
     supabaseInstance: SupabaseClient<Database>,
     itemId: string,
