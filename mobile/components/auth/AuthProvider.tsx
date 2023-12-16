@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { User } from '@supabase/gotrue-js'
 import { Alert } from "react-native";
 import { Text } from "@/components/common/Text";
-import { createSupabaseClient } from "@/utils/client"
+import { useSupabase } from "@/components/supabase/SupabaseProvider";
 
 interface AuthContextType {
 	user: User | null
@@ -23,7 +23,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [user, setUser] = useState<User | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
-	const supabase = createSupabaseClient();
+	const supabase = useSupabase()
 
 	useEffect(() => {
 		// initial fetch of session
