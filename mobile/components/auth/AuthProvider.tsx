@@ -1,15 +1,14 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
-import { User } from '@supabase/gotrue-js'
-import { Alert } from "react-native";
+import { AuthError, User } from '@supabase/gotrue-js'
 import { Text } from "@/components/common/Text";
 import { useSupabase } from "@/components/supabase/SupabaseProvider";
 
 interface AuthContextType {
 	user: User | null
 	loading: boolean
-	signIn: (email: string, password: string) => Promise<boolean>
-	sendOTP: (email: string) => Promise<boolean>
-	signInWithOTP: (email: string, otp: string) => Promise<boolean>
+	signIn: (email: string, password: string) => Promise<AuthError | null>
+	sendOTP: (email: string) => Promise<AuthError | null>
+	signInWithOTP: (email: string, otp: string) => Promise<AuthError | null>
 	signOut: () => Promise<void>
 }
 
@@ -43,39 +42,37 @@ export function AuthProvider(props: Props) {
 		return () => { listener.subscription?.unsubscribe() }
 	}, [])
 
-	async function signIn(email: string, password: string): Promise<boolean> {
+	async function signIn(email: string, password: string): Promise<AuthError | null> {
 		const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-		if (error) {
-			if (error.message === 'Invalid login credentials') {InvalidCredentialsAlert()} else {console.error(error)}
-			return false
-		}
-		setUser(data?.user ?? null)
-		return true
+		if (error)
+			console.error(error)
+		else
+			setUser(data?.user ?? null)
+		return error
 	}
 
-	async function sendOTP(email: string): Promise<boolean> {
-		const { data, error } = await supabase.auth.signInWithOtp({
+	async function sendOTP(email: string): Promise<AuthError | null> {
+		const { error } = await supabase.auth.signInWithOtp({
 			email,
 			options: {
 				shouldCreateUser: true,
 			},
 		})
 		if (error) console.error(error)
-		return !error
+		return error
 	}
 
-	async function signInWithOTP(email: string, otp: string): Promise<boolean> {
+	async function signInWithOTP(email: string, otp: string): Promise<AuthError | null> {
 		const { data, error } = await supabase.auth.verifyOtp({
 			email,
 			token: otp,
 			type: 'email',
 		})
-		if (error) {
+		if (error)
 			console.error(error)
-			return false
-		}
-		setUser(data?.user ?? null)
-		return true
+		else
+			setUser(data?.user ?? null)
+		return error
 	}
 
 	async function signOut(): Promise<void> {
@@ -83,8 +80,6 @@ export function AuthProvider(props: Props) {
 		if (error) console.error(error)
 		setUser(null)
 	}
-
-	const InvalidCredentialsAlert = () => Alert.alert('Invalid credentials')
 
 	return (
 		<AuthContext.Provider value={{ user, loading, signIn, sendOTP, signInWithOTP, signOut, }}>

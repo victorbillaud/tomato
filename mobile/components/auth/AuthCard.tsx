@@ -6,6 +6,7 @@ import { Text } from "@/components/common/Text"
 import { View } from "@/components/View"
 import { useAuth } from "@/components/auth/AuthProvider";
 import tw from "@/constants/tw"
+import { Alert } from "react-native";
 
 export function AuthCard() {
 	const auth = useAuth()
@@ -35,9 +36,11 @@ export function AuthCard() {
 							isLoader={sendingOTP}
 							onPress={async () => {
 								setSendingOTP(true)
-								const success = await auth.sendOTP(email)
-								if (success)
+								const error = await auth.sendOTP(email)
+								if (!error)
 									setLoginType('otp')
+								else
+									Alert.alert("Could not send OTP", error.message)
 								setSendingOTP(false)
 							}}
 					/>
@@ -66,7 +69,11 @@ export function AuthCard() {
 						<Button text={"Sign in"}
 								variant={"primary"}
 								disabled={!email || !otp}
-								onPress={() => auth.signInWithOTP(email, otp)}
+								onPress={async () => {
+									const error = await auth.signInWithOTP(email, otp)
+									if (error)
+										Alert.alert("Could not sign in", error.message)
+								}}
 						/>
 					</View>
 				</>
@@ -89,7 +96,11 @@ export function AuthCard() {
 						<Button text={"Sign in"}
 								variant={"primary"}
 								disabled={!email || !password}
-								onPress={() => auth.signIn(email, password)}
+								onPress={async () => {
+									const error = await auth.signIn(email, password)
+									if (error)
+										Alert.alert("Could not sign in", error.message)
+								}}
 						/>
 					</View>
 				</>
