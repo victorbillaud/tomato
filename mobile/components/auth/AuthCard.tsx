@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useAuth } from "./AuthProvider"
-import { Button } from "../common/Button"
-import { InputText } from "../common/InputText"
-import { Text } from "../common/Text"
-import { View } from "../View"
-import tw from "../../constants/tw"
 import { IconArrowLeft } from "tabler-icons-react-native";
+import { Button } from "@/components/common/Button"
+import { InputText } from "@/components/common/InputText"
+import { Text } from "@/components/common/Text"
+import { View } from "@/components/View"
+import { useAuth } from "@/components/auth/AuthProvider";
+import tw from "@/constants/tw"
 
 export function AuthCard() {
 	const auth = useAuth()

@@ -1,8 +1,8 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { User } from '@supabase/gotrue-js'
-import { createSupabaseClient } from "../../utils/client"
 import { Alert } from "react-native";
-import { Text } from "../common/Text";
+import { Text } from "@/components/common/Text";
+import { createSupabaseClient } from "@/utils/client"
 
 interface AuthContextType {
 	user: User | null
