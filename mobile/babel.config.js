@@ -14,6 +14,15 @@ module.exports = function (api) {
 				"safe": false,
 				"allowUndefined": false,
 				"verbose": false
+			}],
+
+			// imports with @
+			['module-resolver', {
+				root: ['./'],
+				alias: {
+					'@': './',
+					'@utils': './utils',
+				},
 			}]
 		],
 	}

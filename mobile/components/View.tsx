@@ -1,5 +1,5 @@
 import { ScrollView as RNScrollView, View as RNView } from "react-native";
-import { ThemeProps, useThemeColor } from "./Themed";
+import { ThemeProps, useThemeColor } from "@/components/Themed";
 
 export type ViewProps = ThemeProps & RNView['props']
 

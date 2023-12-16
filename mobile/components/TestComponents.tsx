@@ -1,12 +1,12 @@
 import React from 'react'
-import { Button } from "./common/Button"
-import { InputText } from "./common/InputText"
-import { Icon } from "./common/Icon"
-import { Text } from "./common/Text"
-import { ScrollView, View } from "./View";
-import tw from "../constants/tw";
-import { Card } from "./common/Card";
 import { IconAlertHexagon, IconCheck } from "tabler-icons-react-native";
+import { Button } from "@/components/common/Button"
+import { InputText } from "@/components/common/InputText"
+import { Icon } from "@/components/common/Icon"
+import { Text } from "@/components/common/Text"
+import { ScrollView, View } from "@/components/View";
+import { Card } from "@/components/common/Card";
+import tw from "@/constants/tw";
 
 export function TestComponents() {
 	return (

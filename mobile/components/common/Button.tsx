@@ -1,9 +1,9 @@
 import React from 'react';
 import { ActivityIndicator, GestureResponderEvent, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Style } from 'twrnc/dist/esm/types';
-import tw from "../../constants/tw";
-import { Text } from './Text';
-import { Icon, IIconProps } from "./Icon";
+import { Text } from '@/components/common/Text';
+import { Icon, IIconProps } from "@/components/common/Icon";
+import tw from "@/constants/tw";
 
 export type TButtonVariant = 'primary' | 'secondary' | 'tertiary';
 
