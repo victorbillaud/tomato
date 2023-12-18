@@ -1,18 +1,19 @@
 'use client';
 import { User } from '@supabase/supabase-js';
 import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Icon } from '../common/icon';
 import { Text } from '../common/text';
 import ChatCard from './ChatCard';
 import { ChatListSkeleton } from './Skeletons';
 import { ChatListProps } from './types';
-import { Icon } from '../common/icon';
 
 export default function ChatList({
   conversations,
   currentUser,
 }: ChatListProps) {
+  const router = useRouter();
   const selectedConversationId = useParams().conversation_id as string;
   const [ownedConversations, setOwnedConversations] = useState<
     TConversationWithLastMessage[] | null
@@ -27,10 +28,21 @@ export default function ChatList({
       conversations.filter((conv) => conv.owner_id === currentUser?.id)
     );
     setFoundConversations(
-      conversations.filter((conv) => conv.finder_id === (currentUser?.id || null))
+      conversations.filter(
+        (conv) => conv.finder_id === (currentUser?.id || null)
+      )
     );
     setLoading(false);
   }, [conversations, currentUser]);
+
+  // display the last conversation when loading chat page (if exist)
+  if (
+    !selectedConversationId &&
+    conversations.length > 0 &&
+    conversations[0].id
+  ) {
+    router.push(`/chat/${conversations[0].id}`);
+  }
 
   const renderConversations = (
     conversationsList: TConversationWithLastMessage[]
