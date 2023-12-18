@@ -34,7 +34,7 @@ export const AnonBanner: React.FC = () => {
   };
 
   return (
-    <div className='flex w-full flex-col gap-2 rounded-md border border-orange-300 bg-orange-200/60 p-2 shadow-sm dark:bg-orange-200/20'>
+    <div className='mx-3 flex flex-col items-center gap-2 rounded-lg border-orange-300 bg-orange-200/60 p-2 dark:bg-orange-200/20 sm:mx-0 sm:shadow-none'>
       <Text
         variant='caption'
         color='text-orange-500'
@@ -51,17 +51,18 @@ export const AnonBanner: React.FC = () => {
       {!searchParams.get('success') ? (
         <form
           action={handleFinderRegistrationBindRedirection}
-          className='flex w-full flex-row gap-2'
+          className='flex w-full flex-col md:flex-row items-center justify-between gap-2'
         >
           <InputText
             icon='at'
             name='email'
             type='email'
             placeholder='Email'
-            className='border-orange-300 bg-orange-200/60 dark:bg-orange-200/10'
+            className='border-orange-300/20 bg-orange-200/60 dark:bg-orange-200/10'
           />
           <SubmitButton
             variant='tertiary'
+            size='small'
             type='submit'
             text='Create an account'
             className='flex-1 text-orange-500'
@@ -74,7 +75,7 @@ export const AnonBanner: React.FC = () => {
             color='text-orange-500'
             className='text-center opacity-90'
           >
-            We sent you an email with a code to verify your email address.
+            Your account has been created, please check your emails.
           </Text>
           {otpSend ? (
             <VerifyOTPForm
@@ -85,12 +86,21 @@ export const AnonBanner: React.FC = () => {
           ) : (
             <Button
               variant='secondary'
-              text='Send OTP code'
+              text='Connect now with OTP'
               onClick={sendOTP}
               className='w-full'
             />
           )}
         </>
+      )}
+      {searchParams.get('error') && (
+        <Text
+          variant='caption'
+          color='text-red-500'
+          className='text-center opacity-90'
+        >
+          {searchParams.get('error')}
+        </Text>
       )}
     </div>
   );

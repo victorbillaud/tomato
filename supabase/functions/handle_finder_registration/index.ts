@@ -47,7 +47,7 @@ export const createUser = async (email: string, tokens: string[]) => {
     .inviteUserByEmail(email);
 
   if (error || !user) {
-    throw new Error("Error creating user");
+    throw new Error(error?.message ?? "Error creating user");
   }
 
   try {
