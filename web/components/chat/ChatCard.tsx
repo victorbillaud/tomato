@@ -116,7 +116,7 @@ export default function ChatCard({
 
   const selectedStyle =
     selectedConversationId === conversation?.id
-      ? ' bg-gray-700/10 dark:bg-white/20 '
+      ? ' bg-zinc-100 dark:bg-zinc-800/70'
       : '';
 
   // ! Same here, we can't get the item info when we are the finder
@@ -136,7 +136,7 @@ export default function ChatCard({
     <Link
       href={/chat/ + conversation.id}
       key={conversation.id}
-      className={`${selectedStyle} flex items-center gap-2 px-2 py-3 hover:bg-gray-700/10 dark:hover:bg-white/20`}
+      className={`flex items-center gap-2 rounded-br-lg rounded-tr-lg px-4 py-3 hover:bg-zinc-100 dark:hover:bg-zinc-800/70 ${selectedStyle} `}
     >
       <div className='flex-shrink-0'>
         {avatarUrl ? (
@@ -159,10 +159,14 @@ export default function ChatCard({
 
       <div className='flex-grow truncate'>
         <Text variant={'h4'} className='truncate'>
-          {itemInfo?.name || 'unknown'}
+          {itemInfo?.name || 'Item found'}
         </Text>
         <div className='flex items-center'>
-          <Text variant={'body'} className='truncate'>
+          <Text
+            variant={'body'}
+            className='truncate'
+            color='text-black dark:text-stone-100'
+          >
             {lastMessage?.sender_id === currentUser?.id ? 'You: ' : ''}
             {lastMessage?.content || 'No messages yet'}
           </Text>
@@ -171,7 +175,9 @@ export default function ChatCard({
 
       <div className='flex flex-shrink-0 flex-col items-end gap-1'>
         {renderTag()}
-        <Text variant={'caption'}>{displayLastMessageDate()}</Text>
+        <Text variant={'caption'} color='text-black/90 dark:text-stone-100/70'>
+          {displayLastMessageDate()}
+        </Text>
       </div>
     </Link>
   );

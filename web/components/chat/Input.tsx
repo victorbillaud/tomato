@@ -9,6 +9,7 @@ import { insertMessage } from '@utils/lib/messaging/services';
 const Input = ({ conversationId }: InputChatProps) => {
   const supabase = createClient();
   const [value, setValue] = useState('');
+  const [focus, setFocus] = useState(false);
 
   async function sendMessage(e: any) {
     e.preventDefault();
@@ -37,14 +38,20 @@ const Input = ({ conversationId }: InputChatProps) => {
   }
 
   return (
-    <form onSubmit={sendMessage} className='flex sm:pl-6'>
-      <InputText
+    <form
+      onSubmit={sendMessage}
+      className='flex w-full rounded-full border border-zinc-200 bg-white py-1 pl-6 pr-2 dark:border-zinc-600 dark:bg-zinc-800'
+    >
+      <input
         name='message'
-        placeholder='Type a message'
+        placeholder={focus ? '' : 'Type a message...'}
         value={value}
         onChange={(e) => {
           setValue(e.target.value);
         }}
+        className='w-full bg-transparent text-black focus:outline-none dark:text-white'
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
       />
 
       <div className='mx-2 flex h-10 w-10 cursor-pointer items-center justify-center'>

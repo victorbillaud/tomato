@@ -15,7 +15,7 @@ export default async function Scan({
   const { data: qrCode, error } = await getQRCode(supabase, params.qrcode_id);
 
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-center gap-20'>
+    <div className='flex w-full flex-1 flex-col items-center justify-center gap-20 px-3'>
       <div className='flex w-full flex-col items-center justify-center gap-2'>
         {qrCode?.item_id ? (
           <>

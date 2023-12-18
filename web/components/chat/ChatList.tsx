@@ -1,17 +1,19 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect, useLayoutEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { Text } from '../common/text';
 import ChatCard from './ChatCard';
 import { User } from '@supabase/supabase-js';
 import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
 import { ChatListSkeleton } from './Skeletons';
 import { ChatListProps } from './types';
+import { Icon } from '../common/icon';
 
 export default function ChatList({
   conversations,
   currentUser,
 }: ChatListProps) {
+  const router = useRouter();
   const selectedConversationId = useParams().conversation_id as string;
   const [ownedConversations, setOwnedConversations] = useState<
     TConversationWithLastMessage[] | null
@@ -20,6 +22,11 @@ export default function ChatList({
     TConversationWithLastMessage[] | null
   >(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 640);
+
+  useLayoutEffect(() => {
+    setIsMobile(window.innerWidth < 640);
+  }, [setIsMobile]);
 
   useEffect(() => {
     setOwnedConversations(
@@ -30,6 +37,16 @@ export default function ChatList({
     );
     setLoading(false);
   }, [conversations, currentUser]);
+
+  // display the last conversation when loading chat page (if exist)
+  if (
+    !selectedConversationId &&
+    conversations.length > 0 &&
+    conversations[0].id &&
+    !isMobile
+  ) {
+    router.push(`/chat/${conversations[0].id}`);
+  }
 
   const renderConversations = (
     conversationsList: TConversationWithLastMessage[]
@@ -47,44 +64,48 @@ export default function ChatList({
     });
   };
 
-  const mobileStyle = selectedConversationId ? ' hidden sm:block ' : '';
+  const mobileStyle = selectedConversationId ? ' hidden sm:flex ' : '';
 
   return (
     <div
-      className={`flex h-full w-full flex-col border-gray-700/10 px-3 dark:border-white/20 sm:w-1/3 sm:border-r-[1px] sm:px-0 ${mobileStyle}`}
+      className={`${mobileStyle} flex w-full flex-1 flex-col gap-3 px-5 sm:w-1/3 sm:px-2`}
     >
-      <Text variant={'h2'} className='p-2'>
-        Conversations
-      </Text>
+      <div className='my-5 ml-3 flex justify-start'>
+        <Text variant={'h2'}>Conversations</Text>
+      </div>
 
-      {!conversations || loading ? (
-        <ChatListSkeleton />
-      ) : (
-        <>
-          {ownedConversations && ownedConversations.length > 0 && (
-            <>
-              <Text
-                variant={'h4'}
-                className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
-              >
-                My items
-              </Text>
-              {renderConversations(ownedConversations)}
-            </>
-          )}
-          {foundConversations && foundConversations.length > 0 && (
-            <>
-              <Text
-                variant={'h4'}
-                className='border-b-[1px] border-gray-700/10 px-2 pb-1 pt-2 dark:border-white/20'
-              >
-                Items scanned
-              </Text>
-              {renderConversations(foundConversations)}
-            </>
-          )}
-        </>
-      )}
+      <div className='flex h-full w-full flex-col gap-3 overflow-y-auto rounded-lg border border-zinc-200 bg-white py-4 dark:border-zinc-700 dark:bg-zinc-900'>
+        {!conversations || loading ? (
+          <ChatListSkeleton />
+        ) : (
+          <>
+            {ownedConversations && ownedConversations.length > 0 && (
+              <div className='flex flex-col gap-1'>
+                <Text
+                  variant={'subtitle'}
+                  className='flex items-center gap-2 py-2 pl-3'
+                >
+                  <Icon name='user' size={20} />
+                  My items
+                </Text>
+                {renderConversations(ownedConversations)}
+              </div>
+            )}
+            {foundConversations && foundConversations.length > 0 && (
+              <div className='flex flex-col gap-1'>
+                <Text
+                  variant={'subtitle'}
+                  className='flex items-center gap-2 py-2 pl-3'
+                >
+                  <Icon name='qrcode' size={20} />
+                  Items scanned
+                </Text>
+                {renderConversations(foundConversations)}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
