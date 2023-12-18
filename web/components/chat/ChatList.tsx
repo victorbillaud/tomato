@@ -58,7 +58,7 @@ export default function ChatList({
         <Text variant={'h2'}>Conversations</Text>
       </div>
 
-      <div className='flex h-full w-full flex-col gap-3 overflow-y-auto rounded-3xl bg-white py-4 dark:bg-zinc-700'>
+      <div className='flex h-full w-full flex-col gap-3 overflow-y-auto rounded-lg border border-zinc-200 bg-white py-4 dark:border-zinc-700 dark:bg-zinc-900'>
         {!conversations || loading ? (
           <ChatListSkeleton />
         ) : (
