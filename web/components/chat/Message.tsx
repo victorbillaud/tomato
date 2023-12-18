@@ -89,7 +89,11 @@ const Message = ({
           <div>{message.content}</div>
         </div>
         {lastMessage ? (
-          <Text variant={'caption'} className='px-2 pt-1 text-black/70'>
+          <Text
+            variant={'caption'}
+            className='px-2 pt-1'
+            color='text-black/90 dark:text-white/70'
+          >
             {dateFormat(message.created_at, masks.timeOnly)}
           </Text>
         ) : null}
