@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Text } from '../common/text';
 import ChatCard from './ChatCard';
@@ -22,6 +22,11 @@ export default function ChatList({
     TConversationWithLastMessage[] | null
   >(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 640);
+
+  useLayoutEffect(() => {
+    setIsMobile(window.innerWidth < 640);
+  }, [setIsMobile]);
 
   useEffect(() => {
     setOwnedConversations(
@@ -37,7 +42,8 @@ export default function ChatList({
   if (
     !selectedConversationId &&
     conversations.length > 0 &&
-    conversations[0].id
+    conversations[0].id &&
+    !isMobile
   ) {
     router.push(`/chat/${conversations[0].id}`);
   }
