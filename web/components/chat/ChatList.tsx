@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Text } from '../common/text';
 import ChatCard from './ChatCard';
 import { User } from '@supabase/supabase-js';
@@ -13,6 +13,7 @@ export default function ChatList({
   conversations,
   currentUser,
 }: ChatListProps) {
+  const router = useRouter();
   const selectedConversationId = useParams().conversation_id as string;
   const [ownedConversations, setOwnedConversations] = useState<
     TConversationWithLastMessage[] | null
@@ -31,6 +32,15 @@ export default function ChatList({
     );
     setLoading(false);
   }, [conversations, currentUser]);
+
+  // display the last conversation when loading chat page (if exist)
+  if (
+    !selectedConversationId &&
+    conversations.length > 0 &&
+    conversations[0].id
+  ) {
+    router.push(`/chat/${conversations[0].id}`);
+  }
 
   const renderConversations = (
     conversationsList: TConversationWithLastMessage[]
