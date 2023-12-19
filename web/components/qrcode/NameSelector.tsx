@@ -1,27 +1,33 @@
 'use client';
-import React, { useState } from 'react';
 import * as Select from '@/components/radix/Select';
 import classNames from 'classnames';
-import { Icon } from '../common/icon';
 import { useRouter } from 'next/navigation';
+import React from 'react';
+import { Icon } from '../common/icon';
 
 interface NameSelectorProps {
   values: { name: string; id: string }[];
-  initalValue: string;
+  initialValue: string;
+  redirectPath?: string;
 }
 
-const NameSelector = ({ values, initalValue }: NameSelectorProps) => {
+const NameSelector = ({
+  values,
+  initialValue,
+  redirectPath,
+}: NameSelectorProps) => {
   const router = useRouter();
-  const [value, setValue] = useState<string>('');
 
   const changeQrCode = (newValue: string) => {
-    router.push(`/dashboard/item/create/${newValue}`);
+    router.push(
+      `/dashboard/item/create/${newValue}${redirectPath ? redirectPath : ''}`
+    );
   };
 
   return (
-    <Select.Root onValueChange={changeQrCode} defaultValue={initalValue}>
+    <Select.Root onValueChange={changeQrCode} defaultValue={initialValue}>
       <Select.Trigger
-        className='inline-flex h-[35px] w-44 items-center justify-center gap-[5px] rounded bg-white px-[15px] text-[13px] capitalize leading-none text-red-800 shadow-sm shadow-black/10 outline-none hover:opacity-80 focus:shadow-[0_0_0_2px] focus:shadow-black dark:bg-neutral-900 dark:text-red-900 dark:hover:opacity-90'
+        className='inline-flex h-[35px] w-44 items-center justify-center gap-[5px] rounded bg-white px-[15px] text-[13px] capitalize leading-none text-red-800 shadow-sm shadow-black/10 outline-none hover:opacity-80 focus:shadow-[0_0_0_2px] focus:shadow-black dark:bg-neutral-900 dark:text-red-600 dark:hover:opacity-90'
         aria-label='QrCodes'
       >
         <Select.Value />
@@ -72,7 +78,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, ISelectItemProps>(
     return (
       <Select.Item
         className={classNames(
-          'relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-red-800 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-900 data-[highlighted]:text-white data-[highlighted]:outline-none dark:text-red-900',
+          'relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-red-800 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-600 data-[highlighted]:text-white data-[highlighted]:outline-none dark:text-red-600',
           className
         )}
         {...props}
