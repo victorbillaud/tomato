@@ -1,13 +1,15 @@
 'use client';
-import { useState } from 'react';
-import { InputText } from '../common/input';
-import { Icon } from '../common/icon';
-import { InputChatProps } from './types';
 import { createClient } from '@/utils/supabase/client';
-import { insertMessage } from '@utils/lib/messaging/services';
+import { useState } from 'react';
+import { Icon } from '../common/icon';
+import { InputText } from '../common/input';
+import { useChatContext } from './ChatContext';
+import { InputChatProps } from './types';
 
-const Input = ({ conversationId }: InputChatProps) => {
+const ChatInput = ({ conversationId }: InputChatProps) => {
   const supabase = createClient();
+  const { insertMessage } = useChatContext();
+
   const [value, setValue] = useState('');
   const [focus, setFocus] = useState(false);
 
@@ -20,15 +22,7 @@ const Input = ({ conversationId }: InputChatProps) => {
     }
 
     // Insert the message in the database
-    const { insertedMessage, error } = await insertMessage(supabase, {
-      content: value as string,
-      conversation_id: conversationId as string,
-    });
-
-    if (error) {
-      console.error(error);
-      throw error;
-    }
+    const insertedMessage = await insertMessage(value, conversationId);
 
     if (!insertedMessage) {
       throw new Error('Message not inserted');
@@ -69,4 +63,4 @@ const Input = ({ conversationId }: InputChatProps) => {
   );
 };
 
-export default Input;
+export default ChatInput;

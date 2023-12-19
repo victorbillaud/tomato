@@ -1,10 +1,10 @@
 'use client';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Icon } from '../common/icon';
+import { Tag } from '../common/tag';
 import { Text } from '../common/text';
 import { MobileHeaderProps } from './types';
-import { useEffect, useState } from 'react';
-import { Tag } from '../common/tag';
 
 export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
   const [showLinkIcon, setShowLinkIcon] = useState<boolean>(false);

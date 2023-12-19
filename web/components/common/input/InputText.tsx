@@ -26,9 +26,11 @@ export const InputText = React.forwardRef<HTMLInputElement, IInputTextProps>(
   ) => {
     const inputContainerClass = classNames(
       'group flex items-center gap-2 border shadow-sm',
+      className,
       error
         ? 'animate-shake border border-red-500 bg-red-700/10'
-        : 'border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 bg-zinc-100',
+        : className ??
+            'border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 bg-zinc-100',
       'text-s text-black-100 dark:text-white-100 w-full px-2 py-2 outline-none transition-all lg:text-sm xl:text-base',
       children ? 'rounded-r-md' : 'rounded-md'
     );

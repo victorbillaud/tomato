@@ -1,13 +1,13 @@
 'use client';
-import { useState, useEffect, useLayoutEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Text } from '../common/text';
-import ChatCard from './ChatCard';
 import { User } from '@supabase/supabase-js';
 import { TConversationWithLastMessage } from '@utils/lib/messaging/services';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { Icon } from '../common/icon';
+import { Text } from '../common/text';
+import ChatCard from './ChatCard';
 import { ChatListSkeleton } from './Skeletons';
 import { ChatListProps } from './types';
-import { Icon } from '../common/icon';
 
 export default function ChatList({
   conversations,
@@ -33,7 +33,9 @@ export default function ChatList({
       conversations.filter((conv) => conv.owner_id === currentUser?.id)
     );
     setFoundConversations(
-      conversations.filter((conv) => conv.finder_id === currentUser?.id)
+      conversations.filter(
+        (conv) => conv.finder_id === (currentUser?.id || null)
+      )
     );
     setLoading(false);
   }, [conversations, currentUser]);

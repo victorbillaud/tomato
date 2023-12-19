@@ -41,6 +41,7 @@ export interface Database {
           id: string
           item_id: string
           owner_id: string
+          token: string | null
           updated_at: string | null
         }
         Insert: {
@@ -49,6 +50,7 @@ export interface Database {
           id?: string
           item_id: string
           owner_id: string
+          token?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -57,6 +59,7 @@ export interface Database {
           id?: string
           item_id?: string
           owner_id?: string
+          token?: string | null
           updated_at?: string | null
         }
         Relationships: [
@@ -366,9 +369,21 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      generate_conversation_token: {
+        Args: {
+          conversation_id: string
+        }
+        Returns: string
+      }
+      get_conversation_id_from_token: {
+        Args: {
+          token: string
+        }
+        Returns: string
+      }
       get_user_conversations_with_last_message: {
         Args: {
-          user_id: string
+          user_id?: string
         }
         Returns: {
           id: string
@@ -379,6 +394,19 @@ export interface Database {
           finder_id: string
           last_message: Json
         }[]
+      }
+      update_user_conversations_and_messages: {
+        Args: {
+          tokens: string[]
+          user_id: string
+        }
+        Returns: undefined
+      }
+      verify_conversation_token: {
+        Args: {
+          expected_conversation_id: string
+        }
+        Returns: boolean
       }
     }
     Enums: {

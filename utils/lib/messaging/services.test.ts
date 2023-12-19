@@ -1,4 +1,4 @@
-import { describe, test } from '@jest/globals';
+import { afterEach, describe, test } from '@jest/globals';
 import { insertItem } from '../item/services';
 import { insertQRCode } from '../qrcode/services';
 import {
@@ -8,8 +8,8 @@ import {
 } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
 import {
-  getConversationMessages,
   getConversation,
+  getMessages,
   insertConversation,
   insertMessage,
   listUserConversations,
@@ -38,6 +38,8 @@ beforeAll(async () => {
     throw insertItemError;
   }
 
+  sp.auth.signOut();
+
   globalThis.owner = owner;
   globalThis.insertedItem = insertedItem;
   globalThis.qrCode = qrCode;
@@ -50,14 +52,18 @@ afterAll(async () => {
   sp.auth.signOut();
 });
 
+afterEach(async () => {
+  await sp.auth.signOut();
+});
+
 describe('service messaging module', () => {
   test('insertConversation', async () => {
-    await signInFakeUser(sp);
     const { user: finder } = await createFakeUser(sp, 'finder@example.com');
 
     const { insertedConversation, error } = await insertConversation(sp, {
       finder_id: finder.id,
       item_id: globalThis.insertedItem.id,
+      owner_id: globalThis.owner.id,
     });
 
     expect(error).toBeNull();
@@ -78,18 +84,19 @@ describe('service messaging module', () => {
   });
 
   test('insert message into conversation', async () => {
-    await signInFakeUser(sp);
     const { user: finder } = await createFakeUser(sp, 'finder@example.com');
 
     const { insertedConversation, error: insertConversationError } =
       await insertConversation(sp, {
         finder_id: finder.id,
         item_id: globalThis.insertedItem.id,
+        owner_id: globalThis.owner.id,
       });
 
     if (insertConversationError) {
       throw insertConversationError;
     }
+    await signInFakeUser(sp);
 
     const { insertedMessage, error: insertMessageError } = await insertMessage(
       sp,
@@ -132,18 +139,19 @@ describe('service messaging module', () => {
   });
 
   test('list user conversations', async () => {
-    await signInFakeUser(sp);
     const { user: finder } = await createFakeUser(sp, 'finder@example.com');
-
     const { insertedConversation, error: insertConversationError } =
       await insertConversation(sp, {
         finder_id: finder.id,
         item_id: globalThis.insertedItem.id,
+        owner_id: globalThis.owner.id,
       });
 
     if (insertConversationError) {
       throw insertConversationError;
     }
+
+    await signInFakeUser(sp);
 
     await insertMessage(sp, {
       conversation_id: insertedConversation.id,
@@ -177,18 +185,20 @@ describe('service messaging module', () => {
   });
 
   test('list user conversations without last message', async () => {
-    await signInFakeUser(sp);
     const { user: finder } = await createFakeUser(sp, 'finder@example.com');
 
     const { insertedConversation, error: insertConversationError } =
       await insertConversation(sp, {
         finder_id: finder.id,
         item_id: globalThis.insertedItem.id,
+        owner_id: globalThis.owner.id,
       });
 
     if (insertConversationError) {
       throw insertConversationError;
     }
+
+    await signInFakeUser(sp);
 
     const { data, error } = await listUserConversations(sp);
 
@@ -212,18 +222,20 @@ describe('service messaging module', () => {
   });
 
   test('get conversation messages', async () => {
-    await signInFakeUser(sp);
     const { user: finder } = await createFakeUser(sp, 'finder@example.com');
 
     const { insertedConversation, error: insertConversationError } =
       await insertConversation(sp, {
         finder_id: finder.id,
         item_id: globalThis.insertedItem.id,
+        owner_id: globalThis.owner.id,
       });
 
     if (insertConversationError) {
       throw insertConversationError;
     }
+
+    await signInFakeUser(sp);
 
     await insertMessage(sp, {
       conversation_id: insertedConversation.id,
@@ -235,10 +247,9 @@ describe('service messaging module', () => {
       content: 'test 2',
     });
 
-    const { messages, error } = await getConversationMessages(
-      sp,
-      insertedConversation.id
-    );
+    const { messages, error } = await getMessages(sp, [
+      insertedConversation.id,
+    ]);
 
     expect(error).toBeNull();
     expect(messages).toBeDefined();
@@ -262,18 +273,19 @@ describe('service messaging module', () => {
   });
 
   test('get conversation by id', async () => {
-    await signInFakeUser(sp);
     const { user: finder } = await createFakeUser(sp, 'finder@example.com');
-
     const { insertedConversation, error: insertConversationError } =
       await insertConversation(sp, {
         finder_id: finder.id,
         item_id: globalThis.insertedItem.id,
+        owner_id: globalThis.owner.id,
       });
 
     if (insertConversationError) {
       throw insertConversationError;
     }
+
+    await signInFakeUser(sp);
 
     const { conversation, error } = await getConversation(
       sp,

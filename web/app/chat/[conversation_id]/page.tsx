@@ -1,54 +1,59 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { AnonBanner } from '@/components/chat/AnonBanner';
 import Chat from '@/components/chat/Chat';
-import Input from '@/components/chat/Input';
 import ChatHeader from '@/components/chat/ChatHeader';
+import ChatInput from '@/components/chat/ChatInput';
 import { ChatSkeleton, InputSkeleton } from '@/components/chat/Skeletons';
 import { DBItem, DBMessage } from '@/components/chat/types';
-import { User } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/server';
+import { User } from '@supabase/supabase-js';
 import {
-  getConversationMessages,
   getConversationItem,
+  getMessages,
 } from '@utils/lib/messaging/services';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-export default async function Index({
+export default async function Conversation({
   params,
 }: {
   params: { conversation_id: string };
 }) {
   const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const conversationId = params.conversation_id;
+  const existingCookie = cookieStore.get('conversation_tokens')?.value;
+  const conversationTokens = existingCookie ? JSON.parse(existingCookie) : {};
+  const specificToken: any = Object.values(conversationTokens).find(
+    (token: any) => token.conversation_id === params.conversation_id
+  );
+
+  const supabase = createClient(cookieStore, {
+    'conversation-tokens': Object.values(conversationTokens)
+      .map((token: any) => token.token)
+      .join(','),
+  });
 
   const {
     data: { user },
-    error: userError,
   } = await supabase.auth.getUser();
 
-  if (userError) {
-    throw new Error('User not found');
-  }
+  const { messages, error: messageError } = await getMessages(supabase, [
+    params.conversation_id,
+  ]);
 
-  const { messages, error: messageError } = await getConversationMessages(
-    supabase,
-    conversationId
-  );
-  // if can't get messages, redirect to conversations list
   if (messageError) {
     redirect('/chat');
   }
 
   const { item, error: itemError } = await getConversationItem(
     supabase,
-    conversationId
+    params.conversation_id
   );
+
   if (itemError) {
     console.error(itemError);
     return null;
   }
 
-  if (!user && !messages && !item) {
+  if (!messages && !item) {
     return (
       <div className='flex h-full w-full flex-col justify-end overflow-hidden px-4 sm:w-2/3'>
         <ChatSkeleton />
@@ -58,15 +63,16 @@ export default async function Index({
   }
 
   return (
-    <div className='flex h-full w-full flex-col justify-start gap-1 sm:w-2/3 sm:pl-4'>
+    <div className='flex h-full w-full flex-col justify-start gap-2 sm:w-2/3 sm:pl-4'>
+      {specificToken?.token && !user && <AnonBanner />}
       <ChatHeader currentUser={user as User} item={item as DBItem} />
       <div className='flex h-full flex-col justify-end gap-1 overflow-hidden px-3 sm:px-0'>
         <Chat
-          conversationId={conversationId}
+          conversationId={params.conversation_id}
           oldMessages={messages as DBMessage[]}
           currentUser={user as User}
         />
-        <Input conversationId={conversationId} />
+        <ChatInput conversationId={params.conversation_id} />
       </div>
     </div>
   );

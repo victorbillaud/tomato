@@ -1,10 +1,10 @@
 'use client';
+import { notFound, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Message from './Message';
 import { useChatContext } from './ChatContext';
-import { ChatProps, DBMessage } from './types';
+import Message from './Message';
 import { ChatSkeleton } from './Skeletons';
-import { notFound } from 'next/navigation';
+import { ChatProps, DBMessage } from './types';
 
 export default function Chat({
   conversationId,
@@ -17,6 +17,7 @@ export default function Chat({
   const { newMessages } = useChatContext();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
 
   const memoMessages = useMemo(() => {
     // Sort the messages by date & time (oldest first)
@@ -62,6 +63,16 @@ export default function Chat({
         scrollContainerRef.current.scrollHeight;
     }
   }, [loading, messages]);
+
+  // This hook resolve the refresh supabase client issue
+  useEffect(() => {
+    if (searchParams.get('token')) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('token');
+      window.history.replaceState({}, '', url.href);
+      window.location.reload();
+    }
+  }, [searchParams]);
 
   // Check if there is a conversation selected
   if (!conversationId) {

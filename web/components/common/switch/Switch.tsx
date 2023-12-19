@@ -20,7 +20,6 @@ export function Switch({
   //   input value can't take a boolean, so we use a string
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.checked);
     const checked = event.target.checked;
     setChecked(checked);
     onValueChange?.(checked);

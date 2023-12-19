@@ -1,6 +1,5 @@
 import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '../supabase/supabase_types';
-import { getUserDetails } from '../user/services';
 
 type ArrayElementType<T> = T extends (infer U)[] ? U : never;
 
@@ -22,12 +21,13 @@ export async function listUserConversations(
 }> {
   const {
     data: { user },
+    error: getUserError,
   } = await supabaseInstance.auth.getUser();
 
   const { data, error } = await supabaseInstance.rpc(
     'get_user_conversations_with_last_message',
     {
-      user_id: user.id,
+      user_id: user ? user.id : null,
     }
   );
 
@@ -49,22 +49,12 @@ export async function insertConversation(
   supabaseInstance: SupabaseClient<Database>,
   conversation: Pick<
     Database['public']['Tables']['conversation']['Insert'],
-    'finder_id' | 'item_id'
+    'finder_id' | 'item_id' | 'owner_id'
   >
 ) {
-  const {
-    data: { user },
-  } = await supabaseInstance.auth.getUser();
-
-  const conversationToInsert: Database['public']['Tables']['conversation']['Insert'] =
-    {
-      ...conversation,
-      owner_id: user.id,
-    };
-
   const { data: insertedConversation, error } = await supabaseInstance
     .from('conversation')
-    .insert(conversationToInsert)
+    .insert(conversation)
     .select('*')
     .single();
   return { insertedConversation, error };
@@ -84,14 +74,23 @@ export async function getConversation(
   return { conversation, error };
 }
 
-export async function getConversationMessages(
+export async function getMessages(
   supabaseInstance: SupabaseClient<Database>,
-  conversationId: string
+  conversationIds: string[],
+  gteDate?: string
 ) {
-  const { data: messages, error } = await supabaseInstance
+  const query = supabaseInstance
     .from('message')
     .select('*')
-    .eq('conversation_id', conversationId);
+    .in('conversation_id', conversationIds);
+
+  if (gteDate) {
+    query.gte('created_at', gteDate);
+  }
+
+  const { data: messages, error } = await query.order('created_at', {
+    ascending: true,
+  });
 
   return { messages, error };
 }
@@ -122,7 +121,7 @@ export async function insertMessage(
 
   const messageToInsert: Database['public']['Tables']['message']['Insert'] = {
     ...message,
-    sender_id: sender.id,
+    sender_id: sender ? sender.id : null,
   };
 
   const { data: insertedMessage, error } = await supabaseInstance
