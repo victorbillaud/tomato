@@ -1,6 +1,6 @@
 import { StyledLink } from '@/components/common/link';
 
-export default function CreateItemForm({
+export default function CreateItemQrCode({
   children,
   params,
 }: {
@@ -12,7 +12,7 @@ export default function CreateItemForm({
       <div className='flex w-full flex-row items-center justify-start gap-5'>
         <StyledLink
           icon='arrow-left'
-          text='Go back'
+          text='Choose another method'
           variant='tertiary'
           href={`/dashboard/item/create/${params.qrcode_id}`}
         />

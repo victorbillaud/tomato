@@ -1,5 +1,6 @@
 import { SubmitButton } from '@/components/common/button/SubmitButton';
 import { InputText } from '@/components/common/input/InputText';
+import { Text } from '@/components/common/text';
 import NameSelector from '@/components/qrcode/NameSelector';
 import { createClient } from '@/utils/supabase/server';
 import { insertItem } from '@utils/lib/item/services';
@@ -56,6 +57,17 @@ export default async function CreateItemForm({
 
   return (
     <div className='flex w-full flex-col items-center justify-center gap-5'>
+      <div className='flex w-full flex-col items-start justify-start gap-5 text-left'>
+        <Text variant='h1' weight={400} className='opacity-90'>
+          <strong className='text-primary-600'>1.</strong> Choose a qrcode to
+          link to your new item
+        </Text>
+        <Text variant='h4' weight={300} className='opacity-70'>
+          To facilitate the identification of your different items, Tomato
+          automatically generates a name for each QR Code. You can select one of
+          the names below for your new item.
+        </Text>
+      </div>
       <NameSelector
         values={qrCodes.map((code) => ({
           name: code.name,
@@ -65,26 +77,47 @@ export default async function CreateItemForm({
         redirectPath='/form'
       />
       <form action={insertActionItemBinded} className='w-full'>
-        <div className='flex w-full flex-col items-center justify-center gap-2'>
+        <div className='flex w-full flex-col items-center justify-center gap-4'>
+          <div className='flex w-full flex-col items-start justify-start gap-5 text-left'>
+            <Text variant='h1' weight={400} className='opacity-90'>
+              <strong className='text-primary-600'>2.</strong> Choose a name for
+              your item
+            </Text>
+            <Text variant='h4' weight={300} className='opacity-70'>
+              The name of your item will be used to identify it in the future.
+              You should choose a name that is easy to remember and that allows
+              you to quickly identify the item.
+            </Text>
+          </div>
+          <InputText name='name' placeholder='Your item name' required />
+
+          <div className='flex w-full flex-col items-start justify-start gap-5 text-left'>
+            <Text variant='h4' weight={300} className='opacity-70'>
+              To help you identify your item, you can add a description. This
+              description can be changed later.
+            </Text>
+          </div>
           <InputText
-            labelText='Item name'
-            name='name'
-            placeholder='Phone'
-            required
-          />
-          <InputText
-            labelText='Item description'
             name='description'
-            placeholder='My phone'
+            placeholder='Your item description'
             required
           />
+
           <SubmitButton
             text='Create item'
             variant='primary'
             color='green'
             type='submit'
-            className='my-5 w-full'
+            className='w-full'
           />
+          <Text
+            variant='none'
+            className='w-full rounded-md border border-stone-300 bg-stone-200/60 px-3 py-2 text-center text-xs opacity-50 shadow-sm dark:border-stone-700 dark:bg-stone-900'
+          >
+            Using this process to create an item will automatically set the item
+            as deactivated to prevent any misuse. You can activate it later by
+            scanning the QR Code with your phone.
+          </Text>
         </div>
       </form>
     </div>

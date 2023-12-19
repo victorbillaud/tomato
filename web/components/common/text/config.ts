@@ -8,4 +8,5 @@ export const textConfig = {
   body: 'text-sm md:text-base font-sans',
   caption: 'text-xs md:text-sm font-sans',
   overline: 'text-xs font-sans',
+  none: '',
 };
