@@ -18,7 +18,9 @@ export async function handleFinderRegistration(
   }
 
   const response = await fetch(
-    'http://127.0.0.1:54321/functions/v1/handle_finder_registration',
+    process.env.NEXT_PUBLIC_SUPABASE_URL
+      ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/handle_finder_registration`
+      : 'http://127.0.0.1:54321/functions/v1/handle_finder_registration',
     {
       method: 'POST',
       headers: {
