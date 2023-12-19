@@ -1,8 +1,6 @@
 import {
-  IconChevronLeft,
-  IconSend,
-  IconUserCircle,
   IconAlertHexagon,
+  IconAlertTriangle,
   IconArrowLeft,
   IconAt,
   IconBellFilled,
@@ -12,20 +10,26 @@ import {
   IconChecks,
   IconChevronCompactDown,
   IconChevronDown,
+  IconChevronLeft,
   IconChevronUp,
+  IconDevices,
   IconDiscountCheck,
   IconDiscountCheckFilled,
   IconDownload,
+  IconExclamationCircle,
+  IconExternalLink,
+  IconLayout,
   IconLoader,
   IconLock,
+  IconLogout,
+  IconMessage2,
   IconQrcode,
   IconQuestionMark,
+  IconSend,
+  IconUser,
+  IconUserCircle,
   IconWritingSign,
   IconWritingSignOff,
-  IconExternalLink,
-  IconExclamationCircle,
-  IconAlertTriangle,
-  IconUser,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -56,6 +60,10 @@ const ICONS = {
   'exclamation-circle': IconExclamationCircle,
   'alert-triangle': IconAlertTriangle,
   user: IconUser,
+  message: IconMessage2,
+  devices: IconDevices,
+  layout: IconLayout,
+  logout: IconLogout,
 };
 
 export default ICONS;
