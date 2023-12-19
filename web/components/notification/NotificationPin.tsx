@@ -135,7 +135,7 @@ export const NotificationPin = ({ userId }: NotificationPinProps) => {
                   </Text>
                 </div>
               </button>
-              <form action={signOut}>
+              <form action={signOut} className='flex items-center justify-center'>
                 <button type='submit'>
                   <Icon name='logout' size={20} color='text-red-500' />
                 </button>

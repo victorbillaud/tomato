@@ -18,10 +18,10 @@ export default async function Navbar() {
   const userAvatarUrl = user ? getUserAvatarUrl(user) : null;
 
   return (
-    <div className='flex w-full items-center justify-between gap-4'>
+    <nav className='flex h-16 w-full max-w-5xl items-center justify-between gap-4 p-3 text-sm'>
       <Link href='/' className='px-2'>
         <Image
-          src={'/tomato.png'}
+          src={'/tomato_green.png'}
           alt='logo'
           width={40}
           height={40}
@@ -39,6 +39,6 @@ export default async function Navbar() {
           <StyledLink href='/auth/login' text='Login' size='small' />
         )}
       </div>
-    </div>
+    </nav>
   );
 }
