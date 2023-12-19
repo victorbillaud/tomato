@@ -59,7 +59,6 @@ export const Login = () => {
         <VerifyOTPForm
           email={email}
           setMessage={setInfoMessage}
-          supabase={supabase}
         />
       )}
 

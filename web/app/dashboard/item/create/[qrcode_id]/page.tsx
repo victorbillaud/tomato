@@ -88,7 +88,6 @@ export default async function CreateItem({
                 labelText='Item name'
                 name='name'
                 placeholder='Phone'
-                className='w-full md:w-2/4'
                 required
               />
               <InputText
