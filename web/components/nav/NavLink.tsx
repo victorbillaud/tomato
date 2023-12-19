@@ -18,10 +18,8 @@ export const NavLink = ({ href, label, icon }: INavLinkProps) => {
     <Link
       href={href}
       className={`relative ${
-        `/${selectedSegment}` === href
-          ? 'opacity-100'
-          : 'opacity-60'
-      } flex cursor-pointer flex-row items-center justify-center gap-1 rounded-lg border-stone-500 p-1  dark:border-stone-700`}
+        `/${selectedSegment}` === href ? 'opacity-100' : 'opacity-60'
+      } flex transform cursor-pointer flex-row items-center justify-center gap-1 rounded-lg border-stone-500 p-1 transition-all duration-200 ease-in-out active:scale-[0.9]  dark:border-stone-700`}
       aria-label='Notifications'
     >
       <Icon

@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { getUserAvatarUrl } from '@utils/lib/common/user_helper';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,12 +13,12 @@ export default async function Navbar() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const userAvatarUrl = user ? getUserAvatarUrl(user) : null;
-
   return (
-    <nav className='flex h-16 w-full max-w-5xl items-center justify-between gap-4 p-3 text-sm'>
-      <Link href='/' className='px-2'>
+    <nav className='flex w-full max-w-5xl items-center justify-between gap-4 p-3 text-sm'>
+      <Link
+        href='/'
+        className='transform px-2 transition-all duration-200 ease-in-out active:scale-[0.9]'
+      >
         <Image
           src={'/tomato_green.png'}
           alt='logo'
