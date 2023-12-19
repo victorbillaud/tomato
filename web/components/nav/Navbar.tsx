@@ -1,9 +1,9 @@
 import { createClient } from '@/utils/supabase/server';
 import { getUserAvatarUrl } from '@utils/lib/common/user_helper';
 import { cookies } from 'next/headers';
+import Image from 'next/image';
 import Link from 'next/link';
 import { StyledLink } from '../common/link';
-import { Text } from '../common/text';
 import { NotificationPin } from '../notification/NotificationPin';
 import { NavLink } from './NavLink';
 
@@ -20,9 +20,13 @@ export default async function Navbar() {
   return (
     <div className='flex w-full items-center justify-between gap-4'>
       <Link href='/' className='px-2'>
-        <Text variant={'caption'} className='text-center'>
-          Tomato
-        </Text>
+        <Image
+          src={'/tomato.png'}
+          alt='logo'
+          width={40}
+          height={40}
+          className='rounded-full'
+        />
       </Link>
       <div className='flex w-full flex-row items-center justify-end gap-3'>
         <NavLink href='/chat' label='Chat' icon='message' />

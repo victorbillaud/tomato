@@ -21,6 +21,7 @@ import {
   IconLayout,
   IconLoader,
   IconLock,
+  IconLogout,
   IconMessage2,
   IconQrcode,
   IconQuestionMark,
@@ -28,7 +29,7 @@ import {
   IconUser,
   IconUserCircle,
   IconWritingSign,
-  IconWritingSignOff
+  IconWritingSignOff,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -61,7 +62,8 @@ const ICONS = {
   user: IconUser,
   message: IconMessage2,
   devices: IconDevices,
-  layout: IconLayout
+  layout: IconLayout,
+  logout: IconLogout,
 };
 
 export default ICONS;

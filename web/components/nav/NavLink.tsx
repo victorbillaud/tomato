@@ -32,6 +32,7 @@ export const NavLink = ({ href, label, icon }: INavLinkProps) => {
       <Text
         variant={'caption'}
         className='text-center'
+        weight={`/${selectedSegment}` === href ? 400 : 300}
         color='text-stone-500 dark:text-stone-300'
       >
         {label}

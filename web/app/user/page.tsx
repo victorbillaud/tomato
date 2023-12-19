@@ -1,10 +1,10 @@
+import { signOut } from '@/components/auth/actions';
 import { Button } from '@/components/common/button';
 import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
 import { getUserAvatarUrl } from '@utils/lib/common/user_helper';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
-import { redirect } from 'next/navigation';
 
 export default async function UserPage() {
   const cookieStore = cookies();
@@ -12,15 +12,6 @@ export default async function UserPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const signOut = async () => {
-    'use server';
-
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    await supabase.auth.signOut();
-    return redirect('/auth/login');
-  };
 
   const userAvatarUrl = user ? getUserAvatarUrl(user) : null;
 
