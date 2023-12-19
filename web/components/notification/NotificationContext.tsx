@@ -45,8 +45,6 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     };
 
     if (user && user.id) {
-      // Set up real-time message subscription
-      console.log(supabase);
       notificationsChannel = supabase
         .channel(`notification:${user.id}`)
         .on(

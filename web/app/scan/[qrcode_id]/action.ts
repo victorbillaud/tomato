@@ -27,6 +27,17 @@ export async function edgeFinderFlow(itemId: string) {
   const specificToken = conversationTokens[itemId]?.token;
   const token = (await supabase.auth.getSession()).data.session?.access_token;
 
+  console.log('edgeFinderFlow', {
+    existingCookie,
+    conversationTokens,
+    specificToken,
+    token,
+    headers: {
+      'x-tomato-edge-token': process.env.TOMATO_EDGE_TOKEN ?? '',
+      'x-tomato-conversation-token': specificToken ?? '',
+    },
+  });
+
   const response = await fetch(
     process.env.NEXT_PUBLIC_SUPABASE_URL
       ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/handle_finder_flow`

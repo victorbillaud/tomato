@@ -1,25 +1,28 @@
 'use client';
 
-import { Icon } from '@/components/common/icon';
 import { Text } from '@/components/common/text/Text';
 import * as Popover from '@/components/radix/PopOver';
 import { createClient } from '@/utils/supabase/client';
+import { User } from '@supabase/supabase-js';
+import { getUserAvatarUrl } from '@utils/lib/common/user_helper';
 import {
   markAllNotificationsAsRead,
   markNotificationAsRead,
 } from '@utils/lib/notification/services';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '../common/button';
 import { NotificationCard } from './NotificationCard';
 import { useNotificationContext } from './NotificationContext';
 
 export type NotificationPinProps = {
-  user_id: string;
+  userId: string;
 };
 
-export const NotificationPin = ({ user_id }: NotificationPinProps) => {
+export const NotificationPin = ({ userId }: NotificationPinProps) => {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<User>();
 
   const router = useRouter();
   const supabase = createClient();
@@ -40,19 +43,61 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
     await markAllNotificationsAsRead({
       // @ts-ignore
       client: supabase,
-      user_id: user_id,
+      user_id: userId,
     });
-  }, [supabase, user_id]);
+  }, [supabase, userId]);
 
   const filteredNotifications = useMemo(() => {
     return notifications.filter((notification) => !notification.is_read);
   }, [notifications]);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      user && setUser(user);
+    };
+    fetchUser();
+  }, [userId]);
+
+  const userAvatarUrl = useMemo(() => {
+    return user ? getUserAvatarUrl(user) : null;
+  }, [user]);
+
   return (
     isNotificationsLoaded && (
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
-          <button
+          <div className='relative flex cursor-pointer flex-row items-center justify-center'>
+            {userAvatarUrl ? (
+              <>
+                <Image
+                  src={userAvatarUrl}
+                  alt='avatar'
+                  width={30}
+                  height={30}
+                  className='rounded-full'
+                />
+                {filteredNotifications.length > 0 && (
+                  <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 p-1 font-semibold text-white'>
+                    {filteredNotifications.length}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-stone-200 dark:bg-stone-700'>
+                <Text
+                  variant='caption'
+                  weight={600}
+                  className='text-center uppercase opacity-60'
+                >
+                  {user && user.email ? user.email[0] : 'A'}
+                </Text>
+              </div>
+            )}
+          </div>
+          {/* <button
             className={`relative flex cursor-pointer flex-row items-center justify-center gap-1 rounded-lg border-stone-500 p-1 px-2 opacity-100 dark:border-stone-700 ${
               notifications.filter((notification) => !notification.is_read)
                 .length == 0 && 'opacity-50'
@@ -69,7 +114,7 @@ export const NotificationPin = ({ user_id }: NotificationPinProps) => {
                 {filteredNotifications.length}
               </div>
             )}
-          </button>
+          </button> */}
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Content

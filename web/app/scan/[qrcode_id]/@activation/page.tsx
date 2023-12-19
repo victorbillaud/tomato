@@ -6,10 +6,9 @@ import { activateItem, getItemFromQrCodeId } from '@utils/lib/item/services';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const handleActivation = async (formData: FormData) => {
+const handleActivation = async (itemId: string, formData: FormData) => {
   'use server';
 
-  const itemId = formData.get('itemId') as string;
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -38,9 +37,16 @@ export default async function Scan({
     params.qrcode_id
   );
 
-  if (!item || error) {
+  if (error) {
+    console.error(error);
     throw new Error("Couldn't fetch Item");
   }
+
+  if (!item) {
+    throw new Error("Couldn't find Item");
+  }
+
+  const handleItemActivation = handleActivation.bind(null, item.id);
 
   return (
     <div className='flex w-full flex-1 flex-col items-center justify-center gap-20'>
@@ -51,7 +57,7 @@ export default async function Scan({
         This item is <strong>not activated</strong> yet, if you want to activate
         it, click on the button below
       </Text>
-      <form action={handleActivation}>
+      <form action={handleItemActivation}>
         <input type='hidden' name='itemId' value={item.id} />
         <SubmitButton
           type='submit'

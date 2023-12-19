@@ -1,5 +1,5 @@
-import Navbar from '@/components/auth/Navbar';
 import { Text } from '@/components/common/text';
+import Navbar from '@/components/nav/Navbar';
 import { GeistSans } from 'geist/font';
 
 import { NotificationProvider } from '@/components/notification/NotificationContext';
@@ -25,7 +25,7 @@ export default function RootLayout({
       <NotificationProvider>
         <body className='flex h-screen max-h-screen w-full flex-col items-center justify-start gap-2 bg-zinc-50 dark:bg-zinc-800 sm:gap-5'>
           <nav className='dark:bg-dark-200 flex h-16 w-full justify-center border-b border-b-stone-300 bg-zinc-100 dark:border-b-stone-700 dark:bg-zinc-900'>
-            <div className='flex w-full max-w-4xl items-center justify-between p-3 text-sm'>
+            <div className='flex w-full max-w-5xl items-center justify-between p-3 text-sm'>
               <Navbar />
             </div>
           </nav>
