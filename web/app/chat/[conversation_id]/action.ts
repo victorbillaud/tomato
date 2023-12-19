@@ -1,5 +1,6 @@
 'use server';
 
+import { createClient } from '@/utils/supabase/server';
 import { User } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -9,8 +10,10 @@ export async function handleFinderRegistration(
   formData: FormData
 ) {
   const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
   const existingCookie = cookieStore.get('conversation_tokens')?.value;
   const conversationTokens = existingCookie ? JSON.parse(existingCookie) : {};
+  const token = (await supabase.auth.getSession()).data.session?.access_token;
   const email = formData.get('email') as string;
 
   if (!email) {
@@ -25,6 +28,9 @@ export async function handleFinderRegistration(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${
+          token ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+        }`,
         'x-tomato-edge-token': process.env.TOMATO_EDGE_TOKEN ?? '',
       },
       body: JSON.stringify({

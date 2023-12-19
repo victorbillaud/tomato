@@ -173,9 +173,13 @@ const handle_finder_flow = async (_request: Request): Promise<Response> => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  console.log({ _request });
+
   try {
     const payload: RequestPayload = await _request.json();
     verifyPayload(payload);
+
+    console.log({ payload });
 
     const item = await fetchItem(payload.item_id);
     const finder_id = await getFinderIdFromRequest(_request);

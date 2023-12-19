@@ -35,7 +35,9 @@ export async function edgeFinderFlow(itemId: string) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token ?? ''}`,
+        Authorization: `Bearer ${
+          token ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+        }`,
         'x-tomato-edge-token': process.env.TOMATO_EDGE_TOKEN ?? '',
         'x-tomato-conversation-token': specificToken ?? '',
       },
@@ -47,6 +49,7 @@ export async function edgeFinderFlow(itemId: string) {
 
   if (!response.ok) {
     const { error } = await response.json();
+    console.error(error);
     throw new Error(error);
   }
 
