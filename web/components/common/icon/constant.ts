@@ -11,6 +11,7 @@ import {
   IconChevronCompactDown,
   IconChevronDown,
   IconChevronLeft,
+  IconChevronRight,
   IconChevronUp,
   IconDevices,
   IconDiscountCheck,
@@ -23,6 +24,7 @@ import {
   IconLock,
   IconLogout,
   IconMessage2,
+  IconMotorbike,
   IconQrcode,
   IconQuestionMark,
   IconSend,
@@ -64,6 +66,8 @@ const ICONS = {
   devices: IconDevices,
   layout: IconLayout,
   logout: IconLogout,
+  motorbike: IconMotorbike,
+  'chevron-right': IconChevronRight,
 };
 
 export default ICONS;

@@ -9,7 +9,8 @@ export type TTextStyles =
   | 'subtitle'
   | 'body'
   | 'caption'
-  | 'overline';
+  | 'overline'
+  | 'none';
 
 export interface ITextProps extends HTMLAttributes<HTMLDivElement> {
   variant: TTextStyles;
