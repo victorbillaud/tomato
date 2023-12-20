@@ -33,6 +33,7 @@ export const Text: FunctionComponent<ITextProps> = ({
     body: 'font-normal',
     caption: 'font-normal',
     overline: 'font-normal',
+    none: 'font-normal',
   };
 
   const classNameString = classNames(

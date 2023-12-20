@@ -1,121 +1,59 @@
-import { SubmitButton } from '@/components/common/button/SubmitButton';
-import { Card } from '@/components/common/card';
-import { InputText } from '@/components/common/input/InputText';
+import { StyledLink } from '@/components/common/link';
 import { Text } from '@/components/common/text';
-import NameSelector from '@/components/qrcode/NameSelector';
-import { QrCode } from '@/components/qrcode/QrCode';
-import { createClient } from '@/utils/supabase/server';
-import { insertItem } from '@utils/lib/item/services';
-import { listQRCode } from '@utils/lib/qrcode/services';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-
-const insertItemAction = async (formData: FormData) => {
-  'use server';
-
-  const itemToInsert = {
-    name: formData.get('name') as string,
-    description: formData.get('description') as string,
-    qrcode_id: formData.get('qrcode_id') as string,
-  };
-
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const { insertedItem, error } = await insertItem(supabase, itemToInsert);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  if (!insertedItem) {
-    throw new Error('Item not inserted');
-  }
-
-  redirect(`/dashboard`);
-};
 
 export default async function CreateItem({
   params,
 }: {
   params: { qrcode_id: string };
 }) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const { data: qrCodes, error } = await listQRCode(supabase);
-
-  if (error || !qrCodes) {
-    throw new Error("You don't have any QR Code");
-  }
-
-  const qrCode = qrCodes.find((code) => code.id === params.qrcode_id);
-  if (!qrCode) {
-    throw new Error('This QR Code does not exist');
-  }
-  if (qrCode.item_id != null) {
-    throw new Error('This QR Code is already linked to an item');
-  }
-
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-center gap-10'>
-      <div className='flex flex-col items-center justify-center py-5'>
-        <Text variant='body' className='text-center opacity-50'>
-          This is now the time to create your item, you have 2 possibilities:
-        </Text>
-      </div>
+    <div className='flex w-full flex-1 flex-col items-start justify-start gap-10 pt-10 md:pt-20'>
+      <Text variant='h1' weight={500}>
+        Let's create your new <strong className='text-primary-600'>item</strong>{' '}
+        together !
+      </Text>
+      <Text variant='h3' weight={300} className='opacity-70'>
+        Here, you can choose how to create your new item. Select one of the
+        methods below to get started.
+      </Text>
+      <div className='relative flex w-full flex-col items-center justify-center gap-10 pt-10'>
+        <div className='flex w-full flex-col items-center justify-center gap-5 px-5 text-center md:w-2/3'>
+          <Text variant='h1'>Using your mobile</Text>
+          <Text variant='h3' weight={300} className='text-center opacity-80'>
+            Simply scan the QR code and finish the process directly on your
+            mobile device. We strongly <strong>recommends</strong> this method.
+          </Text>
 
-      <div className='flex w-full flex-col-reverse items-center justify-between gap-10 md:flex-row'>
-        <div className='flex w-full flex-col items-center justify-center gap-10'>
-          <NameSelector
-            values={qrCodes.map((code) => ({
-              name: code.name,
-              id: code.id.toString(),
-            }))}
-            initalValue={qrCode.id}
+          <StyledLink
+            text='Continue on your mobile'
+            variant='primary'
+            href={`/dashboard/item/create/${params.qrcode_id}/qrcode`}
           />
-          {qrCode.barcode_data && <QrCode url={qrCode.barcode_data} />}
-          <Text variant='body' className='text-center opacity-50'>
-            Scan this QR Code with your phone and follow the instructions
-          </Text>
+        </div>
+        <div className='flex w-full flex-col items-center justify-center gap-5 px-5'>
+          <div className='h-1 w-1/2 rounded-md bg-stone-300 opacity-30 dark:bg-stone-700 md:w-1/2' />
         </div>
 
-        <div className='h-1 w-2/4 rounded-md bg-stone-300 dark:bg-stone-700 md:h-2/4 md:w-1' />
-
-        <div className='flex w-full flex-col items-center justify-center gap-5'>
-          <form action={insertItemAction} className='w-full'>
-            <div className='flex w-full flex-col items-center justify-center gap-2'>
-              <input type='hidden' name='qrcode_id' value={qrCode.id} />
-              <InputText
-                labelText='Item name'
-                name='name'
-                placeholder='Phone'
-                required
-              />
-              <InputText
-                labelText='Item description'
-                name='description'
-                placeholder='My phone'
-                required
-              />
-              <SubmitButton
-                text='Create item'
-                variant='primary'
-                color='green'
-                type='submit'
-                className='my-5 w-full'
-              />
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div className='flex w-full flex-col items-center justify-center gap-5'>
-        <Card className='px-5 py-3'>
-          <Text variant='caption' className='text-center opacity-50'>
-            When you select to create a new item from here without scanning the
-            QR Code, your item will be deactivated and you will have to scan the
-            QR Code to activate it.
+        <div className='flex w-full flex-col items-center justify-center gap-4 px-5 opacity-80 md:w-2/3'>
+          <Text variant='h4'>Using the form</Text>
+          <Text variant='caption' weight={300} className='text-center'>
+            Use our online form to enter details about your item quickly and
+            easily. Ideal for those who prefer typing and have all the
+            information ready.
           </Text>
-        </Card>
+          <Text
+            variant='none'
+            className='rounded-md border border-stone-300 bg-stone-200/60 px-3 py-2 text-center text-xs opacity-50 shadow-sm dark:border-stone-700 dark:bg-stone-900'
+          >
+            When you choose to create a new object using this method,
+            you&apos;ll need to activate it by scanning it later.
+          </Text>
+          <StyledLink
+            text='Use the form'
+            variant='tertiary'
+            href={`/dashboard/item/create/${params.qrcode_id}/form`}
+          />
+        </div>
       </div>
     </div>
   );

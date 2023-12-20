@@ -1,27 +1,33 @@
 'use client';
-import React, { useState } from 'react';
 import * as Select from '@/components/radix/Select';
 import classNames from 'classnames';
-import { Icon } from '../common/icon';
 import { useRouter } from 'next/navigation';
+import React from 'react';
+import { Icon } from '../common/icon';
 
 interface NameSelectorProps {
   values: { name: string; id: string }[];
-  initalValue: string;
+  initialValue: string;
+  redirectPath?: string;
 }
 
-const NameSelector = ({ values, initalValue }: NameSelectorProps) => {
+const NameSelector = ({
+  values,
+  initialValue,
+  redirectPath,
+}: NameSelectorProps) => {
   const router = useRouter();
-  const [value, setValue] = useState<string>('');
 
   const changeQrCode = (newValue: string) => {
-    router.push(`/dashboard/item/create/${newValue}`);
+    router.push(
+      `/dashboard/item/create/${newValue}${redirectPath ? redirectPath : ''}`
+    );
   };
 
   return (
-    <Select.Root onValueChange={changeQrCode} defaultValue={initalValue}>
+    <Select.Root onValueChange={changeQrCode} defaultValue={initialValue}>
       <Select.Trigger
-        className='inline-flex h-[35px] w-44 items-center justify-center gap-[5px] rounded bg-white px-[15px] text-[13px] capitalize leading-none text-red-800 shadow-sm shadow-black/10 outline-none hover:opacity-80 focus:shadow-[0_0_0_2px] focus:shadow-black dark:bg-neutral-900 dark:text-red-900 dark:hover:opacity-90'
+        className='inline-flex h-[35px] w-44 items-center justify-center gap-[5px] rounded border border-slate-200 dark:border-zinc-700 bg-white px-[15px] text-[13px] capitalize leading-none text-red-500 shadow-sm shadow-black/10 outline-none hover:opacity-80 dark:bg-zinc-800 dark:text-red-600 dark:hover:opacity-90'
         aria-label='QrCodes'
       >
         <Select.Value />
@@ -30,8 +36,8 @@ const NameSelector = ({ values, initalValue }: NameSelectorProps) => {
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
-        <Select.Content className='overflow-hidden rounded-md bg-white shadow-md dark:bg-neutral-900'>
-          <Select.ScrollUpButton className='flex h-[25px] cursor-default items-center justify-center bg-white dark:bg-neutral-900 dark:text-white'>
+        <Select.Content className='overflow-hidden rounded-md bg-white shadow-md dark:bg-zinc-800'>
+          <Select.ScrollUpButton className='flex h-[25px] cursor-default items-center justify-center bg-white dark:bg-zinc-800 dark:text-white'>
             <Icon name='chevron-up' size={16} />
           </Select.ScrollUpButton>
           <Select.Viewport className='p-[5px]'>
@@ -52,7 +58,7 @@ const NameSelector = ({ values, initalValue }: NameSelectorProps) => {
               })}
             </Select.Group>
           </Select.Viewport>
-          <Select.ScrollDownButton className='flex h-[25px] cursor-default items-center justify-center bg-white dark:bg-neutral-900 dark:text-white'>
+          <Select.ScrollDownButton className='flex h-[25px] cursor-default items-center justify-center bg-white dark:bg-zinc-800 dark:text-white'>
             <Icon name='chevron-down' size={16} />
           </Select.ScrollDownButton>
         </Select.Content>
@@ -72,7 +78,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, ISelectItemProps>(
     return (
       <Select.Item
         className={classNames(
-          'relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-red-800 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-900 data-[highlighted]:text-white data-[highlighted]:outline-none dark:text-red-900',
+          'relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-red-500 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-600 data-[highlighted]:text-white data-[highlighted]:outline-none dark:text-red-600',
           className
         )}
         {...props}
