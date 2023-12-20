@@ -11,6 +11,7 @@ import {
   IconChevronCompactDown,
   IconChevronDown,
   IconChevronLeft,
+  IconChevronRight,
   IconChevronUp,
   IconDevices,
   IconDiscountCheck,
@@ -30,7 +31,7 @@ import {
   IconUser,
   IconUserCircle,
   IconWritingSign,
-  IconWritingSignOff
+  IconWritingSignOff,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -65,7 +66,8 @@ const ICONS = {
   devices: IconDevices,
   layout: IconLayout,
   logout: IconLogout,
-  motorbike: IconMotorbike
+  motorbike: IconMotorbike,
+  'chevron-right': IconChevronRight,
 };
 
 export default ICONS;

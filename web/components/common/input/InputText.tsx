@@ -68,7 +68,7 @@ export const InputText = React.forwardRef<HTMLInputElement, IInputTextProps>(
           <input
             id='txt'
             autoComplete='off'
-            className='w-full border-none bg-transparent text-gray-700 outline-none placeholder:opacity-20 group-focus:border-transparent group-focus:outline-none group-focus:ring-2 group-focus:ring-gray-200 dark:text-gray-200'
+            className='w-full border-none bg-transparent text-gray-700 outline-none placeholder:opacity-40 group-focus:border-transparent group-focus:outline-none group-focus:ring-2 group-focus:ring-gray-200 dark:text-gray-200'
             {...props}
             ref={ref}
             type={type}

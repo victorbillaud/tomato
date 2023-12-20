@@ -59,7 +59,7 @@ export default async function CreateItemForm({
     <div className='flex w-full flex-col items-center justify-center gap-5'>
       <div className='flex w-full flex-col items-start justify-start gap-5 text-left'>
         <Text variant='h1' weight={400} className='opacity-90'>
-          <strong className='text-primary-600'>1.</strong> Choose a qrcode to
+          <strong className='text-primary-600'>1.</strong> Choose a QR Code to
           link to your new item
         </Text>
         <Text variant='h4' weight={300} className='opacity-70'>
@@ -89,17 +89,25 @@ export default async function CreateItemForm({
               you to quickly identify the item.
             </Text>
           </div>
-          <InputText name='name' placeholder='Your item name' required />
+          <InputText
+            name='name'
+            icon='chevron-right'
+            placeholder='Your item name'
+            className='border-0 shadow-none'
+            required
+          />
 
           <div className='flex w-full flex-col items-start justify-start gap-5 text-left'>
             <Text variant='h4' weight={300} className='opacity-70'>
-              To help you identify your item, you can add a description. This
-              description can be changed later.
+              To help you identify your item, you can add a description. The
+              name and description can be changed later.
             </Text>
           </div>
           <InputText
             name='description'
+            icon='chevron-right'
             placeholder='Your item description'
+            className='border-0 shadow-none'
             required
           />
 
