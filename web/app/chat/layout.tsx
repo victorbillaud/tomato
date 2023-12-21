@@ -7,6 +7,10 @@ import { User } from '@supabase/supabase-js';
 import { listUserConversations } from '@utils/lib/messaging/services';
 import { cookies } from 'next/headers';
 
+export const metadata = {
+  title: 'Tomato - Chat',
+};
+
 export default async function ChatLayout({
   children,
 }: {

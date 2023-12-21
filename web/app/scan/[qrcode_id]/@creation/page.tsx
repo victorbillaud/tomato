@@ -6,6 +6,10 @@ import { insertItem } from '@utils/lib/item/services';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+export const metadata = {
+  title: 'Tomato - Create item',
+};
+
 const insertItemAction = async (formData: FormData) => {
   'use server';
 

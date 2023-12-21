@@ -1,3 +1,7 @@
+export const metadata = {
+  title: 'Tomato - Dashboard',
+};
+
 export default async function DashboardLayout({
   children,
 }: {

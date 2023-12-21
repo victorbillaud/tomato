@@ -10,6 +10,10 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+export const metadata = {
+  title: 'Tomato - My item',
+};
+
 async function handleDeclareLost(formData: FormData) {
   'use server';
 
