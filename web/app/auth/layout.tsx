@@ -1,6 +1,10 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
+export const metadata = {
+  title: 'Tomato - Login',
+};
+
 export default async function AuthLayout({
   children,
 }: {

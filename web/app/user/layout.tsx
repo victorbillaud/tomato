@@ -2,6 +2,10 @@ import { NotificationList } from '@/components/notification/NotificationList';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
+export const metadata = {
+  title: 'Tomato - Profile',
+};
+
 export default async function UserLayout({ children }: { children: any }) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);

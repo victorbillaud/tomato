@@ -6,6 +6,10 @@ import { activateItem, getItemFromQrCodeId } from '@utils/lib/item/services';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+export const metadata = {
+  title: 'Tomato - Activate',
+};
+
 const handleActivation = async (itemId: string, formData: FormData) => {
   'use server';
 
