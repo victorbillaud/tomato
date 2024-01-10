@@ -21,7 +21,6 @@ module.exports = function (api) {
 				root: ['./'],
 				alias: {
 					'@': './',
-					'@utils': './utils',
 				},
 			}]
 		],
