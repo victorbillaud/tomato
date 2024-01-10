@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '@env'
 
 export function createSupabaseClient() {
+	console.log('Creating supabase client with url', SUPABASE_URL)
 	return createClient(
 		SUPABASE_URL!,
 		SUPABASE_ANON_KEY!,

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Icon, IIconProps } from './Icon'
-import { Text } from './Text'
 import { TextInput } from "react-native";
-import tw from "../../constants/tw"
-import { View } from "../View";
+import { Icon, IIconProps } from '@/components/common/Icon'
+import { Text } from '@/components/common/Text'
+import tw from "@/constants/tw"
+import { View } from "@/components/View";
 
 interface IProps {
 	labelText?: string
