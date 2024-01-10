@@ -30,7 +30,6 @@
     "expo-system-ui": "~2.4.0",
     "expo-web-browser": "~12.3.2",
     "react": "18.2.0",
-    "react-async": "^10.0.1",
     "react-dom": "18.2.0",
     "react-native": "0.72.6",
     "react-native-dotenv": "^3.4.9",
