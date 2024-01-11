@@ -1,13 +1,15 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { SplashScreen } from 'expo-router'
+import { SplashScreen, Stack } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
-import { AuthProvider } from "@/components/auth/AuthProvider";
-import { AuthGuard } from "@/components/auth/AuthGuard";
+import { AuthProvider, useAuth } from "@/components/auth/AuthProvider";
 import { ItemsProvider } from "@/components/item/ItemsProvider";
 import { QRCodesProvider } from "@/components/qrcode/QRCodesProvider";
+import { View } from "@/components/View";
+import tw from "@/constants/tw";
+import { AuthCard } from "@/components/auth/AuthCard";
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -52,4 +54,20 @@ function RootLayoutNav() {
 			</AuthProvider>
 		</ThemeProvider>
 	)
+}
+
+function AuthGuard() {
+	const auth = useAuth()
+	return auth?.user
+		? (
+			<Stack>
+				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+			</Stack>
+		)
+		: (
+			<View style={tw`flex-1 justify-center items-center`}>
+				<AuthCard />
+			</View>
+		)
+
 }
