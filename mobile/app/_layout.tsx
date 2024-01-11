@@ -7,6 +7,7 @@ import { useColorScheme } from 'react-native'
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { ItemsProvider } from "@/components/item/ItemsProvider";
+import { QRCodesProvider } from "@/components/qrcode/QRCodesProvider";
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -44,7 +45,9 @@ function RootLayoutNav() {
 		<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 			<AuthProvider>
 				<ItemsProvider>
-					<AuthGuard />
+					<QRCodesProvider>
+						<AuthGuard />
+					</QRCodesProvider>
 				</ItemsProvider>
 			</AuthProvider>
 		</ThemeProvider>
