@@ -1,6 +1,6 @@
 import React from 'react'
-import tw from "../../constants/tw"
-import { View, ViewProps } from "../View"
+import { View, ViewProps } from "@/components/View"
+import tw from "@/constants/tw"
 
 export interface ICardProps extends ViewProps {
 	children?: React.ReactNode

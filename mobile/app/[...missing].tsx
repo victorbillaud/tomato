@@ -1,8 +1,8 @@
-import { View } from "../components/View";
-import { Button } from "../components/common/Button";
-import { Text } from "../components/common/Text";
-import tw from "../constants/tw";
 import { router } from 'expo-router';
+import { View } from "@/components/View";
+import { Button } from "@/components/common/Button";
+import { Text } from "@/components/common/Text";
+import tw from "@/constants/tw";
 
 export default function NotFoundScreen() {
 	return (

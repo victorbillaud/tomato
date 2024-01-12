@@ -1,6 +1,6 @@
 import { Text as DefaultText, TextStyle, ViewStyle } from "react-native"
 import { ReactNode } from "react"
-import tw from "../../constants/tw"
+import tw from "@/constants/tw"
 
 export interface ITextProps {
 	variant: 'h1' | 'h2' | 'h3' | 'h4' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline'
