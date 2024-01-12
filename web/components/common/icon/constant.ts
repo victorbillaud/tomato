@@ -34,6 +34,10 @@ import {
   IconWritingSignOff,
   IconEye,
   IconMessageCircle,
+  IconCircleCheckFilled,
+  IconScan,
+  IconEyeSearch,
+  IconUserQuestion,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -72,6 +76,10 @@ const ICONS = {
   'chevron-right': IconChevronRight,
   eye: IconEye,
   'message-circle': IconMessageCircle,
+  'circle-check-filled': IconCircleCheckFilled,
+  scan: IconScan,
+  'eye-search': IconEyeSearch,
+  'user-question': IconUserQuestion,
 };
 
 export default ICONS;
