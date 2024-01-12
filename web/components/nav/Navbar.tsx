@@ -14,7 +14,7 @@ export default async function Navbar() {
     data: { user },
   } = await supabase.auth.getUser();
   return (
-    <nav className='flex w-full max-w-5xl items-center justify-between gap-4 p-3 text-sm'>
+    <nav className='flex w-full max-w-6xl items-center justify-between gap-4 p-3 text-sm'>
       <Link
         href='/'
         className='transform px-2 transition-all duration-200 ease-in-out active:scale-[0.9]'

@@ -39,7 +39,7 @@ export default async function ChatLayout({
   return (
     <ChatProvider>
       {conversations.length > 0 ? (
-        <div className='flex h-[80vh] w-full overflow-hidden'>
+        <div className='flex h-[80vh] w-full max-w-6xl overflow-hidden px-0 sm:px-3'>
           <ChatList conversations={conversations} currentUser={user as User} />
           {children}
         </div>

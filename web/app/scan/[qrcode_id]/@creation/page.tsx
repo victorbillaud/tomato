@@ -41,7 +41,7 @@ export default async function Scan({
   params: { qrcode_id: string };
 }) {
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-center gap-20'>
+    <div className='flex w-full max-w-6xl flex-1 flex-col items-center justify-center gap-20 px-0 sm:px-3'>
       <Text variant='body' className='text-center opacity-50'>
         Well done ! You have successfully scanned the QR Code, this is now the
         time to <strong>create your item</strong>.
