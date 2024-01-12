@@ -1,16 +1,9 @@
-import QRCode from 'qrcode';
-
 const generateQRCode = async (data: string): Promise<string> => {
-    const options = {
-        errorCorrectionLevel: 'H',
-        margin: 2,
-        width: 200,
-        color: {
-            dark: '#000000',
-            light: '#FFFFFF',
-        },
-    };
-    return QRCode.toDataURL(data, options);
+  const baseUrl = process.env.NEXT_PUBLIC_QR_SERVER_URL;    
+  const url = new URL(baseUrl);
+  url.searchParams.append('url', data);
+  const response = await fetch(url.toString());
+  return response.text();
 };
 
 export default generateQRCode;
