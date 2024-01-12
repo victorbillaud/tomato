@@ -6,22 +6,20 @@ import Button from "@/components/common/Button";
 import { useQRCodes } from "@/components/qrcode/QRCodesProvider";
 import React, { useState } from "react";
 import { ItemCard } from "@/components/item/ItemCard";
-import { ItemCreateModal } from "@/components/item/ItemCreateModal";
 import { Pressable } from "react-native";
 import { router } from "expo-router";
 
 export default function ItemsTab() {
-	const [buyingQRCode, setBuyingQRCode] = useState(false)
-	const [creatingItem, setCreatingItem] = useState(false)
-
 	const { items, loading: itemsLoading } = useItems()
 	const { qrCodes, loading: qrCodesLoading, createQRCode } = useQRCodes()
+
+	const [buyingQRCode, setBuyingQRCode] = useState(false)
 
 	if (itemsLoading || qrCodesLoading)
 		return <Text variant={'title'}>Loading...</Text>
 
 	const qrCodesFree = qrCodes.filter(qrCode => !qrCode.item_id)
-	return <>
+	return (
 		<View style={tw`w-full h-full p-4 flex flex-col justify-between`}>
 			<View>
 				{items.length === 0
@@ -60,13 +58,9 @@ export default function ItemsTab() {
 				<Button
 					text={'Add item'}
 					disabled={qrCodesFree.length === 0 || buyingQRCode}
-					onPress={() => setCreatingItem(true)}
+					onPress={() => router.push({ pathname: `/item/create` })}
 				/>
 			</View>
 		</View>
-
-		{creatingItem && (
-			<ItemCreateModal close={() => setCreatingItem(false)} />
-		)}
-	</>
+	)
 }
