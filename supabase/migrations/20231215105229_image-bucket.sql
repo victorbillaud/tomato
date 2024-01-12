@@ -2,6 +2,11 @@ drop policy "Anyone can upload an avatar." on "storage"."objects";
 
 drop policy "Avatar images are publicly accessible." on "storage"."objects";
 
+insert into storage.buckets
+  (id, name, public)
+values
+  ('items-images', 'items-images', true);
+
 create policy "Allow everyone to read images 1m5g5k5_0"
 on "storage"."objects"
 as permissive

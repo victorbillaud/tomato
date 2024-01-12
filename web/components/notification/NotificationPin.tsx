@@ -89,15 +89,22 @@ export const NotificationPin = ({ userId }: NotificationPinProps) => {
                 )}
               </>
             ) : (
-              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-stone-200 dark:bg-stone-700'>
-                <Text
-                  variant='caption'
-                  weight={600}
-                  className='text-center uppercase opacity-60'
-                >
-                  {user && user.email ? user.email[0] : 'A'}
-                </Text>
-              </div>
+              <>
+                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-stone-200 dark:bg-stone-700'>
+                  <Text
+                    variant='caption'
+                    weight={600}
+                    className='text-center uppercase opacity-60'
+                  >
+                    {user && user.email ? user.email[0] : 'A'}
+                  </Text>
+                </div>
+                {filteredNotifications.length > 0 && (
+                  <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 p-1 font-semibold text-white'>
+                    {filteredNotifications.length}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </Popover.Trigger>
@@ -109,7 +116,7 @@ export const NotificationPin = ({ userId }: NotificationPinProps) => {
           >
             <div className='flex flex-row items-center justify-between gap-20 px-3 py-3'>
               <button
-                className='flex flex-row focus:outline-none items-center justify-start gap-2'
+                className='flex flex-row items-center justify-start gap-2 focus:outline-none'
                 onClick={() => {
                   router.replace('/user');
                   setOpen(false);
@@ -135,7 +142,10 @@ export const NotificationPin = ({ userId }: NotificationPinProps) => {
                   </Text>
                 </div>
               </button>
-              <form action={signOut} className='flex items-center justify-center'>
+              <form
+                action={signOut}
+                className='flex items-center justify-center'
+              >
                 <button type='submit'>
                   <Icon name='logout' size={20} color='text-red-500' />
                 </button>

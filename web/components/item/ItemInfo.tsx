@@ -8,16 +8,27 @@ import { InputTextForm } from '../common/input';
 import { Text } from '../common/text';
 import { IItemInfoProps } from './types';
 import { InputFileForm } from '../common/input/InputFileForm';
+import { Button } from '../common/button';
+import ItemFileButton from './ItemFileButton';
 
-const DEFAULT_ITEM_IMAGE = '/default-item.jpg';
-
-async function handleImageUpdate(itemId: string, oldImage: string, userId: string, formData: FormData) {
+async function handleImageUpdate(
+  itemId: string,
+  oldImage: string,
+  userId: string,
+  formData: FormData
+) {
   'use server';
 
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const imageValue: File = formData.get('picture') as File;
-  const { imagePath, error } = await updateItemImage(supabase, itemId, imageValue, oldImage, userId);
+  const { imagePath, error } = await updateItemImage(
+    supabase,
+    itemId,
+    imageValue,
+    oldImage,
+    userId
+  );
 
   if (error) {
     throw error;
@@ -53,15 +64,22 @@ async function handleUpdate(formData: FormData) {
 }
 
 export function ItemInfo({ item }: IItemInfoProps) {
-  const handleImageUpdateBind = handleImageUpdate.bind(null, item.id, item.image_path?.split('/').pop() || '', item.user_id);
+  const handleImageUpdateBind = handleImageUpdate.bind(
+    null,
+    item.id,
+    item.image_path?.split('/').pop() || '',
+    item.user_id
+  );
 
   return (
     <div className='flex w-full flex-row-reverse justify-between gap-6 md:flex-row md:justify-start'>
-      <InputFileForm
-        imgSource={item.image_path || DEFAULT_ITEM_IMAGE}
-        iconName='photo-edit'
-        callback={handleImageUpdateBind}
-      />
+      {item.image_path && (
+        <InputFileForm
+          imgSource={item.image_path}
+          iconName='photo-edit'
+          callback={handleImageUpdateBind}
+        />
+      )}
       <div className='flex w-2/3 flex-col items-center justify-start gap-3'>
         <div className='flex w-full flex-row items-center justify-start'>
           <InputTextForm
@@ -129,6 +147,11 @@ export function ItemInfo({ item }: IItemInfoProps) {
             </Text>
           </div>
         </div>
+        {item.image_path === null && (
+          <div className='flex w-full'>
+            <ItemFileButton callback={handleImageUpdateBind} />
+          </div>
+        )}
         {item.lost_at && (
           <div className='items-top flex w-full flex-row justify-between py-1'>
             <div className='flex flex-col items-start justify-center'>
