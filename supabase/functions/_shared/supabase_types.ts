@@ -92,6 +92,7 @@ export interface Database {
           created_at: string
           description: string | null
           id: string
+          image_path: string | null
           lost: boolean
           lost_at: string | null
           name: string
@@ -104,6 +105,7 @@ export interface Database {
           created_at?: string
           description?: string | null
           id?: string
+          image_path?: string | null
           lost?: boolean
           lost_at?: string | null
           name: string
@@ -116,6 +118,7 @@ export interface Database {
           created_at?: string
           description?: string | null
           id?: string
+          image_path?: string | null
           lost?: boolean
           lost_at?: string | null
           name?: string

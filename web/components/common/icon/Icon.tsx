@@ -5,7 +5,7 @@ import { IIconProps } from './types';
 export const Icon: FunctionComponent<IIconProps> = ({
   name,
   size = 24,
-  color = 'black',
+  color = 'text-black',
   stroke = 2,
   fill = false,
   animateOnClick = false,
