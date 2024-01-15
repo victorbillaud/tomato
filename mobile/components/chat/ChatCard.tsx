@@ -1,4 +1,3 @@
-//import {TConversationWithLastMessage} from "@utils/lib/messaging/services";
 import {User} from "@supabase/supabase-js";
 import { Text } from "@/components/common/Text"
 import {View} from "@/components/View";

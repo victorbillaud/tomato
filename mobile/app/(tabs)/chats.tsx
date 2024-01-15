@@ -1,23 +1,16 @@
 import { Text } from "@/components/common/Text";
 import { View } from "@/components/View";
 import tw from "@/constants/tw";
-import {useSupabase} from "@/components/supabase/SupabaseProvider";
-import { useAuth } from "@/components/auth/AuthProvider";
-import {listUserConversations} from "@utils/lib/messaging/services";
 import {ChatList} from "@/components/chat/ChatList";
-import {User} from "@supabase/supabase-js";
+import {useChats} from "@/components/chat/ChatsProvider";
+import {useAuth} from "@/components/auth/AuthProvider";
+import {User} from "@supabase/gotrue-js";
+
 
 export default async function ChatsTab() {
 
-	const supabase = useSupabase()
-	const user = useAuth().user
-
-	const { data: conversations, error: conversationsError } =
-		await listUserConversations(supabase);
-
-	if (conversationsError) {
-		throw new Error("Couldn't fetch conversations");
-	}
+	const {conversations} = useChats();
+	const {user} = useAuth();
 
 	return (
 		<>

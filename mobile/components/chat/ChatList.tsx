@@ -1,4 +1,3 @@
-//import {TConversationWithLastMessage} from "@utils/lib/messaging/services";
 import {User} from "@supabase/supabase-js";
 import {ChatCard} from "@/components/chat/ChatCard";
 import {useEffect, useState} from "react";
