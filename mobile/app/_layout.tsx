@@ -6,6 +6,7 @@ import React, { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { ItemsProvider } from "@/components/item/ItemsProvider";
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -42,7 +43,9 @@ function RootLayoutNav() {
 	return (
 		<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 			<AuthProvider>
-				<AuthGuard />
+				<ItemsProvider>
+					<AuthGuard />
+				</ItemsProvider>
 			</AuthProvider>
 		</ThemeProvider>
 	)

@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext } from 'react'
-import { createSupabaseClient } from "@/utils/client"
+import { createSupabaseClient } from "@/utils/supabase/client"
 
 const supabase = createSupabaseClient()
 const SupabaseContext = createContext(supabase)
