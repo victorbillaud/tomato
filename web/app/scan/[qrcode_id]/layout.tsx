@@ -20,7 +20,7 @@ const handleScan = async (
   });
 
   if (error) {
-    console.error(error);
+    console.error(error, { itemId, qrCodeId, scanTypes });
     throw new Error("Couldn't insert Scan");
   }
 };
