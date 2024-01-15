@@ -38,7 +38,6 @@ export default async function Scan({
   );
 
   if (error) {
-    console.error(error);
     throw new Error("Couldn't fetch Item");
   }
 
