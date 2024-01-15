@@ -20,7 +20,7 @@ const handleScan = async (
   });
 
   if (error) {
-    console.error(error);
+    console.error(error, { itemId, qrCodeId, scanTypes });
     throw new Error("Couldn't insert Scan");
   }
 };
@@ -32,15 +32,9 @@ const getUserAndQrCode = async (
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const { data: qrCode, error: qrError } = await getQRCode(supabase, qrCodeId);
-
-  if (qrError) {
-    console.error(qrError);
-    throw new Error("Couldn't fetch QR Code");
-  }
+  const { data: qrCode } = await getQRCode(supabase, qrCodeId);
   return { user, qrCode };
 };
-
 
 export default async function ScanLayout(props: {
   children: React.ReactNode;

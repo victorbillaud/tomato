@@ -19,7 +19,7 @@ type ResponseReturnType =
   | SignInResponseReturnType
   | AnonymousResponseReturnType;
 
-export async function edgeFinderFlow(itemId: string) {
+export async function edgeFinderFlow(itemId: string, qrCodeId: string) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const existingCookie = cookieStore.get('conversation_tokens')?.value;
@@ -49,7 +49,9 @@ export async function edgeFinderFlow(itemId: string) {
 
   if (!response.ok) {
     const { error } = await response.json();
-    console.error(error);
+    if (error === 'Item is not lost') {
+      redirect(`/scan/${qrCodeId}/item-not-lost`);
+    }
     throw new Error(error);
   }
 

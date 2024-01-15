@@ -1,6 +1,7 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-import { associateQRCodeToItem } from '../qrcode/services';
-import { Database } from '../supabase/supabase_types';
+import { SupabaseClient } from "@supabase/supabase-js";
+import { associateQRCodeToItem } from "../qrcode/services";
+import { Database } from "../supabase/supabase_types";
+import * as uuid from 'uuid';
 
 export async function insertItem(
   supabaseInstance: SupabaseClient<Database>,
@@ -138,5 +139,39 @@ export async function updateItem(
     .select('*')
     .single();
 
-  return { data, error };
+    return { data, error }
+}
+
+export async function updateItemImage(
+    supabaseInstance: SupabaseClient<Database>,
+    itemId: string,
+    image: File,
+    oldImageId: string,
+    userId: string
+) {
+    const imagePath =  userId + '/' + uuid.v4() + image.type.replace('image/', '.');
+    const { data, error } = await supabaseInstance.storage
+        .from('items-images')
+        .upload(imagePath, image);
+    
+    if (error) {
+        return { imagePath: null, error: error };
+    }
+
+    const publicUrl = supabaseInstance.storage.from('items-images').getPublicUrl(data.path).data.publicUrl;
+    const { error: itemUpdateError } = await supabaseInstance
+        .from('item')
+        .update({ image_path: publicUrl })
+        .eq('id', itemId)
+    
+    if (itemUpdateError) {
+        await supabaseInstance.storage.from('items-images').remove([imagePath]);
+        return { imagePath: null, error: itemUpdateError };
+    }
+
+    if (oldImageId !== '') {
+        const res = await supabaseInstance.storage.from('items-images').remove([userId + '/' + oldImageId]);
+    }
+
+    return { imagePath: publicUrl, error: null };
 }

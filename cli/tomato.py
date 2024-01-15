@@ -111,7 +111,15 @@ def apply_db_change_to_migration(migration_name: str):
         f"Do you want to create a new migration named '{migration_name}'? (y/n): "
     )
     if user_choice == "y":
-        subprocess.run(["supabase", "db", "diff", "-f", migration_name])
+        subprocess.run(["supabase", "db", "diff", "--local", "-f", migration_name])
+
+def apply_storage_change_to_migration(migration_name: str):
+    """Create a new migration with your local storage schema changes"""
+    user_choice = input(
+        f"Do you want to create a new migration named '{migration_name}'? (y/n): "
+    )
+    if user_choice == "y":
+        subprocess.run(["supabase", "db", "diff", "--local", "--schema", "storage", "-f", migration_name])
 
 
 def migrate_db_changes():
@@ -214,6 +222,7 @@ def deploy_edge_function():
 COMMANDS = {
     "db_types": generate_supabase_types,
     "db_apply": apply_db_change_to_migration,
+    "storage_apply": apply_storage_change_to_migration,
     "db_reset": reset_database,
     "db_migrate": migrate_db_changes,
     "fn_new": create_edge_function,
