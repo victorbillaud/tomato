@@ -7,7 +7,7 @@ import {useAuth} from "@/components/auth/AuthProvider";
 import {User} from "@supabase/gotrue-js";
 
 
-export default async function ChatsTab() {
+export default function ChatsTab() {
 
 	const {conversations} = useChats();
 	const {user} = useAuth();
