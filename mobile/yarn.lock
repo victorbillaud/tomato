@@ -2292,6 +2292,11 @@
   dependencies:
     "@babel/types" "^7.20.7"
 
+"@types/dateformat@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.npmjs.org/@types/dateformat/-/dateformat-5.0.2.tgz"
+  integrity sha512-M95hNBMa/hnwErH+a+VOD/sYgTmo15OTYTM2Hr52/e0OdOuY+Crag+kd3/ioZrhg0WGbl9Sm3hR7UU+MH6rfOw==
+
 "@types/graceful-fs@^4.1.3":
   version "4.1.9"
   resolved "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.9.tgz"
@@ -3614,6 +3619,11 @@ data-urls@^3.0.2:
     abab "^2.0.6"
     whatwg-mimetype "^3.0.0"
     whatwg-url "^11.0.0"
+
+dateformat@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.npmjs.org/dateformat/-/dateformat-5.0.3.tgz"
+  integrity sha512-Kvr6HmPXUMerlLcLF+Pwq3K7apHpYmGDVqrxcDasBg86UcKeTSNWbEzU8bwdXnxnR44FtMhJAxI4Bov6Y/KUfA==
 
 dayjs@^1.8.15:
   version "1.11.10"
