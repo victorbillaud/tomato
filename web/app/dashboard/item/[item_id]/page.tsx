@@ -2,10 +2,11 @@ import { SubmitButton } from '@/components/common/button';
 import { Tag } from '@/components/common/tag';
 import { Text } from '@/components/common/text';
 import { ItemInfo, ItemScanHistory, ItemStateBanner } from '@/components/item';
+import DeleteItemAlert from '@/components/item/DeleteItemAlert';
 import { ItemSettings } from '@/components/item/ItemSettings';
 import { QrCode } from '@/components/qrcode/QrCode';
 import { createClient } from '@/utils/supabase/server';
-import { deleteItem, getItem, updateItem } from '@utils/lib/item/services';
+import { getItem, updateItem } from '@utils/lib/item/services';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -56,26 +57,6 @@ async function handleDeclareFound(itemId: string) {
   redirect(`/dashboard/item/${item.id}`);
 }
 
-async function handleDeleteItem(itemId: string) {
-  'use server';
-
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const { data: item, error } = await deleteItem(supabase, itemId);
-
-  if (error) {
-    throw error;
-  }
-
-  if (!item) {
-    throw new Error('Item not found');
-  }
-
-  revalidatePath(`/dashboard`);
-  redirect(`/dashboard`);
-}
-
 export default async function ItemPage(props: { params: { item_id: string } }) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -91,7 +72,6 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
 
   const handleDeclareLostItem = handleDeclareLost.bind(null, item.id);
   const handleDeclareFoundItem = handleDeclareFound.bind(null, item.id);
-  const handleDeleteItemItem = handleDeleteItem.bind(null, item.id);
 
   return (
     <div className='flex h-full w-full flex-col items-center justify-between gap-5'>
@@ -139,15 +119,7 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
             />
           </form>
         )}
-
-        <form action={handleDeleteItemItem}>
-          <SubmitButton
-            text='Delete item'
-            type='submit'
-            variant='tertiary'
-            icon='trash'
-          />
-        </form>
+        <DeleteItemAlert item={item} />
       </div>
     </div>
   );
