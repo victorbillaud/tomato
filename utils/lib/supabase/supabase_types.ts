@@ -427,19 +427,16 @@ export interface Database {
       public_profile_view: {
         Row: {
           avatar_url: string | null
-          full_name: string | null
           id: string | null
           username: string | null
         }
         Insert: {
           avatar_url?: string | null
-          full_name?: string | null
           id?: string | null
           username?: string | null
         }
         Update: {
           avatar_url?: string | null
-          full_name?: string | null
           id?: string | null
           username?: string | null
         }

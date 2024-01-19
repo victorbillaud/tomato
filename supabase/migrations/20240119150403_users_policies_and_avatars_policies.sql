@@ -20,7 +20,6 @@ set check_function_bodies = off;
 
 create or replace view "public"."public_profile_view" as  SELECT profiles.id,
     profiles.username,
-    profiles.full_name,
     profiles.avatar_url
    FROM profiles;
 
