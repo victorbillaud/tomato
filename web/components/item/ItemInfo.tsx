@@ -72,7 +72,11 @@ export function ItemInfo({ item }: IItemInfoProps) {
   );
 
   return (
-    <div className='flex w-full flex-row-reverse justify-between gap-6 md:flex-row md:justify-start'>
+    <div
+      className={`flex w-full flex-row-reverse gap-6 md:flex-row md:justify-start ${
+        item.image_path ? 'justify-between' : 'justify-end'
+      }`}
+    >
       {item.image_path && (
         <InputFileForm
           imgSource={item.image_path}
