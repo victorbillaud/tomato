@@ -35,7 +35,7 @@ export default async function UserPage() {
       <div className='flex w-full flex-col items-start justify-start gap-4 md:flex-row'>
         <div className='flex w-full flex-1 flex-col gap-4'>
           <ProfileCard user={user} profile={profile} />
-          <Card title='Notifications'>
+          <Card title='Notifications settings'>
             <div className='flex w-full flex-col gap-3'>
               <NotificationSettingsSwitch
                 user_id={user?.id}
