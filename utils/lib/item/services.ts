@@ -88,9 +88,6 @@ export async function getItem(
   supabaseInstance: SupabaseClient<Database>,
   itemId: string
 ) {
-  const {
-    data: { user },
-  } = await supabaseInstance.auth.getUser();
 
   const { data, error } = await supabaseInstance
     .from('item')
@@ -103,7 +100,6 @@ export async function getItem(
         `
     )
     .eq('id', itemId)
-    .eq('user_id', user.id)
     .limit(1)
     .single();
 
