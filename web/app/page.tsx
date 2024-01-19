@@ -6,7 +6,7 @@ export default async function Index() {
   return (
     <div className='animate-in flex w-full flex-col'>
       <section className='flex w-full justify-center px-6 py-12 sm:px-10 sm:py-20'>
-        <div className='flex max-w-5xl items-center'>
+        <div className='flex w-full max-w-5xl items-center'>
           <div className='flex w-full flex-col items-center gap-8'>
             <Text variant='h1' className='text-left'>
               Facile à perdre, encore plus
@@ -18,7 +18,7 @@ export default async function Index() {
             </Text>
           </div>
 
-          <div className='hidden h-full w-full items-end justify-center sm:flex'>
+          <div className='hidden h-full w-full items-end justify-center gap-4 sm:flex'>
             <StyledLink
               href={'/login'}
               icon='chevron-right'
@@ -26,141 +26,159 @@ export default async function Index() {
               variant='primary'
               size='large'
             />
+            <StyledLink
+              href={'/login'}
+              icon='chevron-right'
+              text='Login'
+              variant='secondary'
+              size='large'
+            />
           </div>
         </div>
       </section>
 
-      <section className='flex w-full justify-center bg-primary-500 px-6 py-12 sm:px-10 sm:py-20'>
-        <div className='flex max-w-5xl flex-col items-center'>
+      <section className='flex w-full justify-center bg-primary-500 px-6 py-12 opacity-90 sm:px-10 sm:py-20'>
+        <div className='flex w-full max-w-5xl flex-col items-center'>
           <div className='flex w-full items-center justify-center pb-12'>
-            <Text variant='h1' className='text-left text-white'>
+            <Text variant='h1' className='text-left' color='text-white'>
               L&apos;objectif&nbsp;?
             </Text>
           </div>
 
           <div className='flex w-full flex-col gap-8 sm:py-12'>
-            <Text variant='h3' className='text-left text-white'>
+            <Text variant='h3' className='text-left' color='text-white'>
               Rendre la restitution d&apos;objets si simple, que ça en devient
               un plaisir. Aider les personnes bienveillantes à rentrer en
               contact avec les propriétaires d&apos;objets égarés.
             </Text>
 
-            <div className='flex justify-around'>
-              <div className='flex flex-col gap-2'>
-                <div className='flex items-center gap-4 pb-6'>
-                  <Icon
-                    name='eye-search'
-                    size={50}
-                    color='text-white'
-                    stroke={1.5}
-                    className='flex justify-center'
-                  />
-                  <Text variant='h3' className='text-center text-white'>
-                    Objet trouvé ?
-                  </Text>
-                </div>
-                <div className='flex items-center justify-start gap-2'>
-                  <Icon
-                    name='circle-check-filled'
-                    size={28}
-                    color='text-white'
-                    stroke={1}
-                  />
-                  <Text variant='h3' className='text-white'>
-                    Simple
-                  </Text>
-                </div>
-                <div className='flex items-center justify-start gap-2'>
-                  <Icon
-                    name='circle-check-filled'
-                    size={28}
-                    color='text-white'
-                    stroke={1}
-                  />
-                  <Text variant='h3' className='text-white'>
-                    Pas d&apos;application à télécharger
-                  </Text>
-                </div>
-                <div className='flex items-center justify-start gap-2'>
-                  <Icon
-                    name='circle-check-filled'
-                    size={28}
-                    color='text-white'
-                    stroke={1}
-                  />
-                  <Text variant='h3' className='text-white'>
-                    Pas de compte à créer
-                  </Text>
-                </div>
-                <div className='flex items-center justify-start gap-2'>
-                  <Icon
-                    name='circle-check-filled'
-                    size={28}
-                    color='text-white'
-                    stroke={1}
-                  />
-                  <Text variant='h3' className='text-white'>
-                    Anonyme
-                  </Text>
+            <div className='grid grid-cols-1 justify-around gap-8 sm:grid-cols-2 sm:gap-4'>
+              <div className='flex justify-center'>
+                <div className='flex flex-col gap-2'>
+                  <div className='flex items-center justify-center gap-4 pb-6'>
+                    <Icon
+                      name='eye-search'
+                      size={50}
+                      color='text-white'
+                      stroke={1.5}
+                      className='flex justify-center'
+                    />
+                    <Text
+                      variant='h3'
+                      className='text-center'
+                      color='text-white'
+                    >
+                      Objet trouvé ?
+                    </Text>
+                  </div>
+                  <div className='flex items-center justify-start gap-2'>
+                    <Icon
+                      name='circle-check-filled'
+                      size={28}
+                      color='text-white'
+                      stroke={1}
+                    />
+                    <Text variant='h3' color='text-white'>
+                      Simple
+                    </Text>
+                  </div>
+                  <div className='flex items-center justify-start gap-2'>
+                    <Icon
+                      name='circle-check-filled'
+                      size={28}
+                      color='text-white'
+                      stroke={1}
+                    />
+                    <Text variant='h3' color='text-white'>
+                      Pas d&apos;application à télécharger
+                    </Text>
+                  </div>
+                  <div className='flex items-center justify-start gap-2'>
+                    <Icon
+                      name='circle-check-filled'
+                      size={28}
+                      color='text-white'
+                      stroke={1}
+                    />
+                    <Text variant='h3' color='text-white'>
+                      Pas de compte à créer
+                    </Text>
+                  </div>
+                  <div className='flex items-center justify-start gap-2'>
+                    <Icon
+                      name='circle-check-filled'
+                      size={28}
+                      color='text-white'
+                      stroke={1}
+                    />
+                    <Text variant='h3' color='text-white'>
+                      Anonyme
+                    </Text>
+                  </div>
                 </div>
               </div>
-
-              <div className='flex flex-col gap-2'>
-                <div className='flex items-center gap-4 pb-6'>
-                  <Icon
-                    name='user-question'
-                    size={50}
-                    color='text-white'
-                    stroke={1.5}
-                    className='flex justify-center'
-                  />
-                  <Text variant='h3' className='text-center text-white'>
-                    Propriétaire ?
-                  </Text>
-                </div>
-                <div className='flex items-center justify-start gap-2'>
-                  <Icon
-                    name='circle-check-filled'
-                    size={28}
-                    color='text-white'
-                    stroke={1}
-                  />
-                  <Text variant='h3' className='text-white'>
-                    Une application simple
-                  </Text>
-                </div>
-                <div className='flex items-center justify-start gap-2'>
-                  <Icon
-                    name='circle-check-filled'
-                    size={28}
-                    color='text-white'
-                    stroke={1}
-                  />
-                  <Text variant='h3' className='text-white'>
-                    Une interface web complète
-                  </Text>
-                </div>
-                <div className='flex items-center justify-start gap-2'>
-                  <Icon
-                    name='circle-check-filled'
-                    size={28}
-                    color='text-white'
-                    stroke={1}
-                  />
-                  <Text variant='h3' className='text-white'>
-                    Une communauté bienveillante
-                  </Text>
-                </div>
-                <div className='flex items-center justify-start gap-2'>
-                  <Icon
-                    name='circle-check-filled'
-                    size={28}
-                    color='text-white'
-                    stroke={1}
-                  />
-                  <Text variant='h3' className='text-white'>
-                    Anonyme
-                  </Text>
+              <div className='flex justify-center'>
+                <div className='flex flex-col gap-2'>
+                  <div className='flex items-center justify-center gap-4 pb-6'>
+                    <Icon
+                      name='user-question'
+                      size={50}
+                      color='text-white'
+                      stroke={1.5}
+                      className='flex justify-center'
+                    />
+                    <Text
+                      variant='h3'
+                      className='text-center'
+                      color='text-white'
+                    >
+                      Propriétaire ?
+                    </Text>
+                  </div>
+                  <div className='flex items-center justify-start gap-2'>
+                    <Icon
+                      name='circle-check-filled'
+                      size={28}
+                      color='text-white'
+                      stroke={1}
+                    />
+                    <Text variant='h3' color='text-white'>
+                      Une application simple
+                    </Text>
+                  </div>
+                  <div className='flex items-center justify-start gap-2'>
+                    <Icon
+                      name='circle-check-filled'
+                      size={28}
+                      color='text-white'
+                      stroke={1}
+                    />
+                    <Text variant='h3' color='text-white'>
+                      Une interface web complète
+                    </Text>
+                  </div>
+                  <div className='flex items-center justify-start gap-2'>
+                    <Icon
+                      name='circle-check-filled'
+                      size={28}
+                      color='text-white'
+                      stroke={1}
+                    />
+                    <Text variant='h3' color='text-white'>
+                      Une communauté bienveillante
+                    </Text>
+                  </div>
+                  <div className='flex items-center justify-start gap-2'>
+                    <Icon
+                      name='circle-check-filled'
+                      size={28}
+                      color='text-white'
+                      stroke={1}
+                    />
+                    <Text variant='h3' color='text-white'>
+                      Anonyme
+                    </Text>
+                  </div>
                 </div>
               </div>
             </div>
