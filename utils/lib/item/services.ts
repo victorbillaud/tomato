@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import * as uuid from 'uuid';
 import { associateQRCodeToItem } from '../qrcode/services';
 import { Database } from '../supabase/supabase_types';
-import * as uuid from 'uuid';
 
 export async function insertItem(
   supabaseInstance: SupabaseClient<Database>,

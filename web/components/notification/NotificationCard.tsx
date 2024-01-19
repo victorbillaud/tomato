@@ -15,7 +15,7 @@ export const NotificationCard = ({
 }): JSX.Element => {
   return (
     <div
-      className={`flex h-14 w-full flex-row items-center justify-between gap-10 border-b ${
+      className={`flex h-14 w-full flex-row items-center justify-between border-b ${
         !notification.is_read &&
         'border-l-2 border-l-primary-500 bg-zinc-200/30 dark:bg-zinc-800/30'
       } border-b-zinc-300 px-4 py-2 last:border-b-0 dark:border-b-zinc-700`}
@@ -24,35 +24,37 @@ export const NotificationCard = ({
       }}
       onClick={onClick}
     >
-      <div className='flex w-full flex-col items-start justify-start gap-1'>
+      <div className='flex flex-1 flex-col items-start justify-start gap-1'>
         <Text
           variant='caption'
           weight={500}
-          className='text-center first-letter:capitalize'
+          className='truncate text-start first-letter:capitalize'
         >
           {notification.title}
         </Text>
         <Text
           variant='caption'
           weight={400}
-          className='text-center opacity-50 first-letter:capitalize'
+          className='text-start opacity-50 first-letter:capitalize'
         >
           {notificationDate(new Date(notification.created_at))}
         </Text>
       </div>
       {!notification.is_read && (
-        <Button
-          text='Mark as read'
-          className='opacity-70'
-          variant='tertiary'
-          icon='check'
-          size='small'
-          onClick={(e) => {
-            e.stopPropagation();
-            markNotificationAsRead(notification.id);
-          }}
-          iconOnly
-        />
+        <div className='flex flex-row items-center justify-center gap-2'>
+          <Button
+            text='Mark as read'
+            className='opacity-70'
+            variant='tertiary'
+            icon='check'
+            size='small'
+            onClick={(e) => {
+              e.stopPropagation();
+              markNotificationAsRead(notification.id);
+            }}
+            iconOnly
+          />
+        </div>
       )}
     </div>
   );
