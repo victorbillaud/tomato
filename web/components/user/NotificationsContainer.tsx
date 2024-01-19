@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/client';
 import { markAllNotificationsAsRead } from '@utils/lib/notification/services';
 import { useCallback } from 'react';
 import { Button } from '../common/button';
-import { NotificationList } from './NotificationList';
+import { NotificationList } from '../notification/NotificationList';
 
 interface NotificationListProps {
   user_id: string;
@@ -22,8 +22,8 @@ export function NotificationsContainer({ user_id }: NotificationListProps) {
   }, [supabase, user_id]);
 
   return (
-    <div className='flex w-full flex-col rounded-md border border-gray-200 shadow-md'>
-      <div className='flex w-full flex-row items-center justify-between border-b border-gray-200 px-4 py-4'>
+    <div className='flex w-full flex-col rounded-md border border-stone-300 dark:border-stone-700 shadow-sm'>
+      <div className='flex w-full flex-row items-center justify-between border-b border-stone-300 dark:border-stone-700 px-4 py-4'>
         <Text variant='h4'>Notifications</Text>
         <Button
           text='Mark all as read'

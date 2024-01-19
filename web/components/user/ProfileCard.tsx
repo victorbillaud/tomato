@@ -56,8 +56,8 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
   }, [profile?.id]);
 
   return (
-    <div className='flex w-full flex-col rounded-md border border-gray-200 shadow-md'>
-      <div className='flex w-full flex-row items-center justify-between border-b border-gray-200 px-4 py-4'>
+    <div className='flex w-full flex-col rounded-md border border-stone-300 shadow-sm dark:border-stone-700'>
+      <div className='flex w-full flex-row items-center justify-between border-b border-stone-300 px-4 py-4 dark:border-stone-700'>
         <Text variant='h4'>Profile</Text>
         <div className='flex flex-row items-center justify-between gap-2'>
           <ResetPasswordButton user={user} supabase={supabase} />
@@ -98,7 +98,12 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
           </div>
           <div className='items-right flex w-full flex-col justify-between gap-1'>
             <div className='flex w-full flex-row items-center justify-start gap-1'>
-              <Icon name={'at'} size={16} className='opacity-60' />
+              <Icon
+                name={'at'}
+                size={16}
+                className='opacity-60'
+                color='text-stone-900 dark:text-stone-100'
+              />
               <Text variant='body' className='opacity-60' weight={300}>
                 Email
               </Text>
@@ -109,7 +114,7 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
           </div>
         </form>
       </div>
-      <div className='flex w-full flex-row items-center justify-between border-t border-gray-200 p-4'>
+      <div className='flex w-full flex-row items-center justify-between border-t border-stone-300 p-4 dark:border-stone-700'>
         <Text variant='caption' className='opacity-70'>
           Last updated{' '}
           {dateFormat(profile?.updated_at || undefined, masks.fullDate)}
@@ -144,7 +149,14 @@ function ElementForm({
   return (
     <div className='items-right flex w-full flex-col justify-between gap-1'>
       <div className='flex w-full flex-row items-center justify-start gap-1'>
-        {icon && <Icon name={icon} size={16} className='opacity-60' />}
+        {icon && (
+          <Icon
+            name={icon}
+            size={16}
+            className='opacity-60'
+            color='text-stone-900 dark:text-stone-100'
+          />
+        )}
         <Text variant='body' className='opacity-60' weight={300}>
           {label}
         </Text>

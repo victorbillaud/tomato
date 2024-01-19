@@ -1,5 +1,6 @@
 import { Text } from '@/components/common/text';
-import { NotificationsContainer } from '@/components/notification/NotificationsContainer';
+import { NotificationsContainer } from '@/components/user/NotificationsContainer';
+import { NotificationSettingsSwitch } from '@/components/user/NotificationSettingsSwitch';
 import { ProfileCard } from '@/components/user/ProfileCard';
 import { createClient } from '@/utils/supabase/server';
 import { getUserDetails } from '@utils/lib/user/services';
@@ -20,15 +21,35 @@ export default async function UserPage() {
 
   const { user: profile } = await getUserDetails(supabase, user?.id);
 
+  if (!profile) {
+    return notFound();
+  }
+
   return (
     <div className='flex w-full flex-1 flex-col items-start justify-start gap-10 px-3'>
       <Text variant='h3' className=''>
         <span className='font-normal opacity-70'>Welcome, </span>
         <span className='font-bold'> {user?.email}</span>
       </Text>
-      <div className='flex w-full flex-col md:flex-row items-start justify-start gap-4'>
-        <div className='w-full flex flex-1 flex-col gap-4'>
+      <div className='flex w-full flex-col items-start justify-start gap-4 md:flex-row'>
+        <div className='flex w-full flex-1 flex-col gap-4'>
           <ProfileCard user={user} profile={profile} />
+          <Card title='Notifications'>
+            <div className='flex w-full flex-col gap-3'>
+              <NotificationSettingsSwitch
+                user_id={user?.id}
+                label='Receive email notifications'
+                field='email_notifications'
+                value={profile?.email_notifications}
+              />
+              <NotificationSettingsSwitch
+                user_id={user?.id}
+                label='Receive notifications for new messages'
+                field='message_notifications'
+                value={profile?.message_notifications}
+              />
+            </div>
+          </Card>
           <Card
             title='Security'
             details='Manage your password and two-factor authentication.'
@@ -47,7 +68,7 @@ export default async function UserPage() {
             </div>
           </Card>
         </div>
-        <div className='flex w-full md:w-1/3 flex-col gap-4'>
+        <div className='flex w-full flex-col gap-4 md:w-1/3'>
           <NotificationsContainer user_id={user?.id} />
         </div>
       </div>
@@ -71,8 +92,8 @@ function Card({
   rightButtonText,
 }: CardProps) {
   return (
-    <div className='flex w-full flex-col rounded-md border border-gray-200 shadow-md'>
-      <div className='flex w-full flex-row items-center justify-between border-b border-gray-200 px-4 py-5'>
+    <div className='flex w-full flex-col rounded-md border border-stone-300 dark:border-stone-700 shadow-sm'>
+      <div className='flex w-full flex-row items-center justify-between border-b border-stone-300 dark:border-stone-700 px-4 py-5'>
         <Text variant='h4'>{title}</Text>
         {rightButtonHref && (
           <Link href={rightButtonHref}>
@@ -82,7 +103,7 @@ function Card({
       </div>
       <div className='flex w-full flex-col p-4'>{children}</div>
       {details && (
-        <div className='flex w-full flex-row items-center justify-between border-t border-gray-200 p-4'>
+        <div className='flex w-full flex-row items-center justify-between border-t border-stone-300 dark:border-stone-700 p-4'>
           <Text variant='body' className='opacity-70'>
             {details}
           </Text>
