@@ -27,7 +27,7 @@ export default function TabLayout() {
 				options={{
 					tabBarIcon: ({ color }) => <Icon icon={IconMessages} color={color} />,
 					tabBarShowLabel: false,
-					title: 'Chats',
+					title: 'Conversations',
 					headerTitleStyle: [textConfig.h1]
 				}}
 			/>
