@@ -228,7 +228,7 @@ export interface Database {
       }
       profiles: {
         Row: {
-          avatar_url: string | null
+          avatar_url: string
           email_notifications: boolean
           full_name: string | null
           id: string
@@ -238,7 +238,7 @@ export interface Database {
           username: string | null
         }
         Insert: {
-          avatar_url?: string | null
+          avatar_url?: string
           email_notifications?: boolean
           full_name?: string | null
           id: string
@@ -248,7 +248,7 @@ export interface Database {
           username?: string | null
         }
         Update: {
-          avatar_url?: string | null
+          avatar_url?: string
           email_notifications?: boolean
           full_name?: string | null
           id?: string

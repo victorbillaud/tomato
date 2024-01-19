@@ -104,7 +104,7 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
                 className='opacity-60'
                 color='text-stone-900 dark:text-stone-100'
               />
-              <Text variant='body' className='opacity-60' weight={300}>
+              <Text variant='caption' className='opacity-60' weight={300}>
                 Email
               </Text>
             </div>
@@ -157,7 +157,7 @@ function ElementForm({
             color='text-stone-900 dark:text-stone-100'
           />
         )}
-        <Text variant='body' className='opacity-60' weight={300}>
+        <Text variant='caption' className='opacity-60' weight={300}>
           {label}
         </Text>
       </div>

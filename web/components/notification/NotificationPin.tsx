@@ -4,18 +4,18 @@ import { Text } from '@/components/common/text/Text';
 import * as Popover from '@/components/radix/PopOver';
 import { createClient } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
-import { getUserAvatarUrl } from '@utils/lib/common/user_helper';
 import {
   markAllNotificationsAsRead,
   markNotificationAsRead,
 } from '@utils/lib/notification/services';
+import { getUserDetails } from '@utils/lib/user/services';
 import dateFormat, { masks } from 'dateformat';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { signOut } from '../auth/actions';
 import { Button } from '../common/button';
 import { Icon } from '../common/icon';
+import { CustomImage } from '../common/image';
 import { NotificationCard } from './NotificationCard';
 import { useNotificationContext } from './NotificationContext';
 
@@ -26,6 +26,7 @@ export type NotificationPinProps = {
 export const NotificationPin = ({ userId }: NotificationPinProps) => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<User>();
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   const router = useRouter();
   const supabase = createClient();
@@ -61,25 +62,29 @@ export const NotificationPin = ({ userId }: NotificationPinProps) => {
       } = await supabase.auth.getUser();
       user && setUser(user);
     };
-    fetchUser();
-  }, [userId]);
 
-  const userAvatarUrl = useMemo(() => {
-    return user ? getUserAvatarUrl(user) : null;
-  }, [user]);
+    const fetchUserDetails = async () => {
+      const { user: profile } = await getUserDetails(supabase, userId);
+      setAvatarUrl(profile?.avatar_url || null);
+    };
+
+    fetchUser();
+    fetchUserDetails();
+  }, [userId]);
 
   return (
     isNotificationsLoaded && (
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
           <div className='relative flex cursor-pointer flex-row items-center justify-center'>
-            {userAvatarUrl ? (
+            {avatarUrl ? (
               <>
-                <Image
-                  src={userAvatarUrl}
+                <CustomImage
+                  src={avatarUrl}
                   alt='avatar'
                   width={30}
                   height={30}
+                  cover
                   className='rounded-full'
                 />
                 {filteredNotifications.length > 0 && (
@@ -122,11 +127,12 @@ export const NotificationPin = ({ userId }: NotificationPinProps) => {
                   setOpen(false);
                 }}
               >
-                <Image
-                  src={userAvatarUrl}
+                <CustomImage
+                  src={avatarUrl}
                   alt='avatar'
                   width={50}
                   height={50}
+                  cover
                   className='rounded-full'
                 />
                 <div className='flex flex-col items-start justify-center'>

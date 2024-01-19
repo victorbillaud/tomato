@@ -2,6 +2,7 @@ import { Text } from '@/components/common/text';
 import { NotificationsContainer } from '@/components/user/NotificationsContainer';
 import { NotificationSettingsSwitch } from '@/components/user/NotificationSettingsSwitch';
 import { ProfileCard } from '@/components/user/ProfileCard';
+import { ProfilePictureUploader } from '@/components/user/ProfilePictureUploader';
 import { createClient } from '@/utils/supabase/server';
 import { getUserDetails } from '@utils/lib/user/services';
 import { cookies } from 'next/headers';
@@ -26,7 +27,7 @@ export default async function UserPage() {
   }
 
   return (
-    <div className='flex w-full flex-1 flex-col items-start justify-start gap-10 px-3'>
+    <div className='flex w-full flex-1 flex-col items-start justify-start gap-5 px-3'>
       <Text variant='h3' className=''>
         <span className='font-normal opacity-70'>Welcome, </span>
         <span className='font-bold'> {profile.full_name}</span>
@@ -52,6 +53,7 @@ export default async function UserPage() {
           </Card>
         </div>
         <div className='flex w-full flex-col gap-4 md:w-1/3'>
+          <ProfilePictureUploader />
           <NotificationsContainer user_id={user?.id} />
         </div>
       </div>
