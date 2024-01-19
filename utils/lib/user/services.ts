@@ -31,7 +31,7 @@ export async function getUserDetails(
 export async function updateUserDetails(
   supabaseInstance: SupabaseClient<Database>,
   userId: string,
-  updates: Record<string, unknown>
+  updates: Database['public']['Tables']['profiles']['Update']
 ) {
   const { data: user, error } = await supabaseInstance
     .from('profiles')
