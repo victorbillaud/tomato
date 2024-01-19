@@ -116,7 +116,7 @@ const InputFileFormContent = forwardRef<
         {renderImage ?? (
           <CustomImage
             alt='item'
-            className={`${pending ? 'opacity-70' : 'group-hover:opacity-70'}`}
+            className={`${pending ? 'opacity-70' : 'group-hover:opacity-70'} transition-opacity`}
             src={imgSource}
             shadow='md'
             rounded='md'

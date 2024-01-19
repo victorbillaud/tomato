@@ -67,6 +67,7 @@ export async function ProfilePictureUploader() {
             src={profile?.avatar_url}
             shadow='md'
             rounded='full'
+            className='group-hover:opacity-75 transition-opacity'
             cover
             width={200}
             height={200}

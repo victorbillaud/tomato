@@ -2,6 +2,19 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import * as uuid from 'uuid';
 import { Database } from '../supabase/supabase_types';
 
+export async function getPublicUserDetails(
+  supabaseInstance: SupabaseClient<Database>,
+  userId: string
+) {
+  const { data: user, error } = await supabaseInstance
+    .from('public_profile_view')
+    .select('*')
+    .eq('id', userId)
+    .single();
+
+  return { user, error };
+}
+
 export async function getUserDetails(
   supabaseInstance: SupabaseClient<Database>,
   userId: string
