@@ -32,13 +32,15 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
 
     const username = formData.get('username') as string;
     const full_name = formData.get('full_name') as string;
+    const phone = formData.get('phone') as string;
 
     const { user: userUpdated, error } = await updateUserDetails(
       supabase,
       user.id,
       {
-        username,
-        full_name,
+        username: username || "",
+        full_name: full_name || "",
+        phone: phone || "",
         updated_at: new Date().toISOString(),
       }
     );
@@ -91,6 +93,7 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
             <ElementForm
               icon='phone'
               label='Phone'
+              type='number'
               value={profile?.phone || null}
               isEditing={isEdit}
               name='phone'
@@ -137,6 +140,7 @@ interface IElementFormProps {
   value: string | null;
   isEditing: boolean;
   icon?: IconNames;
+  type?: typeof HTMLInputElement.prototype.type;
 }
 
 function ElementForm({
@@ -145,6 +149,7 @@ function ElementForm({
   isEditing,
   name,
   icon,
+  type = 'text',
 }: IElementFormProps) {
   return (
     <div className='items-right flex w-full flex-col justify-between gap-1'>
@@ -165,7 +170,7 @@ function ElementForm({
         <div className='w-fukk flex flex-row items-center justify-end'>
           <InputText
             icon={icon}
-            type='text'
+            type={type}
             name={name}
             defaultValue={value || ''}
             textAlignment='text-left'
