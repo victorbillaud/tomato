@@ -33,6 +33,7 @@ import {
   IconUserCircle,
   IconWritingSign,
   IconWritingSignOff,
+  IconX,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -70,6 +71,7 @@ const ICONS = {
   logout: IconLogout,
   motorbike: IconMotorbike,
   'chevron-right': IconChevronRight,
+  'x': IconX
 };
 
 export default ICONS;
