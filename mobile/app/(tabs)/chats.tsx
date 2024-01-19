@@ -9,14 +9,14 @@ import {User} from "@supabase/gotrue-js";
 
 export default function ChatsTab() {
 
-	const {conversations} = useChats();
+	const {conversationCards} = useChats();
 	const {user} = useAuth();
 
 	return (
 		<>
-			{conversations.length > 0 ? (
+			{conversationCards.length > 0 ? (
 				<View className='flex h-[80vh] w-full overflow-hidden'>
-					<ChatList conversations={conversations} currentUser={user as User} />
+					<ChatList conversationCards={conversationCards} currentUser={user as User} />
 				</View>
 			) : (
 				<View className='my-10 flex w-full max-w-[700px] flex-col items-center justify-start gap-10 px-3 text-center'>
