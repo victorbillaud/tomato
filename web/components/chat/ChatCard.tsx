@@ -1,17 +1,17 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { getItem } from '@utils/lib/item/services';
+import { getPublicUserDetails } from '@utils/lib/user/services';
 import dateFormat from 'dateformat';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Icon } from '../common/icon';
-import { Text } from '../common/text';
 import { Tag } from '../common/tag';
-import { ChatCardProps, DBItem, DBMessage, DBProfile } from './types';
-import { createClient } from '@/utils/supabase/client';
-import { getItem } from '@utils/lib/item/services';
-import { getUserDetails } from '@utils/lib/user/services';
+import { Text } from '../common/text';
 import { useChatContext } from './ChatContext';
 import { ChatCardSkeleton } from './Skeletons';
+import { ChatCardProps, DBItem, DBMessage, DBProfile } from './types';
 
 export default function ChatCard({
   conversation,
@@ -33,7 +33,7 @@ export default function ChatCard({
   useEffect(() => {
     async function fetchUserDetails() {
       const { user: userDetailsFetched, error: avatarError } =
-        await getUserDetails(
+        await getPublicUserDetails(
           supabase,
           isOwner ? conversation.finder_id : conversation.owner_id
         );

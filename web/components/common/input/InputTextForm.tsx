@@ -38,7 +38,7 @@ export function InputTextForm({
   }, [setIsEdited]);
 
   return (
-    <div className='group flex w-full flex-row items-center justify-start gap-1'>
+    <div className='group flex flex-row items-center justify-start gap-1'>
       {isEditing ? (
         <form className='w-full' action={callback} onSubmit={setIsEdited}>
           <InputText

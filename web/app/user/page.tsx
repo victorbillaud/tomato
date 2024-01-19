@@ -1,10 +1,13 @@
-import { signOut } from '@/components/auth/actions';
-import { Button } from '@/components/common/button';
 import { Text } from '@/components/common/text';
+import { NotificationsContainer } from '@/components/user/NotificationsContainer';
+import { NotificationSettingsSwitch } from '@/components/user/NotificationSettingsSwitch';
+import { ProfileCard } from '@/components/user/ProfileCard';
+import { ProfilePictureUploader } from '@/components/user/ProfilePictureUploader';
 import { createClient } from '@/utils/supabase/server';
-import { getUserAvatarUrl } from '@utils/lib/common/user_helper';
+import { getUserDetails } from '@utils/lib/user/services';
 import { cookies } from 'next/headers';
-import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export default async function UserPage() {
   const cookieStore = cookies();
@@ -13,36 +16,84 @@ export default async function UserPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const userAvatarUrl = user ? getUserAvatarUrl(user) : null;
+  if (!user) {
+    return notFound();
+  }
+
+  const { user: profile } = await getUserDetails(supabase, user?.id);
+
+  if (!profile) {
+    return notFound();
+  }
 
   return (
-    <div className='flex flex-1 flex-col items-start justify-start gap-2'>
-      <Text variant='h4' className='text-center'>
-        User infos
+    <div className='flex w-full flex-1 flex-col items-start justify-start gap-5 px-3'>
+      <Text variant='h3' className=''>
+        <span className='font-normal opacity-70'>Welcome, </span>
+        <span className='font-bold'> {profile.full_name}</span>
       </Text>
-      <div className='flex flex-row items-center justify-center gap-2'>
-        {userAvatarUrl && (
-          <Image
-            src={userAvatarUrl}
-            alt='avatar'
-            width={60}
-            height={100}
-            className='rounded-full'
-          />
-        )}
-        <Text variant='h4' className='text-center'>
-          {user?.email}
-        </Text>
+      <div className='flex w-full flex-col items-start justify-start gap-4 md:flex-row'>
+        <div className='flex w-full flex-1 flex-col gap-4'>
+          <ProfileCard user={user} profile={profile} />
+          <Card title='Notifications settings'>
+            <div className='flex w-full flex-col gap-3'>
+              <NotificationSettingsSwitch
+                user_id={user?.id}
+                label='Receive email notifications'
+                field='email_notifications'
+                value={profile?.email_notifications}
+              />
+              <NotificationSettingsSwitch
+                user_id={user?.id}
+                label='Receive notifications for new messages'
+                field='message_notifications'
+                value={profile?.message_notifications}
+              />
+            </div>
+          </Card>
+        </div>
+        <div className='flex w-full flex-col gap-4 md:w-1/3'>
+          <ProfilePictureUploader />
+          <NotificationsContainer user_id={user?.id} />
+        </div>
       </div>
-      <form action={signOut}>
-        <Button
-          text='Logout'
-          variant='secondary'
-          color='red'
-          type='submit'
-          title='Logout'
-        />
-      </form>
+    </div>
+  );
+}
+
+interface CardProps {
+  title: string;
+  children: React.ReactNode;
+  details?: string;
+  rightButtonHref?: string;
+  rightButtonText?: string;
+}
+
+function Card({
+  title,
+  children,
+  details,
+  rightButtonHref,
+  rightButtonText,
+}: CardProps) {
+  return (
+    <div className='flex w-full flex-col rounded-md border border-stone-300 shadow-sm dark:border-stone-700'>
+      <div className='flex w-full flex-row items-center justify-between border-b border-stone-300 px-4 py-5 dark:border-stone-700'>
+        <Text variant='h4'>{title}</Text>
+        {rightButtonHref && (
+          <Link href={rightButtonHref}>
+            <Text variant='body'>{rightButtonText}</Text>
+          </Link>
+        )}
+      </div>
+      <div className='flex w-full flex-col p-4'>{children}</div>
+      {details && (
+        <div className='flex w-full flex-row items-center justify-between border-t border-stone-300 p-4 dark:border-stone-700'>
+          <Text variant='body' className='opacity-70'>
+            {details}
+          </Text>
+        </div>
+      )}
     </div>
   );
 }

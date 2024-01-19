@@ -25,14 +25,17 @@ import {
   IconLogout,
   IconMessage2,
   IconMotorbike,
+  IconPhone,
   IconPhotoEdit,
   IconQrcode,
   IconQuestionMark,
   IconSend,
+  IconTrash,
   IconUser,
   IconUserCircle,
   IconWritingSign,
   IconWritingSignOff,
+  IconX,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -70,6 +73,9 @@ const ICONS = {
   logout: IconLogout,
   motorbike: IconMotorbike,
   'chevron-right': IconChevronRight,
+  'x': IconX,
+  'phone': IconPhone,
+  'trash': IconTrash,
 };
 
 export default ICONS;

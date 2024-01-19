@@ -1,7 +1,7 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { associateQRCodeToItem } from "../qrcode/services";
-import { Database } from "../supabase/supabase_types";
+import { SupabaseClient } from '@supabase/supabase-js';
 import * as uuid from 'uuid';
+import { associateQRCodeToItem } from '../qrcode/services';
+import { Database } from '../supabase/supabase_types';
 
 export async function insertItem(
   supabaseInstance: SupabaseClient<Database>,
@@ -88,9 +88,6 @@ export async function getItem(
   supabaseInstance: SupabaseClient<Database>,
   itemId: string
 ) {
-  const {
-    data: { user },
-  } = await supabaseInstance.auth.getUser();
 
   const { data, error } = await supabaseInstance
     .from('item')
@@ -103,7 +100,6 @@ export async function getItem(
         `
     )
     .eq('id', itemId)
-    .eq('user_id', user.id)
     .limit(1)
     .single();
 
@@ -139,39 +135,72 @@ export async function updateItem(
     .select('*')
     .single();
 
-    return { data, error }
+  return { data, error };
+}
+
+export async function deleteItem(
+  supabaseInstance: SupabaseClient<Database>,
+  itemId: string
+) {
+  const { data, error } = await supabaseInstance
+    .from('item')
+    .delete()
+    .eq('id', itemId)
+    .select('*')
+    .single();
+
+  return { data, error };
 }
 
 export async function updateItemImage(
-    supabaseInstance: SupabaseClient<Database>,
-    itemId: string,
-    image: File,
-    oldImageId: string,
-    userId: string
+  supabaseInstance: SupabaseClient<Database>,
+  itemId: string,
+  image: File,
+  oldImageId: string,
+  userId: string
 ) {
-    const imagePath =  userId + '/' + uuid.v4() + image.type.replace('image/', '.');
-    const { data, error } = await supabaseInstance.storage
-        .from('items-images')
-        .upload(imagePath, image);
-    
-    if (error) {
-        return { imagePath: null, error: error };
-    }
-
-    const publicUrl = supabaseInstance.storage.from('items-images').getPublicUrl(data.path).data.publicUrl;
-    const { error: itemUpdateError } = await supabaseInstance
-        .from('item')
-        .update({ image_path: publicUrl })
-        .eq('id', itemId)
-    
-    if (itemUpdateError) {
-        await supabaseInstance.storage.from('items-images').remove([imagePath]);
-        return { imagePath: null, error: itemUpdateError };
-    }
-
+  const imagePath =
+    userId + '/' + uuid.v4() + image.type.replace('image/', '.');
+  if (image.size === 0) {
     if (oldImageId !== '') {
-        const res = await supabaseInstance.storage.from('items-images').remove([userId + '/' + oldImageId]);
+      const res1 = await supabaseInstance.storage
+        .from('items-images')
+        .remove([userId + '/' + oldImageId]);
+      const res2 = await supabaseInstance
+        .from('item')
+        .update({ image_path: null })
+        .eq('id', itemId);
+      return { imagePath: null, error: null };
     }
+  }
+  if (image.size < 100 || image.size > 5000001)
+    return { imagePath: null, error: null };
+  const { data, error } = await supabaseInstance.storage
+    .from('items-images')
+    .upload(imagePath, image);
 
-    return { imagePath: publicUrl, error: null };
+  if (error) {
+    return { imagePath: null, error: error };
+  }
+
+  const publicUrl = supabaseInstance.storage
+    .from('items-images')
+    .getPublicUrl(data.path).data.publicUrl;
+  const { error: itemUpdateError } = await supabaseInstance
+    .from('item')
+    .update({ image_path: publicUrl })
+    .eq('id', itemId);
+
+  if (itemUpdateError) {
+    await supabaseInstance.storage.from('items-images').remove([imagePath]);
+    return { imagePath: null, error: itemUpdateError };
+  }
+
+  if (oldImageId !== '') {
+    const res = await supabaseInstance.storage
+      .from('items-images')
+      .remove([userId + '/' + oldImageId]);
+  }
+
+  return { imagePath: publicUrl, error: null };
 }
