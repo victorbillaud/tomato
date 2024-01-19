@@ -14,3 +14,29 @@ export async function fetchItems(supabase: SupabaseClient<Database>) {
 	if (error) throw error
 	return data
 }
+
+export async function getItem(
+	supabaseInstance: SupabaseClient<Database>,
+	itemId: string
+) {
+	const {
+		data: { user },
+	} = await supabaseInstance.auth.getUser();
+
+	const { data, error } = await supabaseInstance
+		.from('item')
+		.select(
+			`
+            *,
+            qrcode!qrcode_item_id_fkey (
+                *
+            )
+        `
+		)
+		.eq('id', itemId)
+		.eq('user_id', user.id)
+		.limit(1)
+		.single();
+
+	return { data, error };
+}
