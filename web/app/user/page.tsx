@@ -1,6 +1,8 @@
 import { Text } from '@/components/common/text';
 import { NotificationsContainer } from '@/components/notification/NotificationsContainer';
+import { ProfileCard } from '@/components/user/ProfileCard';
 import { createClient } from '@/utils/supabase/server';
+import { getUserDetails } from '@utils/lib/user/services';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -16,6 +18,8 @@ export default async function UserPage() {
     return notFound();
   }
 
+  const { user: profile } = await getUserDetails(supabase, user?.id);
+
   return (
     <div className='flex w-full flex-1 flex-col items-start justify-start gap-10 px-3'>
       <Text variant='h3' className=''>
@@ -24,23 +28,7 @@ export default async function UserPage() {
       </Text>
       <div className='flex w-full flex-row items-start justify-start gap-4'>
         <div className='flex flex-1 flex-col gap-4'>
-          <Card
-            title='Profile'
-            details='Manage your profile information and email address.'
-            rightButtonHref='/user/profile'
-            rightButtonText='Edit'
-          >
-            <div className='flex w-full flex-col'>
-              <div className='flex w-full flex-row items-center justify-between'>
-                <Text variant='body'>Name</Text>
-                <Text variant='body'>{user?.user_metadata.full_name}</Text>
-              </div>
-              <div className='flex w-full flex-row items-center justify-between'>
-                <Text variant='body'>Email</Text>
-                <Text variant='body'>{user?.email}</Text>
-              </div>
-            </div>
-          </Card>
+          <ProfileCard user={user} profile={profile} />
           <Card
             title='Security'
             details='Manage your password and two-factor authentication.'

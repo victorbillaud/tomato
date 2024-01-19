@@ -13,3 +13,18 @@ export async function getUserDetails(
 
   return { user, error };
 }
+
+export async function updateUserDetails(
+  supabaseInstance: SupabaseClient<Database>,
+  userId: string,
+  updates: Record<string, unknown>
+) {
+  const { data: user, error } = await supabaseInstance
+    .from('profiles')
+    .update(updates)
+    .eq('id', userId)
+    .select('*')
+    .single();
+
+  return { user, error };
+}

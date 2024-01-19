@@ -9,6 +9,7 @@ export interface IInputTextProps
   errorMessage?: string;
   children?: React.ReactNode;
   icon?: IconNames;
+  textAlignment?: 'text-left' | 'text-center' | 'text-right';
 }
 
 export const InputText = React.forwardRef<HTMLInputElement, IInputTextProps>(
@@ -20,6 +21,7 @@ export const InputText = React.forwardRef<HTMLInputElement, IInputTextProps>(
       type = 'text',
       error,
       errorMessage,
+      textAlignment = 'text-left',
       ...props
     },
     ref
@@ -68,7 +70,7 @@ export const InputText = React.forwardRef<HTMLInputElement, IInputTextProps>(
           <input
             id='txt'
             autoComplete='off'
-            className='w-full border-none bg-transparent text-gray-700 outline-none placeholder:opacity-40 group-focus:border-transparent group-focus:outline-none group-focus:ring-2 group-focus:ring-gray-200 dark:text-gray-200'
+            className={`w-full border-none bg-transparent text-gray-700 outline-none placeholder:opacity-40 group-focus:border-transparent group-focus:outline-none group-focus:ring-2 group-focus:ring-gray-200 dark:text-gray-200 ${textAlignment}`}
             {...props}
             ref={ref}
             type={type}
