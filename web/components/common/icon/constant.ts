@@ -38,6 +38,9 @@ import {
   IconScan,
   IconEyeSearch,
   IconUserQuestion,
+  IconStar,
+  IconStarFilled,
+  IconStarHalfFilled,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -80,6 +83,9 @@ const ICONS = {
   scan: IconScan,
   'eye-search': IconEyeSearch,
   'user-question': IconUserQuestion,
+  star: IconStar,
+  'star-filled': IconStarFilled,
+  'star-half-filled': IconStarHalfFilled,
 };
 
 export default ICONS;

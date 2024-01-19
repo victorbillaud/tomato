@@ -257,6 +257,93 @@ export default async function Index() {
           </div>
         </div>
       </section>
+
+      <section className='flex w-full justify-center bg-primary-500 px-6 py-12 opacity-90 sm:px-10 sm:py-20'>
+        <div className='flex w-full max-w-5xl flex-col items-center'>
+          <div className='flex w-full items-center justify-center pb-12'>
+            <Text variant='h1' className='text-left' color='text-white'>
+              Vos retours !
+            </Text>
+          </div>
+
+          <div className='flex w-full flex-col gap-8 sm:py-12'>
+            <div className='grid w-full grid-cols-1 justify-around gap-8 sm:grid-cols-3'>
+              <div className='flex h-fit flex-col gap-6 rounded-lg bg-white px-6 py-8'>
+                <div className='flex'>
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon
+                    name='star-half-filled'
+                    size={25}
+                    color='text-yellow-300'
+                    stroke={1}
+                  />
+                </div>
+                <div className='flex flex-col gap-4'>
+                  <Text
+                    variant='body'
+                    className='flex items-center text-left'
+                    color='text-black'
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Distinctio harum inventore sunt unde minus.
+                  </Text>
+                  <Text variant='h4' className='text-right' color='text-black'>
+                    @User 1
+                  </Text>
+                </div>
+              </div>
+              <div className='flex h-fit flex-col gap-6 rounded-lg bg-white px-6 py-8'>
+                <div className='flex'>
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                </div>
+                <div className='flex flex-col gap-4'>
+                  <Text
+                    variant='body'
+                    className='flex items-center text-left'
+                    color='text-black'
+                  >
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Est, cumque?
+                  </Text>
+                  <Text variant='h4' className='text-right' color='text-black'>
+                    @User 2
+                  </Text>
+                </div>
+              </div>
+              <div className='flex h-fit flex-col gap-6 rounded-lg bg-white px-6 py-8'>
+                <div className='flex'>
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                  <Icon name='star-filled' size={25} color='text-yellow-300' />
+                </div>
+                <div className='flex flex-col gap-4'>
+                  <Text
+                    variant='body'
+                    className='flex items-center text-left'
+                    color='text-black'
+                  >
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Necessitatibus, laudantium exercitationem adipisci impedit
+                    commodi dolore consequatur eum neque ipsa unde sit!
+                  </Text>
+                  <Text variant='h4' className='text-right' color='text-black'>
+                    @User 3
+                  </Text>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
