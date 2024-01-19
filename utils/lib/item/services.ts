@@ -142,6 +142,20 @@ export async function updateItem(
   return { data, error };
 }
 
+export async function deleteItem(
+  supabaseInstance: SupabaseClient<Database>,
+  itemId: string
+) {
+  const { data, error } = await supabaseInstance
+    .from('item')
+    .delete()
+    .eq('id', itemId)
+    .select('*')
+    .single();
+
+  return { data, error };
+}
+
 export async function updateItemImage(
   supabaseInstance: SupabaseClient<Database>,
   itemId: string,

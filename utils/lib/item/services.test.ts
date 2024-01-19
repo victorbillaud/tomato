@@ -1,11 +1,12 @@
 import { describe, test } from '@jest/globals';
+import { File } from '@web-std/file';
+import { readFileSync } from 'fs';
 import { insertQRCode } from '../qrcode/services';
 import { signInFakeUser } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
-import { readFileSync } from 'fs';
-import { File } from '@web-std/file';
 import {
   activateItem,
+  deleteItem,
   getItem,
   getItemFromQrCodeId,
   insertItem,
@@ -227,5 +228,28 @@ describe('service item module', () => {
 
     expect(imagePath2).toBeDefined();
     expect(imagePath1).not.toBe(imagePath2);
+  });
+
+  test("delete item", async () => {
+    const data = await signInFakeUser(sp);
+
+    const { data: qrCode } = await insertQRCode(sp, {
+      user_id: data.user.id,
+    });
+
+    const { insertedItem } = await insertItem(sp, {
+      name: 'test',
+      description: 'test',
+      qrcode_id: qrCode.id,
+    });
+
+    const { error: error2 } = await deleteItem(sp, insertedItem.id);
+
+    expect(error2).toBeNull();
+
+    const { data: item2, error: error3 } = await getItem(sp, insertedItem.id);
+
+    expect(error3).toBeDefined();
+    expect(item2).toBeNull();
   });
 });

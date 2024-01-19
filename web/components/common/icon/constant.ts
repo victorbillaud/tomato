@@ -30,11 +30,12 @@ import {
   IconQrcode,
   IconQuestionMark,
   IconSend,
+  IconTrash,
   IconUser,
   IconUserCircle,
   IconWritingSign,
   IconWritingSignOff,
-  IconX
+  IconX,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -73,7 +74,8 @@ const ICONS = {
   motorbike: IconMotorbike,
   'chevron-right': IconChevronRight,
   'x': IconX,
-  'phone': IconPhone
+  'phone': IconPhone,
+  'trash': IconTrash,
 };
 
 export default ICONS;
