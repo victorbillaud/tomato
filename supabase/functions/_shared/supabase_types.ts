@@ -229,27 +229,33 @@ export interface Database {
       profiles: {
         Row: {
           avatar_url: string | null
+          email_notifications: boolean
           full_name: string | null
           id: string
+          message_notifications: boolean
+          phone: string | null
           updated_at: string | null
           username: string | null
-          website: string | null
         }
         Insert: {
           avatar_url?: string | null
+          email_notifications?: boolean
           full_name?: string | null
           id: string
+          message_notifications?: boolean
+          phone?: string | null
           updated_at?: string | null
           username?: string | null
-          website?: string | null
         }
         Update: {
           avatar_url?: string | null
+          email_notifications?: boolean
           full_name?: string | null
           id?: string
+          message_notifications?: boolean
+          phone?: string | null
           updated_at?: string | null
           username?: string | null
-          website?: string | null
         }
         Relationships: [
           {
@@ -408,6 +414,12 @@ export interface Database {
       verify_conversation_token: {
         Args: {
           expected_conversation_id: string
+        }
+        Returns: boolean
+      }
+      verify_item_token: {
+        Args: {
+          expected_item_id: string
         }
         Returns: boolean
       }

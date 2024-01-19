@@ -26,8 +26,8 @@ export default async function UserPage() {
         <span className='font-normal opacity-70'>Welcome, </span>
         <span className='font-bold'> {user?.email}</span>
       </Text>
-      <div className='flex w-full flex-row items-start justify-start gap-4'>
-        <div className='flex flex-1 flex-col gap-4'>
+      <div className='flex w-full flex-col md:flex-row items-start justify-start gap-4'>
+        <div className='w-full flex flex-1 flex-col gap-4'>
           <ProfileCard user={user} profile={profile} />
           <Card
             title='Security'
@@ -47,7 +47,7 @@ export default async function UserPage() {
             </div>
           </Card>
         </div>
-        <div className='flex w-1/3 flex-col gap-4'>
+        <div className='flex w-full md:w-1/3 flex-col gap-4'>
           <NotificationsContainer user_id={user?.id} />
         </div>
       </div>

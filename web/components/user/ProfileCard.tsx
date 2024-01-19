@@ -8,6 +8,7 @@ import dateFormat, { masks } from 'dateformat';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { Button } from '../common/button';
+import { Icon, IconNames } from '../common/icon';
 import { InputText } from '../common/input';
 import { Text } from '../common/text';
 
@@ -57,7 +58,7 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
   return (
     <div className='flex w-full flex-col rounded-md border border-gray-200 shadow-md'>
       <div className='flex w-full flex-row items-center justify-between border-b border-gray-200 px-4 py-4'>
-        <Text variant='h4'>Edit</Text>
+        <Text variant='h4'>Profile</Text>
         <div className='flex flex-row items-center justify-between gap-2'>
           <ResetPasswordButton user={user} supabase={supabase} />
           <Button
@@ -73,7 +74,7 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
           <div className='flex w-full flex-row items-center justify-between'>
             <ElementForm
               label='Username'
-              value={profile?.username || ''}
+              value={profile?.username || null}
               isEditing={isEdit}
               name='username'
             />
@@ -81,15 +82,27 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
           <div className='flex w-full flex-row items-center justify-between'>
             <ElementForm
               label='Name'
-              value={profile?.full_name || ''}
+              value={profile?.full_name || null}
               isEditing={isEdit}
               name='full_name'
             />
           </div>
+          <div className='flex w-full flex-row items-center justify-between'>
+            <ElementForm
+              icon='phone'
+              label='Phone'
+              value={profile?.phone || null}
+              isEditing={isEdit}
+              name='phone'
+            />
+          </div>
           <div className='items-right flex w-full flex-col justify-between gap-1'>
-            <Text variant='body' className='opacity-60' weight={300}>
-              Email
-            </Text>
+            <div className='flex w-full flex-row items-center justify-start gap-1'>
+              <Icon name={'at'} size={16} className='opacity-60' />
+              <Text variant='body' className='opacity-60' weight={300}>
+                Email
+              </Text>
+            </div>
             <Text variant='body' className='opacity-90' weight={500}>
               {user?.email}
             </Text>
@@ -116,28 +129,43 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
 interface IElementFormProps {
   label: string;
   name: string;
-  value: string;
+  value: string | null;
   isEditing: boolean;
+  icon?: IconNames;
 }
 
-function ElementForm({ label, value, isEditing, name }: IElementFormProps) {
+function ElementForm({
+  label,
+  value,
+  isEditing,
+  name,
+  icon,
+}: IElementFormProps) {
   return (
     <div className='items-right flex w-full flex-col justify-between gap-1'>
-      <Text variant='body' className='opacity-60' weight={300}>
-        {label}
-      </Text>
+      <div className='flex w-full flex-row items-center justify-start gap-1'>
+        {icon && <Icon name={icon} size={16} className='opacity-60' />}
+        <Text variant='body' className='opacity-60' weight={300}>
+          {label}
+        </Text>
+      </div>
       {isEditing ? (
         <div className='w-fukk flex flex-row items-center justify-end'>
           <InputText
+            icon={icon}
             type='text'
             name={name}
-            defaultValue={value}
+            defaultValue={value || ''}
             textAlignment='text-left'
           />
         </div>
-      ) : (
+      ) : value ? (
         <Text variant='body' className='opacity-90' weight={500}>
           {value}
+        </Text>
+      ) : (
+        <Text variant='body' className='opacity-40' weight={300}>
+          Not set
         </Text>
       )}
     </div>

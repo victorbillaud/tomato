@@ -25,6 +25,7 @@ import {
   IconLogout,
   IconMessage2,
   IconMotorbike,
+  IconPhone,
   IconPhotoEdit,
   IconQrcode,
   IconQuestionMark,
@@ -70,6 +71,7 @@ const ICONS = {
   logout: IconLogout,
   motorbike: IconMotorbike,
   'chevron-right': IconChevronRight,
+  phone: IconPhone,
 };
 
 export default ICONS;
