@@ -1,14 +1,19 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { useSupabase } from "@/components/supabase/SupabaseProvider";
-import { fetchItems, Item } from "@/utils/supabase/items";
+import { createItem, fetchItems, Item, ItemInsert } from "@/utils/supabase/items";
 import { useAuth } from "@/components/auth/AuthProvider";
 
 interface ItemsContextType {
 	items: Item[]
 	loading: boolean
+	createItem: ({ ...props }: ItemInsert) => Promise<Item>,
 }
 
-const ItemsContext = createContext<ItemsContextType>({ items: [], loading: false })
+const ItemsContext = createContext<ItemsContextType>({
+	items: [],
+	loading: false,
+	createItem: async () => { throw new Error('Not initialized') },
+})
 
 export function ItemsProvider({ ...props }: { children: ReactNode }) {
 	const [items, setItems] = useState<Item[]>([])
@@ -31,7 +36,17 @@ export function ItemsProvider({ ...props }: { children: ReactNode }) {
 			init()
 	}, [user])
 
-	return <ItemsContext.Provider value={{ items, loading }}>{props.children}</ItemsContext.Provider>
+	return (
+		<ItemsContext.Provider value={{
+			items,
+			loading,
+			createItem: async props => {
+				const item = await createItem(supabase, props)
+				setItems([...items, item])
+				return item
+			},
+		}}>{props.children}</ItemsContext.Provider>
+	)
 }
 
 export const useItems = () => useContext(ItemsContext)

@@ -7,12 +7,14 @@ interface QRCodesContextType {
 	qrCodes: QRCode[]
 	loading: boolean
 	createQRCode: (name?: string) => Promise<QRCode>,
+	refreshQRCodes: () => Promise<void>,
 }
 
 const QRCodesContext = createContext<QRCodesContextType>({
 	qrCodes: [],
 	loading: false,
 	createQRCode: async () => { throw new Error('Not initialized') },
+	refreshQRCodes: async () => { throw new Error('Not initialized') },
 })
 
 export function QRCodesProvider({ ...props }: { children: ReactNode }) {
@@ -47,6 +49,7 @@ export function QRCodesProvider({ ...props }: { children: ReactNode }) {
 				qrCodes.push(qrCode)
 				return qrCode
 			},
+			refreshQRCodes: fetch,
 		}}>
 			{props.children}
 		</QRCodesContext.Provider>
