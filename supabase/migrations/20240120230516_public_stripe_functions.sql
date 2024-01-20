@@ -61,7 +61,9 @@ BEGIN
         p.default_price AS price_id,
         p.attrs->'images'->>0 AS image_url
     FROM
-        stripe.products p;
+        stripe.products p
+    WHERE
+        p.active = true;
 END;
 $function$
 ;
