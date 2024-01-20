@@ -1,18 +1,20 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { useSupabase } from "@/components/supabase/SupabaseProvider";
-import { createItem, fetchItems, Item, ItemInsert } from "@/utils/supabase/items";
+import { createItem, editItem, fetchItems, Item, ItemInsert, ItemUpdate } from "@/utils/supabase/items";
 import { useAuth } from "@/components/auth/AuthProvider";
 
 interface ItemsContextType {
 	items: Item[]
 	loading: boolean
 	createItem: ({ ...props }: ItemInsert) => Promise<Item>,
+	editItem: (itemId: string, update: ItemUpdate) => Promise<Item>,
 }
 
 const ItemsContext = createContext<ItemsContextType>({
 	items: [],
 	loading: false,
 	createItem: async () => { throw new Error('Not initialized') },
+	editItem: async () => { throw new Error('Not initialized') },
 })
 
 export function ItemsProvider({ ...props }: { children: ReactNode }) {
@@ -45,7 +47,14 @@ export function ItemsProvider({ ...props }: { children: ReactNode }) {
 				setItems([...items, item])
 				return item
 			},
-		}}>{props.children}</ItemsContext.Provider>
+			editItem: async (itemId, update) => {
+				const item = await editItem(supabase, itemId, update)
+				setItems(items.map(it => it.id === itemId ? item : it))
+				return item
+			}
+		}}>
+			{props.children}
+		</ItemsContext.Provider>
 	)
 }
 
