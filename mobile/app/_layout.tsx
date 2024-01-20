@@ -10,6 +10,7 @@ import { QRCodesProvider } from "@/components/qrcode/QRCodesProvider";
 import { View } from "@/components/View";
 import tw from "@/constants/tw";
 import { AuthCard } from "@/components/auth/AuthCard";
+import { ScansProvider } from "@/components/scan/ScanProvider";
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -48,7 +49,9 @@ function RootLayoutNav() {
 			<AuthProvider>
 				<ItemsProvider>
 					<QRCodesProvider>
-						<AuthGuard />
+						<ScansProvider>
+							<AuthGuard />
+						</ScansProvider>
 					</QRCodesProvider>
 				</ItemsProvider>
 			</AuthProvider>
