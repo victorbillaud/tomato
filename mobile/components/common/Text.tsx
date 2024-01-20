@@ -60,7 +60,7 @@ export const textConfig = {
 	subtitle: tw`text-base md:text-lg`,
 	body: tw`text-sm md:text-base`,
 	caption: tw`text-xs md:text-sm`,
-	overline: tw`text-xs`,
+	overline: tw`text-xs capitalize`,
 }
 
 /* TODO: use theme like the following example :

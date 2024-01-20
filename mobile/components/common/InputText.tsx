@@ -13,6 +13,8 @@ interface IProps {
 	onChangeText?: ((text: string) => void) | undefined;
 	placeholder?: string
 	password?: boolean
+	multiline?: boolean
+	disabled?: boolean
 }
 
 export function InputText(props: IProps) {
@@ -54,6 +56,8 @@ export function InputText(props: IProps) {
 					style={tw`w-full bg-transparent text-gray-700 placeholder:opacity-20 dark:text-gray-200`}
 					placeholder={props.placeholder}
 					secureTextEntry={props.password ?? false}
+					multiline={props.multiline ?? false}
+					editable={!props.disabled}
 				/>
 
 				<View style={tw`flex`}>{props.children}</View>
