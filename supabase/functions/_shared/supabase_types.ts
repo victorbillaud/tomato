@@ -424,6 +424,18 @@ export interface Database {
       }
     }
     Views: {
+      product_prices_view: {
+        Row: {
+          price_amount: number | null
+          price_currency: string | null
+          price_id: string | null
+          product_description: string | null
+          product_id: string | null
+          product_image_url: string | null
+          product_name: string | null
+        }
+        Relationships: []
+      }
       public_profile_view: {
         Row: {
           avatar_url: string | null
