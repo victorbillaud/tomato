@@ -3,8 +3,34 @@ create extension if not exists "wrappers" with schema "extensions";
 
 set check_function_bodies = off;
 
+CREATE OR REPLACE FUNCTION public.get_customer_id(p_id text)
+ RETURNS text
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$
+DECLARE
+    v_customer_id text;
+BEGIN
+    BEGIN
+        -- Try to retrieve the id from the stripe.customers table
+        SELECT id
+        INTO v_customer_id
+        FROM stripe.customers
+        WHERE id = p_id;
+
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            -- Handle the case when no user is found
+            v_customer_id := NULL;
+    END;
+
+    RETURN v_customer_id;
+END;
+$function$
+;
+
 CREATE OR REPLACE FUNCTION public.list_stripe_prices()
- RETURNS TABLE(id text, currency text, unit_amount bigint)
+ RETURNS TABLE(id text, currency text, unit_amount bigint, type text)
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$
@@ -13,7 +39,8 @@ BEGIN
     SELECT
         p.id AS id,
         p.currency AS currency,
-        p.unit_amount AS unit_amount
+        p.unit_amount AS unit_amount,
+        p.type AS type
     FROM
         stripe.prices p;
 END;

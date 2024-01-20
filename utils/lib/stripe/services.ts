@@ -34,3 +34,23 @@ export async function listProductsWithPrices(
 
   return { products: productsWithPrices };
 }
+
+export async function getCustomerId(
+  supabaseInstance: SupabaseClient<Database>,
+  uuid: string
+) {
+  const { data: stripe_customer_id, error } = await supabaseInstance.rpc(
+    'get_customer_id',
+    {
+      p_id: uuid,
+    }
+  );
+
+  if (error) {
+    return { error };
+  }
+
+  console.log('customers', stripe_customer_id);
+
+  return { stripe_customer_id };
+}
