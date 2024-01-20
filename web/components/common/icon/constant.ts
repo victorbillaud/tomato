@@ -30,6 +30,7 @@ import {
   IconQrcode,
   IconQuestionMark,
   IconSend,
+  IconShoppingBag,
   IconTrash,
   IconUser,
   IconUserCircle,
@@ -73,9 +74,10 @@ const ICONS = {
   logout: IconLogout,
   motorbike: IconMotorbike,
   'chevron-right': IconChevronRight,
-  'x': IconX,
-  'phone': IconPhone,
-  'trash': IconTrash,
+  x: IconX,
+  phone: IconPhone,
+  trash: IconTrash,
+  'shopping-bag': IconShoppingBag,
 };
 
 export default ICONS;
