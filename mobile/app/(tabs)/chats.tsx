@@ -1,5 +1,5 @@
 import { Text } from "@/components/common/Text";
-import { View } from "@/components/View";
+import {ScrollView, View} from "@/components/View";
 import tw from "@/constants/tw";
 import {ChatList} from "@/components/chat/ChatList";
 import {useChats} from "@/components/chat/ChatsProvider";
@@ -15,8 +15,10 @@ export default function ChatsTab() {
 	return (
 		<>
 			{conversationCards.length > 0 ? (
-				<View className='flex h-[80vh] w-full overflow-hidden'>
-					<ChatList conversationCards={conversationCards} currentUser={user as User} />
+				<View className='h-12/13'>
+					<ScrollView>
+						<ChatList conversationCards={conversationCards} currentUser={user as User} />
+					</ScrollView>
 				</View>
 			) : (
 				<View className='my-10 flex w-full max-w-[700px] flex-col items-center justify-start gap-10 px-3 text-center'>
