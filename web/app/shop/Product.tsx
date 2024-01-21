@@ -71,23 +71,25 @@ export default function Product({ product }: IProductProps) {
   }, [product.price]);
 
   return (
-    <div className='flex flex-col gap-3 rounded-md border border-stone-300 p-4 shadow-md dark:border-stone-700'>
+    <div className='flex w-full flex-col gap-3 rounded-md border border-stone-300 p-4 shadow-md dark:border-stone-700 md:w-auto'>
       <div className='relative'>
         <CustomImage
           src={product.image_url}
           alt={product.name}
-          width={200}
-          height={200}
+          width={250}
+          height={250}
           rounded='lg'
         />
-        <div className='absolute inset-0 rounded-lg border-none border-stone-300 bg-white/10 dark:bg-black/30 backdrop-blur-sm dark:border-stone-700' />
+        <div className='absolute inset-0 rounded-lg border-none border-stone-300 bg-white/10 backdrop-blur-sm dark:border-stone-700 ' />
         <div className='absolute bottom-0 left-0 right-0 p-4'>
-          <h1 className='text-6xl font-bold text-primary-500'>
+          <h1 className='text-right text-6xl font-bold text-primary-500 md:text-left'>
             {getQuantity()}
           </h1>
-          <Text variant='caption' color='text-white/80' weight={400}>
-            {product.description}
-          </Text>
+          <div className='flex flex-col items-end md:items-start'>
+            <Text variant='caption' color='md:text-white/80 text-black/80 dark:text-white/80' weight={400}>
+              {product.name}
+            </Text>
+          </div>
         </div>
       </div>
       <div className='flex flex-row items-start'>

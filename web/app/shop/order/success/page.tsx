@@ -23,7 +23,7 @@ export default async function OrderSuccessPage({
         <Icon
           name='circle-check'
           size={100}
-          className='text-green-500 dark:text-green-500'
+          color='text-green-500 dark:text-green-500'
         />
         <div className='flex flex-col items-start justify-center gap-2'>
           <Text variant='h1'>Order Success</Text>
