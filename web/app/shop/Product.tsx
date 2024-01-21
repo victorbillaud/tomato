@@ -93,7 +93,7 @@ export default function Product({ product }: IProductProps) {
         </div>
       </div>
       <div className='flex flex-row items-start'>
-        <Text variant='h2' className='text-center' weight={700}>
+        <Text variant='h2' className='text-center' weight={600}>
           €{getPrice()}
         </Text>
       </div>
@@ -101,7 +101,7 @@ export default function Product({ product }: IProductProps) {
         text='Buy'
         onClick={() => handleCheckout()}
         className='w-full'
-        variant='secondary'
+        variant='primary'
         isLoader={isSubmitting}
       />
     </div>

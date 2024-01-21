@@ -126,7 +126,7 @@ export async function POST(req: Request) {
           mode: 'payment',
           allow_promotion_codes: true,
           success_url: `${getURL()}/shop/order/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${getURL()}/`,
+          cancel_url: `${getURL()}/shop`,
         });
       } else {
         return new Response(
