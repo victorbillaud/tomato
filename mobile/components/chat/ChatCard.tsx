@@ -82,7 +82,7 @@ export function ChatCard({
                 )}
             </View>
 
-            <View style={tw`flex-grow truncate`}>
+            <View style={tw`flex-grow`}>
                 <Text variant={'subtitle'}>
                     {itemInfo?.name || 'Item found'}
                 </Text>
