@@ -1,6 +1,8 @@
 create extension if not exists "wrappers" with schema "extensions";
 
 
+drop policy "Enable insert for authenticated users only" on "public"."qrcode";
+
 set check_function_bodies = off;
 
 CREATE OR REPLACE FUNCTION public.get_customer_id(p_id text)
@@ -68,6 +70,14 @@ BEGIN
 END;
 $function$
 ;
+
+create policy "Enable insert for service role only"
+on "public"."qrcode"
+as permissive
+for insert
+to service_role
+with check (true);
+
 
 
 create schema if not exists "stripe";
