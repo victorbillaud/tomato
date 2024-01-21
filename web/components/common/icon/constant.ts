@@ -13,6 +13,7 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconChevronUp,
+  IconCircleCheck,
   IconDevices,
   IconDiscountCheck,
   IconDiscountCheckFilled,
@@ -78,6 +79,7 @@ const ICONS = {
   phone: IconPhone,
   trash: IconTrash,
   'shopping-bag': IconShoppingBag,
+  'circle-check': IconCircleCheck,
 };
 
 export default ICONS;

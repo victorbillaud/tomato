@@ -30,7 +30,7 @@ $function$
 ;
 
 CREATE OR REPLACE FUNCTION public.list_stripe_prices()
- RETURNS TABLE(id text, currency text, unit_amount bigint, type text)
+ RETURNS TABLE(id text, currency text, unit_amount bigint, type text, lookup_key text)
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$
@@ -40,7 +40,8 @@ BEGIN
         p.id AS id,
         p.currency AS currency,
         p.unit_amount AS unit_amount,
-        p.type AS type
+        p.type AS type,
+        p.attrs->'lookup_key'->>0 AS lookup_key
     FROM
         stripe.prices p;
 END;

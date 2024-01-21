@@ -10,14 +10,14 @@ export default async function ShopPage() {
   const { products, error } = await listProductsWithPrices(supabase);
 
   return (
-    <div>
+    <div className='flex w-full flex-col items-center justify-center gap-5 px-3'>
       <h1>Shop</h1>
-      <ul>
+      <div className='flex flex-row-reverse items-center justify-between gap-6'>
         {products &&
           products.map((product) => (
             <Product key={product.id} product={product} />
           ))}
-      </ul>
+      </div>
     </div>
   );
 }

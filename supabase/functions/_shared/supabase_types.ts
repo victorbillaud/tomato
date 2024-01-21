@@ -452,22 +452,6 @@ export interface Database {
       }
     }
     Functions: {
-      create_or_retrieve_customer:
-        | {
-            Args: {
-              p_email: string
-              p_name: string
-              p_uuid: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              p_email: string
-              p_uuid: string
-            }
-            Returns: string
-          }
       generate_conversation_token: {
         Args: {
           conversation_id: string
@@ -507,6 +491,7 @@ export interface Database {
           currency: string
           unit_amount: number
           type: string
+          lookup_key: string
         }[]
       }
       list_stripe_products: {

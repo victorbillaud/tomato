@@ -7,7 +7,8 @@ import { adjectives } from '../_shared/qrcode/adjectives.ts';
 import { fruitsVegetables } from '../_shared/qrcode/fruits-vegetables.ts';
 import { Database } from "../_shared/supabase_types.ts";
 
-
+type NotificationInsert =
+  Database["public"]["Tables"]["notification"]["Insert"];
 
 export const stripe = new Stripe(
   Deno.env.get("STRIPE_API_KEY_LIVE") ?? Deno.env.get("STRIPE_API_KEY") ?? "",
@@ -100,6 +101,16 @@ async function handleQrCodeBuy(userId: string, numberOfQRCodes: number) {
     return error;
   }
 
+  await insertNotification({
+    user_id: userId,
+    type: "system",
+    title: `You bought ${numberOfQRCodes} QR Code(s)`,
+    link: "/dashboard/item/create",
+    metadata: {
+      data
+    },
+  });
+
   return data;
 }
 
@@ -158,6 +169,7 @@ export const generateQRCodeName = (language: Language = 'en'): string => {
 };
 
 
+
 function buildQRCodeURL(qrCodeId: string): string {
   const baseURL = Deno.env.get("WEBSITE_URL") ?? "http://localhost:3000";
 
@@ -165,3 +177,20 @@ function buildQRCodeURL(qrCodeId: string): string {
 
   return qrCodeURL;
 }
+
+const insertNotification = async (notification: NotificationInsert) => {
+  const supabaseClient = createClient<Database>(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+  );
+
+  const { data: notificationData, error } = await supabaseClient
+    .from("notification")
+    .insert(notification);
+
+  if (error) {
+    throw new Error("Error inserting notification");
+  }
+
+  return notificationData;
+};
