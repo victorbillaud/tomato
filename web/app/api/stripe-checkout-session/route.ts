@@ -37,8 +37,10 @@ async function createOrRetrieveCustomer(
   const customerData: {
     metadata: { supabaseUUID: string };
     email?: string;
+    id?: string;
     name?: string;
   } = {
+    id: id,
     metadata: {
       supabaseUUID: id,
     },
@@ -58,6 +60,7 @@ async function createOrRetrieveCustomer(
   }
 
   if (!stripe_customer_id_created) {
+    console.log(customer);
     return { error: 'Customer not created' };
   }
 
@@ -77,6 +80,18 @@ export async function POST(req: Request) {
         data: { user },
       } = await supabase.auth.getUser();
 
+      if (!user) {
+        return new Response(
+          JSON.stringify({
+            error: {
+              statusCode: 500,
+              message: 'You must be logged to buy a product',
+            },
+          }),
+          { status: 500 }
+        );
+      }
+
       const { user: profile } = await getUserDetails(supabase, user?.id || '');
 
       // 3. Retrieve or create the customer in Stripe
@@ -94,30 +109,7 @@ export async function POST(req: Request) {
 
       // 4. Create a checkout session in Stripe
       let session;
-      if (price.type === 'recurring') {
-        // session = await stripe.checkout.sessions.create({
-        //   payment_method_types: ['card'],
-        //   billing_address_collection: 'required',
-        //   customer: stripe_customer_id,
-        //   customer_update: {
-        //     address: 'auto',
-        //   },
-        //   line_items: [
-        //     {
-        //       price: price.id,
-        //       quantity,
-        //     },
-        //   ],
-        //   mode: 'subscription',
-        //   allow_promotion_codes: true,
-        //   subscription_data: {
-        //     trial_from_plan: true,
-        //     metadata,
-        //   },
-        //   success_url: `${getURL()}/account`,
-        //   cancel_url: `${getURL()}/`,
-        // });
-      } else if (price.type === 'one_time') {
+      if (price.type === 'one_time') {
         session = await stripe.checkout.sessions.create({
           payment_method_types: ['card'],
           billing_address_collection: 'required',
@@ -136,6 +128,13 @@ export async function POST(req: Request) {
           success_url: `${getURL()}/shop/order/success?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${getURL()}/`,
         });
+      } else {
+        return new Response(
+          JSON.stringify({
+            error: { statusCode: 500, message: 'Price type is not supported' },
+          }),
+          { status: 500 }
+        );
       }
 
       if (session) {
@@ -152,7 +151,10 @@ export async function POST(req: Request) {
       }
     } catch (err: any) {
       console.log(err);
-      return new Response(JSON.stringify(err), { status: 500 });
+      return new Response(
+        JSON.stringify({ statusCode: 500, message: err.message }),
+        { status: 500 }
+      );
     }
   } else {
     return new Response('Method Not Allowed', {

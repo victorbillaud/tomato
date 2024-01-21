@@ -232,7 +232,7 @@ def deploy_edge_function():
 
 
 def generate_qrcode(user_id: str):
-    """Generate a QR code for a given string"""
+    """Generate a QR code for a given user id"""
     # Move to utils directory
     os.chdir("./utils")
     # Generate a QR code

@@ -1,3 +1,4 @@
+import { StyledLink } from '@/components/common/link';
 import { Text } from '@/components/common/text';
 import { createClient } from '@/utils/supabase/server';
 import { listQRCode } from '@utils/lib/qrcode/services';
@@ -11,7 +12,7 @@ export default async function ShopPage() {
 
   const { products, error } = await listProductsWithPrices(supabase);
 
-  const { data: qrCodes } = await listQRCode(supabase);
+  const { data: qrCodes, error: listQrCodeError } = await listQRCode(supabase);
 
   return (
     <div className='flex w-full flex-col items-start justify-center gap-5 px-3'>
@@ -22,16 +23,24 @@ export default async function ShopPage() {
             Buy your QR Code and start using it right away.
           </Text>
         </div>
-        <div className='flex flex-col items-end justify-center'>
-          <Text variant='caption' className='text-right opacity-70'>
-            Your QR codes left
-          </Text>
-          <h1 className='text-6xl font-bold text-primary-500'>
-            {qrCodes?.length}
-          </h1>
-        </div>
+        {!listQrCodeError ? (
+          <div className='flex flex-col items-end justify-center'>
+            <Text variant='caption' className='text-right opacity-70'>
+              Your QR codes left
+            </Text>
+            <h1 className='text-6xl font-bold text-primary-500'>
+              {qrCodes?.length}
+            </h1>
+          </div>
+        ) : (
+          <StyledLink
+            text='Login to see your QR codes'
+            variant='secondary'
+            href='/login'
+          />
+        )}
       </div>
-      <div className='flex w-full flex-col md:flex-row-reverse items-center justify-between gap-6'>
+      <div className='flex w-full flex-col items-center justify-between gap-6 md:flex-row-reverse'>
         {products &&
           products.map((product) => (
             <Product key={product.id} product={product} />

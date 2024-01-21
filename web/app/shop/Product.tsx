@@ -41,8 +41,8 @@ export default function Product({ product }: IProductProps) {
       });
 
       if (!res.ok) {
-        console.error(res);
-        throw Error(res.statusText);
+        const data = await res.json();
+        throw Error(data.error.message);
       }
 
       const data = await res.json();
