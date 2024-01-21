@@ -43,6 +43,8 @@ export default function Product({ product }: IProductProps) {
     }
   }, [product.price]);
 
+  console.log(product);
+
   return (
     <div>
       <h1>Product</h1>

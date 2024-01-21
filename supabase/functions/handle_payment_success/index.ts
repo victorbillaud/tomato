@@ -3,7 +3,11 @@ import {
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "npm:stripe@^14.13.0";
+import { adjectives } from '../_shared/qrcode/adjectives.ts';
+import { fruitsVegetables } from '../_shared/qrcode/fruits-vegetables.ts';
 import { Database } from "../_shared/supabase_types.ts";
+
+
 
 export const stripe = new Stripe(
   Deno.env.get("STRIPE_API_KEY_LIVE") ?? Deno.env.get("STRIPE_API_KEY") ?? "",
@@ -52,13 +56,11 @@ Deno.serve(async (req) => {
     );
 
     lineItems.data.forEach(async (item) => {
-      console.log(item);
-
-      const productId = item.price?.product as keyof typeof itemsHandlerDict;
-      const result = await itemsHandlerDict[productId!](
+      const productId = item.price?.lookup_key as keyof typeof itemsHandlerDict;
+      await itemsHandlerDict[productId!](
         receivedEvent.data.object.customer,
+        itemsQuantityDict[productId!],
       );
-      console.log(result);
     });
   }
 
@@ -66,16 +68,33 @@ Deno.serve(async (req) => {
 });
 
 const itemsHandlerDict = {
-  "prod_PPXa1fY3TKtufl": handleQrCodeBuy,
+  "qrcode_unique": handleQrCodeBuy,
+  "qrcode_3_pack": handleQrCodeBuy,
+  "qrcode_10_pack": handleQrCodeBuy,
 };
 
-async function handleQrCodeBuy(userId: string) {
+const itemsQuantityDict = {
+  "qrcode_unique": 1,
+  "qrcode_3_pack": 3,
+  "qrcode_10_pack": 10,
+};
+
+async function handleQrCodeBuy(userId: string, numberOfQRCodes: number) {
   const supabaseClient = createClient<Database>(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
   );
 
-  const { data, error } = await insertQRCode(supabaseClient, userId);
+  const qrCodeObjects: Database["public"]["Tables"]["qrcode"]["Insert"][] = [];
+
+  for (let i = 0; i < numberOfQRCodes; i++) {
+    qrCodeObjects.push({
+      user_id: userId,
+      name: generateQRCodeName(),
+    });
+  }
+
+  const { data, error } = await insertQRCodes(supabaseClient, qrCodeObjects);
 
   if (error) {
     return error;
@@ -84,47 +103,60 @@ async function handleQrCodeBuy(userId: string) {
   return data;
 }
 
-export async function insertQRCode(
+export async function insertQRCodes(
   supabaseInstance: SupabaseClient<Database>,
-  userId: string,
-): Promise<ReturnType<typeof createQrCodeImage>> {
-  const qrCodeObject: Database["public"]["Tables"]["qrcode"]["Insert"] = {
-    user_id: userId,
-    name: "test",
-  };
-
+  qrCodeObjects: Database["public"]["Tables"]["qrcode"]["Insert"][],
+) {
   const { data, error } = await supabaseInstance
     .from("qrcode")
-    .insert(qrCodeObject)
-    .select("*")
-    .single();
+    .insert(qrCodeObjects)
+    .select("*");
 
   if (error) {
     return { data, error };
   }
 
-  return await createQrCodeImage(supabaseInstance, data);
+  const qrCodeResults = await createQrCodeImages(supabaseInstance, data!);
+
+  return qrCodeResults;
 }
 
-async function createQrCodeImage(
+async function createQrCodeImages(
   supabaseInstance: SupabaseClient<Database>,
-  qrCode: Database["public"]["Tables"]["qrcode"]["Row"],
-) {
-  const qrCodeURL = buildQRCodeURL(qrCode.id);
+  qrCodeObjects: Database["public"]["Tables"]["qrcode"]["Row"][],
+) {const upsertData = qrCodeObjects.map((qrCode) => {
+    const qrCodeURL = buildQRCodeURL(qrCode.id);
 
-  const qrCodeObject: Database["public"]["Tables"]["qrcode"]["Update"] = {
-    barcode_data: qrCodeURL,
-  };
+    return {
+      id: qrCode.id,
+      user_id: qrCode.user_id,
+      barcode_data: qrCodeURL,
+    };
+  });
 
   const { data, error } = await supabaseInstance
     .from("qrcode")
-    .update(qrCodeObject)
-    .eq("id", qrCode.id)
-    .select()
-    .single();
+    .upsert(upsertData)
+    .select();
 
   return { data, error };
 }
+
+type Language = 'en';
+
+export const generateQRCodeName = (language: Language = 'en'): string => {
+  const fruitVegetable =
+    fruitsVegetables[language][
+      Math.floor(Math.random() * fruitsVegetables[language].length)
+    ];
+  const adjective =
+    adjectives[language][
+      Math.floor(Math.random() * adjectives[language].length)
+    ];
+
+  return `${adjective} ${fruitVegetable}`;
+};
+
 
 function buildQRCodeURL(qrCodeId: string): string {
   const baseURL = Deno.env.get("WEBSITE_URL") ?? "http://localhost:3000";
