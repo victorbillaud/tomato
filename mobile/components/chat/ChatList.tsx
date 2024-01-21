@@ -7,6 +7,8 @@ import { IconUser, IconQrcode } from "tabler-icons-react-native";
 import tw from "@/constants/tw";
 import {View} from "@/components/View";
 import {ChatCardContent} from "@/components/chat/ChatsProvider";
+import {Pressable} from "react-native";
+import {router} from "expo-router";
 
 export type ChatListProps = {
     conversationCards: Array<ChatCardContent>;
@@ -41,11 +43,13 @@ export function ChatList({
     ) => {
         return conversationsList.map((conversationCard) => {
             return (
-                <ChatCard
-                    key={conversationCard.conversation.id}
-                    chatCardContent={conversationCard}
-                    currentUser={currentUser as User}
-                />
+                <Pressable key={conversationCard.conversation.id}
+                           onPress={() => router.push({pathname:'/chat/chatId', params: {chatId: conversationCard.conversation.id}})}>
+                    <ChatCard
+                        chatCardContent={conversationCard}
+                        currentUser={currentUser as User}
+                    />
+                </Pressable>
             );
         });
     };
