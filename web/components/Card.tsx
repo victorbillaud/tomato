@@ -10,7 +10,7 @@ const Card = ({ image }: CardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const [shadowColor, setShadowColor] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches
+    window?.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'rgba(255, 255, 255, 0.20)'
       : 'rgba(0, 0, 0, 0.20)'
   );

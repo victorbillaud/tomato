@@ -7,12 +7,12 @@ export default async function Index() {
     <div className='animate-in flex w-full flex-col'>
       <section className='flex w-full justify-center px-6 py-12 sm:px-10 sm:py-12'>
         <div className='flex w-full max-w-5xl items-center'>
-          <div className='flex w-full flex-col items-center gap-16'>
-            <Text variant='h1' className='text-left'>
+          <div className='flex w-full flex-col items-start gap-16'>
+            <Text variant='h1'>
               Facile à perdre, encore plus
               <span className='text-primary-600'> facile à rendre&nbsp;!</span>
             </Text>
-            <Text variant='h1' className='text-left'>
+            <Text variant='h1'>
               Retrouvez vos objets égarés, et vivez la joie de rendre à
               quelqu&apos;un son bien précieux.
             </Text>
