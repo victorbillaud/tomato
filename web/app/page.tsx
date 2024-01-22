@@ -1,13 +1,13 @@
+import Card from '@/components/Card';
 import { Icon } from '@/components/common/icon';
-import { StyledLink } from '@/components/common/link';
 import { Text } from '@/components/common/text';
 
 export default async function Index() {
   return (
     <div className='animate-in flex w-full flex-col'>
-      <section className='flex w-full justify-center px-6 py-12 sm:px-10 sm:py-20'>
+      <section className='flex w-full justify-center px-6 py-12 sm:px-10 sm:py-12'>
         <div className='flex w-full max-w-5xl items-center'>
-          <div className='flex w-full flex-col items-center gap-8'>
+          <div className='flex w-full flex-col items-center gap-16'>
             <Text variant='h1' className='text-left'>
               Facile à perdre, encore plus
               <span className='text-primary-600'> facile à rendre&nbsp;!</span>
@@ -19,20 +19,7 @@ export default async function Index() {
           </div>
 
           <div className='hidden h-full w-full items-end justify-center gap-4 sm:flex'>
-            <StyledLink
-              href={'/login'}
-              icon='chevron-right'
-              text='Login'
-              variant='primary'
-              size='large'
-            />
-            <StyledLink
-              href={'/login'}
-              icon='chevron-right'
-              text='Login'
-              variant='secondary'
-              size='large'
-            />
+            <Card image='/qrcode_home.png' />
           </div>
         </div>
       </section>
