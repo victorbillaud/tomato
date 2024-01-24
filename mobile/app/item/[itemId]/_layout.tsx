@@ -13,8 +13,9 @@ import Button from "@/components/common/Button";
 import { useScans } from "@/components/scan/ScanProvider";
 import { Scan } from "@/utils/supabase/scans";
 import { useQRCodes } from "@/components/qrcode/QRCodesProvider";
+import { IconUpload } from "tabler-icons-react-native";
+import { Share } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import { IconDownload } from "tabler-icons-react-native";
 
 export default function ItemPage() {
 	const itemId = useLocalSearchParams()['itemId']
@@ -25,10 +26,11 @@ export default function ItemPage() {
 	const { fetchScans } = useScans()
 
 	const [scans, setScans] = useState<Scan[]>()
+	const [itemQRCodeRef, setItemQRCodeRef] = useState<any>()
 	const [updating, setUpdating] = useState(false)
 
 	const item = items.find(item => item.id === itemId)
-	const status = item?.lost ? ITEM_STATUS_LOST : !item?.activated ? ITEM_STATUS_NOT_ACTIVATED : null
+	const itemStatus = item?.lost ? ITEM_STATUS_LOST : !item?.activated ? ITEM_STATUS_NOT_ACTIVATED : null
 	const backgroundStyle = undefined  //status?.backgroundColor ? tw`bg-${status.backgroundColor}` : undefined
 
 	useLayoutEffect(() => {
@@ -39,9 +41,9 @@ export default function ItemPage() {
 	}, [item])
 
 	useEffect(() => {
-		if (item?.qrcode_id)
+		if (item?.qrcode_id) {
 			fetchScans(item.id).then(setScans)
-		else
+		} else
 			setScans([])
 	}, [item])
 
@@ -55,13 +57,13 @@ export default function ItemPage() {
 		<View style={[tw`h-full`, backgroundStyle]}>
 			<View style={[tw`h-12/13 p-4 flex flex-col gap-5`, backgroundStyle]}>
 				{/* -------------------- STATUS -------------------- */}
-				{status && (
+				{itemStatus && (
 					<View style={[tw`flex flex-col gap-1 items-center text-center`, backgroundStyle]}>
 						<View style={[tw`flex flex-row items-center justify-center gap-1`, backgroundStyle]}>
-							<Text variant={'subtitle'} style={tw`text-${status.color}`}>{status.text}</Text>
-							<Icon icon={status.icon} color={status.color} />
+							<Text variant={'subtitle'} style={tw`text-${itemStatus.color}`}>{itemStatus.text}</Text>
+							<Icon icon={itemStatus.icon} color={itemStatus.color} />
 						</View>
-						<Text variant={'body'} style={tw`text-${status.color}`}>{status.description}</Text>
+						<Text variant={'body'} style={tw`text-${itemStatus.color}`}>{itemStatus.description}</Text>
 					</View>
 				)}
 
@@ -125,14 +127,27 @@ export default function ItemPage() {
 								>
 									{itemQRCode.name}
 								</Text>
-								<QRCode value={itemQRCode.barcode_data!} size={125} />
+								<QRCode
+									value={itemQRCode.barcode_data!}
+									size={125}
+									getRef={c => {
+										if (c !== itemQRCodeRef)
+											setItemQRCodeRef(c)
+									}}
+								/>
 								<Button
-									icon={{ icon: IconDownload }}
-									text={'Download'}
+									icon={{ icon: IconUpload, size: 16 }}
+									text={'Share'}
 									size={'small'}
 									variant={'tertiary'}
 									onPress={() => {
-										console.log('download')
+										itemQRCodeRef?.toDataURL((url: any) => {
+											if (url)
+												Share.share({
+													title: itemQRCode.name,
+													url: `data:image/jpeg;base64,${url}`
+												})
+										})
 									}}
 								/>
 							</View>
