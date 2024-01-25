@@ -23,7 +23,11 @@ export default async function Scan({
     throw new Error('QR Code not linked to an item');
   }
 
-  const edgeFinderFlowWithItem = edgeFinderFlow.bind(null, qrCode?.item_id);
+  const edgeFinderFlowWithItem = edgeFinderFlow.bind(
+    null,
+    qrCode?.item_id,
+    params.qrcode_id
+  );
 
   return (
     <div className='flex w-full max-w-6xl flex-1 flex-col items-center justify-center gap-20 px-3'>

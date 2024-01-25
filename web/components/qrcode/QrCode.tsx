@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Icon } from '../common/icon';
 import { Text } from '../common/text';
+import { CustomImage } from '../common/image';
 
 interface QrCodeProps {
   url: string;
@@ -31,7 +32,7 @@ export const QrCode: React.FC<QrCodeProps> = ({
     <div className='flex flex-col items-center justify-center'>
       <div className='flex flex-col items-center justify-center'>
         {qrCodeUrl ? (
-          <Image
+          <CustomImage
             src={qrCodeUrl}
             alt='QR Code'
             width={size}

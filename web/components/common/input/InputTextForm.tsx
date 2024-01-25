@@ -35,10 +35,10 @@ export function InputTextForm({
     return () => {
       window.removeEventListener('keydown', handleEsc);
     };
-  }, []);
+  }, [setIsEdited]);
 
   return (
-    <div className='group flex w-full flex-row items-center justify-start gap-1'>
+    <div className='group flex flex-row items-center justify-start gap-1'>
       {isEditing ? (
         <form className='w-full' action={callback} onSubmit={setIsEdited}>
           <InputText
@@ -70,9 +70,9 @@ export function InputTextForm({
         onClick={isEditing ? setIsEdited : setIsEditing}
       >
         {isEditing ? (
-          <Icon name='pencil-off' size={18} />
+          <Icon name='pencil-off' size={18} color='dark:text-white' />
         ) : (
-          <Icon name='pencil' size={18} />
+          <Icon name='pencil' size={18} color='dark:text-white' />
         )}
       </button>
     </div>

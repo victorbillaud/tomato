@@ -29,7 +29,7 @@ const insertItemAction = async (qrCodeId: string, formData: FormData) => {
     throw new Error('Item not inserted');
   }
 
-  redirect(`/dashboard`);
+  redirect(`/dashboard/item/${insertedItem.id}`);
 };
 
 export default async function CreateItemForm({

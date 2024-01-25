@@ -10,11 +10,18 @@ export const metadata = {
   title: 'Tomato - Activate',
 };
 
-const handleActivation = async (itemId: string, formData: FormData) => {
+const handleActivation = async (
+  itemId: string | undefined,
+  formData: FormData
+) => {
   'use server';
 
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+
+  if (!itemId) {
+    throw new Error('Item not found');
+  }
 
   const { data: activatedItem, error: activatedItemError } = await activateItem(
     supabase,
@@ -41,16 +48,7 @@ export default async function Scan({
     params.qrcode_id
   );
 
-  if (error) {
-    console.error(error);
-    throw new Error("Couldn't fetch Item");
-  }
-
-  if (!item) {
-    throw new Error("Couldn't find Item");
-  }
-
-  const handleItemActivation = handleActivation.bind(null, item.id);
+  const handleItemActivation = handleActivation.bind(null, item?.id);
 
   return (
     <div className='flex w-full max-w-6xl flex-1 flex-col items-center justify-center gap-20 px-0 sm:px-3'>
@@ -62,7 +60,6 @@ export default async function Scan({
         it, click on the button below
       </Text>
       <form action={handleItemActivation}>
-        <input type='hidden' name='itemId' value={item.id} />
         <SubmitButton
           type='submit'
           variant='primary'
