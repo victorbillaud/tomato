@@ -15,7 +15,7 @@ export default async function ShopPage() {
   const { data: qrCodes, error: listQrCodeError } = await listQRCode(supabase);
 
   return (
-    <div className='flex w-full flex-col items-start justify-center gap-5 px-3'>
+    <div className='flex w-full max-w-6xl flex-1 flex-col items-center gap-5 justify-start px-3'>
       <div className='flex w-full flex-row items-center justify-between gap-2 md:flex-row'>
         <div className='flex flex-col items-start justify-center gap-2'>
           <Text variant='h1'>Shop</Text>
