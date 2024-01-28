@@ -30,7 +30,7 @@ export default async function Scan({
   );
 
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-center gap-20 px-3'>
+    <div className='flex w-full max-w-6xl flex-1 flex-col items-center justify-center gap-20 px-3'>
       <div className='flex w-full flex-col items-center justify-center gap-2'>
         {qrCode?.item_id ? (
           <>

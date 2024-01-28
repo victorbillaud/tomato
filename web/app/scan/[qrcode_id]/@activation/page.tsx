@@ -6,6 +6,10 @@ import { activateItem, getItemFromQrCodeId } from '@utils/lib/item/services';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+export const metadata = {
+  title: 'Tomato - Activate',
+};
+
 const handleActivation = async (
   itemId: string | undefined,
   formData: FormData
@@ -47,7 +51,7 @@ export default async function Scan({
   const handleItemActivation = handleActivation.bind(null, item?.id);
 
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-center gap-20'>
+    <div className='flex w-full max-w-6xl flex-1 flex-col items-center justify-center gap-20 px-0 sm:px-3'>
       <div className='text-primary-700/20'>
         <Icon name='discount-check' size={120} color='currentColor' />
       </div>
