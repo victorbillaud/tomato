@@ -36,7 +36,7 @@ export default async function ShopPage() {
           <StyledLink
             text='Login to see your QR codes'
             variant='secondary'
-            href='/login'
+            href='/auth/login?next=/shop'
           />
         )}
       </div>
