@@ -7,6 +7,10 @@ import { Database } from '@utils/lib/supabase/supabase_types';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+export const metadata = {
+  title: 'Tomato - Scan',
+};
+
 const handleScan = async (
   supabase: SupabaseClient<Database>,
   itemId: string | null,

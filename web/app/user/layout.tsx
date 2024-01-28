@@ -2,14 +2,10 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
 export const metadata = {
-  title: 'Tomato - Login',
+  title: 'Tomato - Profile',
 };
 
-export default async function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function UserLayout({ children }: { children: any }) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const {
@@ -17,8 +13,8 @@ export default async function AuthLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <main className='flex w-full max-w-lg flex-1 flex-col items-center justify-center px-3'>
+    <div className='flex w-full max-w-6xl flex-1 flex-col items-start justify-between gap-2 px-3 md:flex-row'>
       {children}
-    </main>
+    </div>
   );
 }

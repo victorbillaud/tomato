@@ -36,6 +36,15 @@ import {
   IconWritingSign,
   IconWritingSignOff,
   IconX,
+  IconEye,
+  IconMessageCircle,
+  IconCircleCheckFilled,
+  IconScan,
+  IconEyeSearch,
+  IconUserQuestion,
+  IconStar,
+  IconStarFilled,
+  IconStarHalfFilled,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -76,6 +85,15 @@ const ICONS = {
   'x': IconX,
   'phone': IconPhone,
   'trash': IconTrash,
+  eye: IconEye,
+  'message-circle': IconMessageCircle,
+  'circle-check-filled': IconCircleCheckFilled,
+  scan: IconScan,
+  'eye-search': IconEyeSearch,
+  'user-question': IconUserQuestion,
+  star: IconStar,
+  'star-filled': IconStarFilled,
+  'star-half-filled': IconStarHalfFilled,
 };
 
 export default ICONS;
