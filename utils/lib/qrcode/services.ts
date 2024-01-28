@@ -1,4 +1,4 @@
-import { SupabaseClient } from '@supabase/supabase-js';
+import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 import { generateQRCodeName } from '../common';
 import { Database } from '../supabase/supabase_types';
 
@@ -44,7 +44,12 @@ async function createQrCodeImage(
   return { data, error };
 }
 
-export async function listQRCode(supabaseInstance: SupabaseClient<Database>) {
+export async function listQRCode(
+  supabaseInstance: SupabaseClient<Database>
+): Promise<{
+  data: Database['public']['Tables']['qrcode']['Row'][];
+  error: PostgrestError | Error | null;
+}> {
   const {
     data: { user },
   } = await supabaseInstance.auth.getUser();
