@@ -190,7 +190,7 @@ export default async function Index() {
                   floqué d&apos;un QRCode Tomato
                 </Text>
                 <Text variant='subtitle' className='text-center align-middle'>
-                  Peeetite description j&apos;ai pas d&apos;idée
+                  Dégainez votre smartphone
                 </Text>
               </div>
               <Icon
@@ -274,11 +274,12 @@ export default async function Index() {
                     className='flex items-center text-left'
                     color='text-black'
                   >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Distinctio harum inventore sunt unde minus.
+                    Tomato a rendu la perte d'objets un lointain souvenir pour
+                    moi. J&apos;ai retrouvé mon porte-monnaie en un clin
+                    d&apos;œil grâce à cette plateforme simple et efficace!
                   </Text>
                   <Text variant='h4' className='text-right' color='text-black'>
-                    @User 1
+                    Sophie. D
                   </Text>
                 </div>
               </div>
@@ -296,11 +297,11 @@ export default async function Index() {
                     className='flex items-center text-left'
                     color='text-black'
                   >
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Est, cumque?
+                    L&apos;interface web est super pratique, et la communauté
+                    est vraiment serviable.
                   </Text>
                   <Text variant='h4' className='text-right' color='text-black'>
-                    @User 2
+                    Baptise L.
                   </Text>
                 </div>
               </div>
@@ -318,12 +319,13 @@ export default async function Index() {
                     className='flex items-center text-left'
                     color='text-black'
                   >
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Necessitatibus, laudantium exercitationem adipisci impedit
-                    commodi dolore consequatur eum neque ipsa unde sit!
+                    J&apos;ai utilisé Tomato pour rendre un téléphone perdu que
+                    j&apos;ai trouvé dans le métro. L&apos;ensemble du processus
+                    était rapide et anonyme, faisant de cette expérience un
+                    plaisir.
                   </Text>
                   <Text variant='h4' className='text-right' color='text-black'>
-                    @User 3
+                    Jeanne. M
                   </Text>
                 </div>
               </div>
