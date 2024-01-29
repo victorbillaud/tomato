@@ -5,7 +5,7 @@ export async function insertScan(
   supabaseInstance: SupabaseClient<Database>,
   scan: Pick<
     Database['public']['Tables']['scan']['Insert'],
-    'item_id' | 'qrcode_id' | 'type' | 'ip_metadata'
+    'item_id' | 'qrcode_id' | 'type' | 'ip_metadata' | 'geo_location_metadata'
   >
 ) {
   const {
@@ -62,6 +62,32 @@ export async function listScans(
   }
 
   const { data, error } = await query;
+
+  return { data, error };
+}
+
+export async function updateGeoLocationMetadata(
+  supabaseInstance: SupabaseClient<Database>,
+  scanId: string,
+  geoLocationMetadata: GeolocationPosition
+) {
+  const { data, error } = await supabaseInstance
+    .from('scan')
+    .update({
+      geo_location_metadata: {
+        latitude: geoLocationMetadata.coords.latitude,
+        longitude: geoLocationMetadata.coords.longitude,
+        accuracy: geoLocationMetadata.coords.accuracy,
+        altitude: geoLocationMetadata.coords.altitude,
+        altitudeAccuracy: geoLocationMetadata.coords.altitudeAccuracy,
+        heading: geoLocationMetadata.coords.heading,
+        speed: geoLocationMetadata.coords.speed,
+        timestamp: geoLocationMetadata.timestamp,
+      },
+    })
+    .eq('id', scanId)
+    .select('*')
+    .single();
 
   return { data, error };
 }

@@ -354,6 +354,7 @@ export interface Database {
       scan: {
         Row: {
           created_at: string
+          geo_location_metadata: Json | null
           id: string
           ip_metadata: Json | null
           item_id: string | null
@@ -363,6 +364,7 @@ export interface Database {
         }
         Insert: {
           created_at?: string
+          geo_location_metadata?: Json | null
           id?: string
           ip_metadata?: Json | null
           item_id?: string | null
@@ -372,6 +374,7 @@ export interface Database {
         }
         Update: {
           created_at?: string
+          geo_location_metadata?: Json | null
           id?: string
           ip_metadata?: Json | null
           item_id?: string | null

@@ -15,6 +15,7 @@ import {
   IconChevronUp,
   IconCircleCheck,
   IconCircleCheckFilled,
+  IconCurrentLocation,
   IconDevices,
   IconDiscountCheck,
   IconDiscountCheckFilled,
@@ -98,6 +99,7 @@ const ICONS = {
   star: IconStar,
   'star-filled': IconStarFilled,
   'star-half-filled': IconStarHalfFilled,
+  'current-location': IconCurrentLocation,
 };
 
 export default ICONS;
