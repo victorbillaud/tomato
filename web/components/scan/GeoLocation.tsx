@@ -114,15 +114,17 @@ export default function GeoLocation({ scanId }: GeoLocationProps) {
       <Text
         variant='body'
         color='text-green-500'
-        className='text-center opacity-90'
+        weight={500}
+        className='text-center opacity-70'
       >
         To help the user to find his item faster, you can give us your location.
       </Text>
       <Button
-        variant='tertiary'
+        variant='custom'
+        icon='current-location'
         isLoader={isLoaded === false}
         onClick={handleGeoLocation}
-        className='text-green-500'
+        className='text-green-500 font-bold'
         text='Share your location'
       />
     </div>
