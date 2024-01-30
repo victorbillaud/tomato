@@ -17,21 +17,15 @@ const SendOTPButton = (props: ISendOTPButtonProps) => {
     }
 
     try {
-      const {
-        data: { user, session },
-        error,
-      } = await props.supabase.auth.signInWithOtp({
+      const { error } = await props.supabase.auth.signInWithOtp({
         email: email,
-        options: {
-          shouldCreateUser: true,
-        },
       });
+
+      console.log(error);
 
       if (error) {
         props.setMessage(error.message);
-      }
-
-      if (!user && !session) {
+      } else {
         props.setMessage('Check your email for the OTP.');
         props.setOtpSent(true);
       }
@@ -43,7 +37,7 @@ const SendOTPButton = (props: ISendOTPButtonProps) => {
   return (
     <Button
       variant='secondary'
-      text='Login or register with OTP' 
+      text='Login or register with OTP'
       onClick={() => sendOTP(props.email)}
     />
   );

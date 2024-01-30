@@ -1,7 +1,10 @@
 import { SubmitButton } from '@/components/common/button';
 import { Text } from '@/components/common/text';
+import GeoLocation from '@/components/scan/GeoLocation';
+import { fetchLocationByIP } from '@/utils/ip';
 import { createClient } from '@/utils/supabase/server';
 import { getQRCode } from '@utils/lib/qrcode/services';
+import { insertScan } from '@utils/lib/scan/services';
 import { cookies } from 'next/headers';
 import { edgeFinderFlow } from './action';
 
@@ -15,6 +18,27 @@ export default async function Scan({
 
   const { data: qrCode, error } = await getQRCode(supabase, params.qrcode_id);
 
+  const ipMetadata = await fetchLocationByIP();
+  const { data: insertedScan, error: scanInsertionError } = await insertScan(
+    supabase,
+    {
+      item_id: qrCode?.item_id,
+      qrcode_id: params.qrcode_id,
+      type: [],
+      ip_metadata: {
+        ip: ipMetadata?.ip,
+        hostname: ipMetadata?.hostname,
+        city: ipMetadata?.city,
+        region: ipMetadata?.region,
+        country: ipMetadata?.country,
+        loc: ipMetadata?.loc,
+        org: ipMetadata?.org,
+        postal: ipMetadata?.postal,
+        timezone: ipMetadata?.timezone,
+      },
+    }
+  );
+
   if (!qrCode || error) {
     throw new Error('QR Code not found');
   }
@@ -23,11 +47,16 @@ export default async function Scan({
     throw new Error('QR Code not linked to an item');
   }
 
-  const edgeFinderFlowWithItem = edgeFinderFlow.bind(null, qrCode?.item_id);
+  const edgeFinderFlowWithItem = edgeFinderFlow.bind(
+    null,
+    qrCode?.item_id,
+    params.qrcode_id
+  );
 
   return (
-    <div className='flex w-full flex-1 flex-col items-center justify-center gap-20 px-3'>
-      <div className='flex w-full flex-col items-center justify-center gap-2'>
+    <div className='flex w-full max-w-6xl flex-1 flex-col items-center justify-start gap-20 px-3'>
+      {insertedScan && <GeoLocation scanId={insertedScan.id} />}
+      <div className='flex h-full w-full flex-col items-center justify-center gap-2'>
         {qrCode?.item_id ? (
           <>
             <Text variant='h4' className='text-center opacity-90'>

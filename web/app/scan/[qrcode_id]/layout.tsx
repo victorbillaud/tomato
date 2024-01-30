@@ -1,26 +1,34 @@
+import { fetchLocationByIP } from '@/utils/ip';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { getItemFromQrCodeId } from '@utils/lib/item/services';
 import { getQRCode } from '@utils/lib/qrcode/services';
 import { insertScan } from '@utils/lib/scan/services';
-import { Database } from '@utils/lib/supabase/supabase_types';
+import { Database, Json } from '@utils/lib/supabase/supabase_types';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const handleScan = async (
+export const metadata = {
+  title: 'Tomato - Scan',
+};
+
+export const handleScan = async (
   supabase: SupabaseClient<Database>,
   itemId: string | null,
   qrCodeId: string,
   scanTypes: Database['public']['Enums']['ScanType'][] = []
 ) => {
+  const ipMetadata = await fetchLocationByIP();
+
   const { error } = await insertScan(supabase, {
     item_id: itemId,
     qrcode_id: qrCodeId,
     type: scanTypes,
+    ip_metadata: JSON.stringify(ipMetadata) as Json,
   });
 
   if (error) {
-    console.error(error);
+    console.error(error, { itemId, qrCodeId, scanTypes });
     throw new Error("Couldn't insert Scan");
   }
 };
@@ -32,15 +40,9 @@ const getUserAndQrCode = async (
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const { data: qrCode, error: qrError } = await getQRCode(supabase, qrCodeId);
-
-  if (qrError) {
-    console.error(qrError);
-    throw new Error("Couldn't fetch QR Code");
-  }
+  const { data: qrCode } = await getQRCode(supabase, qrCodeId);
   return { user, qrCode };
 };
-
 
 export default async function ScanLayout(props: {
   children: React.ReactNode;
@@ -50,6 +52,7 @@ export default async function ScanLayout(props: {
 }) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+
   const { user, qrCode } = await getUserAndQrCode(
     supabase,
     props.params.qrcode_id
@@ -57,7 +60,6 @@ export default async function ScanLayout(props: {
 
   // Finder Flow
   if (!user || user.id !== qrCode?.user_id) {
-    await handleScan(supabase, qrCode?.item_id || null, props.params.qrcode_id);
     return <>{props.children}</>;
   }
 

@@ -111,7 +111,27 @@ def apply_db_change_to_migration(migration_name: str):
         f"Do you want to create a new migration named '{migration_name}'? (y/n): "
     )
     if user_choice == "y":
-        subprocess.run(["supabase", "db", "diff", "-f", migration_name])
+        subprocess.run(["supabase", "db", "diff", "--local", "-f", migration_name])
+
+
+def apply_storage_change_to_migration(migration_name: str):
+    """Create a new migration with your local storage schema changes"""
+    user_choice = input(
+        f"Do you want to create a new migration named '{migration_name}'? (y/n): "
+    )
+    if user_choice == "y":
+        subprocess.run(
+            [
+                "supabase",
+                "db",
+                "diff",
+                "--local",
+                "--schema",
+                "storage",
+                "-f",
+                migration_name,
+            ]
+        )
 
 
 def migrate_db_changes():
@@ -211,14 +231,26 @@ def deploy_edge_function():
     os.chdir("../")
 
 
+def generate_qrcode(user_id: str):
+    """Generate a QR code for a given user id"""
+    # Move to utils directory
+    os.chdir("./utils")
+    # Generate a QR code
+    subprocess.run(["pnpm", "run", "generate_qrcode", user_id])
+    # Move back to original directory
+    os.chdir("../")
+
+
 COMMANDS = {
     "db_types": generate_supabase_types,
     "db_apply": apply_db_change_to_migration,
+    "storage_apply": apply_storage_change_to_migration,
     "db_reset": reset_database,
     "db_migrate": migrate_db_changes,
     "fn_new": create_edge_function,
     "fn_run": run_edge_function,
     "fn_deploy": deploy_edge_function,
+    "qrcode": generate_qrcode,
     "setup": install_dependencies,
     "start": start_supabase,
     "stop": stop_supabase,

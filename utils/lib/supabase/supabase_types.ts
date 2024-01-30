@@ -71,6 +71,13 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "conversation_finder_id_fkey"
+            columns: ["finder_id"]
+            isOneToOne: false
+            referencedRelation: "public_profile_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "conversation_item_id_fkey"
             columns: ["item_id"]
             isOneToOne: false
@@ -83,6 +90,13 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "public_profile_view"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -92,6 +106,7 @@ export interface Database {
           created_at: string
           description: string | null
           id: string
+          image_path: string | null
           lost: boolean
           lost_at: string | null
           name: string
@@ -104,6 +119,7 @@ export interface Database {
           created_at?: string
           description?: string | null
           id?: string
+          image_path?: string | null
           lost?: boolean
           lost_at?: string | null
           name: string
@@ -116,6 +132,7 @@ export interface Database {
           created_at?: string
           description?: string | null
           id?: string
+          image_path?: string | null
           lost?: boolean
           lost_at?: string | null
           name?: string
@@ -136,6 +153,13 @@ export interface Database {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "item_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profile_view"
             referencedColumns: ["id"]
           }
         ]
@@ -175,6 +199,13 @@ export interface Database {
             columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "public_profile_view"
             referencedColumns: ["id"]
           }
         ]
@@ -220,33 +251,46 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profile_view"
+            referencedColumns: ["id"]
           }
         ]
       }
       profiles: {
         Row: {
-          avatar_url: string | null
+          avatar_url: string
+          email_notifications: boolean
           full_name: string | null
           id: string
+          message_notifications: boolean
+          phone: string | null
           updated_at: string | null
           username: string | null
-          website: string | null
         }
         Insert: {
-          avatar_url?: string | null
+          avatar_url?: string
+          email_notifications?: boolean
           full_name?: string | null
           id: string
+          message_notifications?: boolean
+          phone?: string | null
           updated_at?: string | null
           username?: string | null
-          website?: string | null
         }
         Update: {
-          avatar_url?: string | null
+          avatar_url?: string
+          email_notifications?: boolean
           full_name?: string | null
           id?: string
+          message_notifications?: boolean
+          phone?: string | null
           updated_at?: string | null
           username?: string | null
-          website?: string | null
         }
         Relationships: [
           {
@@ -297,13 +341,22 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "qrcode_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profile_view"
+            referencedColumns: ["id"]
           }
         ]
       }
       scan: {
         Row: {
           created_at: string
+          geo_location_metadata: Json | null
           id: string
+          ip_metadata: Json | null
           item_id: string | null
           qrcode_id: string | null
           type: Database["public"]["Enums"]["ScanType"][] | null
@@ -311,7 +364,9 @@ export interface Database {
         }
         Insert: {
           created_at?: string
+          geo_location_metadata?: Json | null
           id?: string
+          ip_metadata?: Json | null
           item_id?: string | null
           qrcode_id?: string | null
           type?: Database["public"]["Enums"]["ScanType"][] | null
@@ -319,7 +374,9 @@ export interface Database {
         }
         Update: {
           created_at?: string
+          geo_location_metadata?: Json | null
           id?: string
+          ip_metadata?: Json | null
           item_id?: string | null
           qrcode_id?: string | null
           type?: Database["public"]["Enums"]["ScanType"][] | null
@@ -346,6 +403,13 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scan_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profile_view"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -366,7 +430,32 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profile_view: {
+        Row: {
+          avatar_url: string | null
+          id: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          id?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          id?: string | null
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Functions: {
       generate_conversation_token: {
@@ -378,6 +467,12 @@ export interface Database {
       get_conversation_id_from_token: {
         Args: {
           token: string
+        }
+        Returns: string
+      }
+      get_customer_id: {
+        Args: {
+          p_id: string
         }
         Returns: string
       }
@@ -395,6 +490,26 @@ export interface Database {
           last_message: Json
         }[]
       }
+      list_stripe_prices: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          currency: string
+          unit_amount: number
+          type: string
+          lookup_key: string
+        }[]
+      }
+      list_stripe_products: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          name: string
+          description: string
+          price_id: string
+          image_url: string
+        }[]
+      }
       update_user_conversations_and_messages: {
         Args: {
           tokens: string[]
@@ -405,6 +520,12 @@ export interface Database {
       verify_conversation_token: {
         Args: {
           expected_conversation_id: string
+        }
+        Returns: boolean
+      }
+      verify_item_token: {
+        Args: {
+          expected_item_id: string
         }
         Returns: boolean
       }
