@@ -8,7 +8,6 @@ import { MobileHeaderProps } from './types';
 import { CustomImage } from '../common/image';
 
 export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
-  const [showLinkIcon, setShowLinkIcon] = useState<boolean>(false);
   const [isOwner, setIsOwner] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
 
   const renderHeaderContent = () => {
     return (
-      <>
+      <div className='flex items-center gap-2'>
         {item.image_path ? (
           <CustomImage
             src={item.image_path}
@@ -43,37 +42,30 @@ export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
             className='block border-[1px] border-gray-700 dark:border-white/20 sm:hidden'
           />
         ) : null}
-        <Text variant='h3' weight={600} className='hidden sm:block'>
-          {item?.name || 'Item found'}
-        </Text>
-        <Text variant='h4' weight={600} className='block sm:hidden'>
+        <Text variant='h3' weight={600}>
           {item?.name || 'Item found'}
         </Text>
         {renderTag()}
-      </>
+      </div>
     );
   };
 
   const renderHeader = () => {
     if (isOwner) {
       return (
-        <Link
-          href={item ? `../dashboard/item/${item?.id}` : ''}
-          className='flex items-center gap-2 dark:text-white'
-          onMouseOver={() => setShowLinkIcon(true)}
-          onMouseLeave={() => setShowLinkIcon(false)}
-        >
+        <div className='flex w-full items-center justify-between gap-2'>
           {renderHeaderContent()}
-          {showLinkIcon && item && (
-            <Icon
-              name='external-link'
-              size={20}
-              animateOnClick
-              color='text-black dark:text-white'
-              className='hidden sm:block'
-            />
-          )}
-        </Link>
+          <Link href={item ? `../dashboard/item/${item?.id}` : ''}>
+            {item && (
+              <Icon
+                name='external-link'
+                size={25}
+                animateOnClick
+                color='text-black dark:text-white'
+              />
+            )}
+          </Link>
+        </div>
       );
     } else {
       return (
@@ -86,7 +78,7 @@ export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
 
   return (
     <>
-      <div className='mx-3 flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-100 py-3 shadow-md dark:border-zinc-700 dark:bg-zinc-900 dark:shadow-black/20 sm:mx-0 sm:pl-6 sm:shadow-none'>
+      <div className='mx-3 flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-100 py-3 pr-4 shadow-md dark:border-zinc-700 dark:bg-zinc-900 dark:shadow-black/20 sm:mx-0 sm:px-6 sm:shadow-none'>
         <Link href='/chat' className='flex sm:hidden'>
           <Icon
             name={'chevron-left'}
