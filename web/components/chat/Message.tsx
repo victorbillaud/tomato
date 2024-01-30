@@ -18,7 +18,7 @@ const Message = ({
   let firstMessage = false;
   let lastMessage = false;
 
-  const isCurrentUser = message.sender_id === (currentUser?.id || null)
+  const isCurrentUser = message.sender_id === (currentUser?.id || null);
   const isSameUserThanPrevious = message.sender_id === prevMessage?.sender_id;
   const isSameUserThanNext = message.sender_id === nextMessage?.sender_id;
   const currentDate = new Date(message.created_at);
@@ -62,7 +62,7 @@ const Message = ({
     lastMessage = true;
   }
 
-  const messageColor = isCurrentUser ? 'bg-primary-900' : 'bg-primary-400';
+  const messageColor = isCurrentUser ? 'bg-primary-900' : 'bg-zinc-200';
   const messageStyle = isCurrentUser
     ? 'self-end items-end'
     : 'self-start items-start';
@@ -84,9 +84,14 @@ const Message = ({
         title={dateFormat(message.created_at, masks.dateTime)}
       >
         <div
-          className={`mt-1 w-fit max-w-[60%] rounded-3xl px-4 py-2 text-white ${messageColor} ${messageBubbleStyle} break-words`}
+          className={`mt-1 w-fit max-w-[60%] rounded-3xl px-4 py-2 ${messageColor} ${messageBubbleStyle} break-words`}
         >
-          <div>{message.content}</div>
+          <Text
+            variant='body'
+            color={isCurrentUser ? 'text-white' : 'text-black/80'}
+          >
+            {message.content}
+          </Text>
         </div>
         {lastMessage ? (
           <Text
