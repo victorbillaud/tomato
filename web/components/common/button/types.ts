@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconNames } from '../icon';
 
-export type TButtonVariant = 'primary' | 'secondary' | 'tertiary';
+export type TButtonVariant = 'primary' | 'secondary' | 'tertiary' | "custom";
 
 export type TButtonSize = 'small' | 'medium' | 'large';
 

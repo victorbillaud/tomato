@@ -146,3 +146,26 @@ alias tmt="python3 /path/to/tomato/cli/tomato.py"
 You can see each one off these by doing:
 
 - `tmt -h`
+
+### Finder flow
+
+# Step to use the feature in local 
+
+1. `tmt db_reset`
+2. Aller sur http://localhost:54323/project/default/database/hooks et Cliquer sur modifier le webhook
+3. Changer l'url avec `http://host.docker.internal:54321/functions/v1/handle_scan_insert`
+4. Remplacer le header Authorization avec `Bearer your_anon_token`
+5. Remplir le `tomato-x-edge-token` avec `super-secret-jwt-token-with-at-least-32-characters-long`
+6. Creer un `.env` dans `./supabase` et le remplir avec
+```bash
+export RESEND_API_KEY=ask_me_in_dm
+export TOMATO_EDGE_TOKEN=super-secret-jwt-token-with-at-least-32-characters-long
+export TOMATO_JWT_SECRET=super-secret-jwt-token-with-at-least-32-characters-long
+```
+7. Inserer le jwt token dans supabase, tu va dans l'invite de commande sql de supabase en local et tu execute ça 
+```sql
+insert into vault.secrets (name, secret)
+values ('tomato-jwt-token', 'super-secret-jwt-token-with-at-least-32-characters-long') returning *;
+```
+9. Ouvrir un nouveau terminal et lancer `tmt fn_run`
+8. Et apres tu creers un item, tu le marque en lost et tu ouvre la page de qrcode sur une nav privée. Si t'as besoin d'aide demande
