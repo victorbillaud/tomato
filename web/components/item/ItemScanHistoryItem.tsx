@@ -37,8 +37,10 @@ export function ItemScanHistoryItem(props: IItemScanHistoryItemProps) {
           )} - ${dateFormat(props.scan.created_at, masks.shortTime)}`}
         </Text>
       </div>
-      <div className='flex w-full flex-wrap flex-row items-center justify-start gap-1 md:justify-end'>
-        {props.scan.ip_metadata && <IpTooltip scan={props.scan} />}
+      <div className='flex w-full flex-row flex-wrap items-center justify-start gap-1 md:justify-end'>
+        {props.scan.ip_metadata['city'] && props.scan.ip_metadata['region'] && (
+          <IpTooltip scan={props.scan} />
+        )}
         {props.scan.geo_location_metadata && (
           <LocationTooltip scan={props.scan} />
         )}
