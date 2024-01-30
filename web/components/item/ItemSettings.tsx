@@ -17,7 +17,7 @@ export function ItemSettings({ item }: IItemSettingsProps) {
 
   return (
     <div className='flex w-full flex-col items-start justify-end gap-3'>
-      <Text variant='h4'>Settings</Text>
+      <Text variant='subtitle'>Settings</Text>
       <Switch
         label='Notify me when scanned even if item is not lost'
         checked={item.notify_anyway}

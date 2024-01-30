@@ -8,26 +8,18 @@ import { Icon } from '../common/icon';
 interface NameSelectorProps {
   values: { name: string; id: string }[];
   initialValue: string;
-  redirectPath?: string;
 }
 
-const NameSelector = ({
-  values,
-  initialValue,
-  redirectPath,
-}: NameSelectorProps) => {
+const NameSelector = ({ values, initialValue }: NameSelectorProps) => {
   const router = useRouter();
-
   const changeQrCode = (newValue: string) => {
-    router.push(
-      `/dashboard/item/create/${newValue}${redirectPath ? redirectPath : ''}`
-    );
+    router.replace(`/dashboard?qrcode_id=${newValue}`);
   };
 
   return (
     <Select.Root onValueChange={changeQrCode} defaultValue={initialValue}>
       <Select.Trigger
-        className='inline-flex h-[35px] w-44 items-center justify-center gap-[5px] rounded border border-slate-200 dark:border-zinc-700 bg-white px-[15px] text-[13px] capitalize leading-none text-red-500 shadow-sm shadow-black/10 outline-none hover:opacity-80 dark:bg-zinc-800 dark:text-red-600 dark:hover:opacity-90'
+        className='inline-flex h-[35px] w-56 items-center justify-center gap-[5px] rounded border border-slate-200 bg-white px-[15px] text-[13px] capitalize leading-none text-red-500 shadow-sm shadow-black/10 outline-none hover:opacity-80 dark:border-zinc-700 dark:bg-zinc-800 dark:text-red-600 dark:hover:opacity-90'
         aria-label='QrCodes'
       >
         <Select.Value />

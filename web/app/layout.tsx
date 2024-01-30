@@ -3,6 +3,7 @@ import Navbar from '@/components/nav/Navbar';
 import { GeistSans } from 'geist/font';
 
 import { NotificationProvider } from '@/components/notification/NotificationContext';
+import Link from 'next/link';
 import './globals.css';
 
 const defaultUrl = process.env.VERCEL_URL
@@ -30,7 +31,49 @@ export default function RootLayout({
             {children}
           </main>
 
-          <footer className='flex w-full justify-center p-10 text-center text-xs'>
+          <footer className='flex w-full flex-col justify-center gap-10 p-10 text-center text-xs'>
+            <div className='flex flex-wrap justify-center gap-6 sm:gap-12'>
+              <Link href='/faq'>
+                <Text
+                  variant={'caption'}
+                  className='text-center opacity-60 hover:underline'
+                >
+                  FAQ
+                </Text>
+              </Link>
+              <Link href='/about-us'>
+                <Text
+                  variant={'caption'}
+                  className='text-center opacity-60 hover:underline'
+                >
+                  About us
+                </Text>
+              </Link>
+              <Link href='/policy'>
+                <Text
+                  variant={'caption'}
+                  className='text-center opacity-60 hover:underline'
+                >
+                  Privacy Policy
+                </Text>
+              </Link>
+              <Link href='/terms'>
+                <Text
+                  variant={'caption'}
+                  className='text-center opacity-60 hover:underline'
+                >
+                  Terms
+                </Text>
+              </Link>
+              <Link href='/contact'>
+                <Text
+                  variant={'caption'}
+                  className='text-center opacity-60 hover:underline'
+                >
+                  Contact
+                </Text>
+              </Link>
+            </div>
             <Text variant={'caption'} className='text-center opacity-60'>
               Powered by <strong>Tomato</strong> © 2024
             </Text>

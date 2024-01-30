@@ -24,7 +24,7 @@ export function NotificationsContainer({ user_id }: NotificationListProps) {
   return (
     <div className='flex w-full flex-col rounded-md border border-stone-300 dark:border-stone-700 shadow-sm'>
       <div className='flex w-full flex-row items-center justify-between border-b border-stone-300 dark:border-stone-700 px-4 py-4'>
-        <Text variant='h4'>Notifications</Text>
+        <Text variant='subtitle'>Notifications</Text>
         <Button
           text='Mark all as read'
           className='opacity-80'

@@ -1,9 +1,9 @@
-import { Text as DefaultText, TextStyle, ViewStyle } from "react-native"
 import { ReactNode } from "react"
+import { Text as DefaultText, TextStyle, ViewStyle } from "react-native"
 import tw from "../../constants/tw"
 
 export interface ITextProps {
-	variant: 'h1' | 'h2' | 'h3' | 'h4' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline'
+	variant: 'h1' | 'h2' | 'h3' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline'
 	weight?: 100 | 200 | 300 | 400 | 500 | 600 | 700
 	color?: string
 	children?: ReactNode

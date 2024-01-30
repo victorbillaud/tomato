@@ -59,7 +59,7 @@ export default async function Scan({
       <div className='flex h-full w-full flex-col items-center justify-center gap-2'>
         {qrCode?.item_id ? (
           <>
-            <Text variant='h4' className='text-center opacity-90'>
+            <Text variant='subtitle' className='text-center opacity-90'>
               How it seems you found an item... let's start a conversation with
               the owner !
             </Text>
