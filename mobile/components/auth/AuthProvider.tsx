@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { AuthError, User } from '@supabase/gotrue-js'
 import { Text } from "@/components/common/Text";
 import { useSupabase } from "@/components/supabase/SupabaseProvider";
-import { editProfile, fetchProfile, UserProfile, UserProfileUpdate } from "@/utils/supabase/user";
+import { editProfile, editUserAvatar, fetchProfile, UserProfile, UserProfileUpdate } from "@/utils/supabase/user";
 
 interface AuthContextType {
 	user: User | null
@@ -12,6 +12,7 @@ interface AuthContextType {
 	sendOTP: (email: string) => Promise<AuthError | null>
 	signInWithOTP: (email: string, otp: string) => Promise<AuthError | null>
 	updateProfile: (update: UserProfileUpdate) => Promise<void>
+	updateAvatar: (file: Blob, oldImageUrl: string) => Promise<void>
 	signOut: () => Promise<void>
 }
 
@@ -91,6 +92,10 @@ export function AuthProvider(props: Props) {
 			},
 			async updateProfile(update: UserProfileUpdate) {
 				setUserProfile(await editProfile(supabase, update))
+			},
+			async updateAvatar(file: Blob, oldImageUrl: string) {
+				await editUserAvatar(supabase, file, oldImageUrl, user!!.id)
+				setUserProfile(await fetchProfile(supabase))
 			},
 			async signOut() {
 				const error = await supabase.auth.signOut()

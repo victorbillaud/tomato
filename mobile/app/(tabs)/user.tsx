@@ -5,11 +5,13 @@ import tw from "@/constants/tw";
 import Button from "@/components/common/Button";
 import React, { useState } from "react";
 import { InputText } from "@/components/common/InputText";
-import { IconCheck, IconPencil } from "tabler-icons-react-native";
+import { IconCheck, IconPencil, IconUpload } from "tabler-icons-react-native";
 import Switch from "@/components/common/Switch";
+import { Image } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function UserTab() {
-	const { user, userProfile, updateProfile, signOut } = useAuth()
+	const { user, userProfile, updateProfile, updateAvatar, signOut } = useAuth()
 
 	const [updating, setUpdating] = useState(false)
 	const [editing, setEditing] = useState(false)
@@ -20,6 +22,43 @@ export default function UserTab() {
 	return (
 		<View style={tw`w-full h-full p-4 flex flex-col justify-between`}>
 			<View style={tw`h-12/13 flex flex-col gap-3`}>
+				{/* -------------------- PROFILE PICTURE -------------------- */}
+				<View style={tw`flex flex-col items-end gap-1`}>
+					<View style={tw`w-full flex flex-col items-center gap-1`}>
+						<Image
+							source={{ uri: userProfile?.avatar_url }}
+							style={tw`w-18 h-18 rounded-full`}
+						/>
+						<Button
+							icon={{ icon: IconUpload, size: 16 }}
+							text={'Upload picture'}
+							size={'small'}
+							variant={'tertiary'}
+							onPress={async () => {
+								const result = await ImagePicker.launchImageLibraryAsync({
+									mediaTypes: ImagePicker.MediaTypeOptions.Images
+								})
+								if (result.canceled) return
+
+								setUpdating(true)
+								try {
+									console.log('===============================================')
+									console.log(result.assets)
+
+									const blob = await fetch(result.assets[0].uri).then(r => r.blob())
+
+									console.log(blob)
+
+									await updateAvatar(blob, userProfile?.avatar_url ?? '')
+								} catch (e) {
+									console.error(e)
+								}
+								setUpdating(false)
+							}}
+						/>
+					</View>
+				</View>
+
 				<View style={tw`flex flex-row justify-between `}>
 					{/* -------------------- USERNAME -------------------- */}
 					<View style={tw`w-2/3 flex flex-col gap-1`}>
@@ -36,8 +75,8 @@ export default function UserTab() {
 						}
 					</View>
 
+					{/* -------------------- EDIT/SAVE CHANGES BUTTONS -------------------- */}
 					<View style={tw`flex flex-row gap-3`}>
-						{/* -------------------- SAVE CHANGES BUTTON -------------------- */}
 						{editing &&
 							<Button
 								icon={{ icon: IconCheck, color: 'white' }}
@@ -57,8 +96,6 @@ export default function UserTab() {
 								}}
 							/>
 						}
-
-						{/* -------------------- EDIT BUTTON -------------------- */}
 						<Button
 							icon={{ icon: IconPencil }}
 							iconOnly
