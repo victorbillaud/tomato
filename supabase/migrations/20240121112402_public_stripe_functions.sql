@@ -11,7 +11,7 @@ create foreign data wrapper stripe_wrapper
 create server stripe_server
   foreign data wrapper stripe_wrapper
   options (
-    api_key_id "to_replace_with_the_stripe_secret", -- Retrieve key_id from the first statement
+    api_key_id 'to_replace_with_the_stripe_secret', -- Retrieve key_id from the first statement
     api_url 'https://api.stripe.com/v1/'  -- Stripe API base URL, optional. Default is 'https://api.stripe.com/v1/'
   );
 
