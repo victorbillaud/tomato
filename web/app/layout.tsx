@@ -44,6 +44,15 @@ export default function RootLayout({
                 FAQ
               </Text>
             </Link>
+            <Link href='/policy'>
+              <Text
+                variant={'caption'}
+                weight={500}
+                className='text-center opacity-60 hover:underline'
+              >
+                Privacy Policy
+              </Text>
+            </Link>
           </footer>
         </body>
       </NotificationProvider>
