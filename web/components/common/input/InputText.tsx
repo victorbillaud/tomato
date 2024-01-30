@@ -4,6 +4,7 @@ import { Icon, IconNames } from '../icon';
 import { Text } from '../text';
 export interface IInputTextProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
+  type?: React.HTMLInputTypeAttribute | 'textarea';
   labelText?: string;
   error?: boolean;
   errorMessage?: string;
@@ -67,14 +68,22 @@ export const InputText = React.forwardRef<HTMLInputElement, IInputTextProps>(
               }`}
             />
           )}
-          <input
-            id='txt'
-            autoComplete='off'
-            className={`w-full border-none bg-transparent text-gray-700 outline-none placeholder:opacity-40 group-focus:border-transparent group-focus:outline-none group-focus:ring-2 group-focus:ring-gray-200 dark:text-gray-200 ${textAlignment}`}
-            {...props}
-            ref={ref}
-            type={type}
-          />
+          {type !== 'textarea' ? (
+            <input
+              id='txt'
+              autoComplete='off'
+              className={`w-full border-none bg-transparent text-gray-700 outline-none placeholder:opacity-40 read-only:cursor-not-allowed read-only:text-opacity-60 group-focus:border-transparent group-focus:outline-none group-focus:ring-2 group-focus:ring-gray-200 dark:text-gray-200 ${textAlignment}`}
+              {...props}
+              ref={ref}
+              type={type}
+            />
+          ) : (
+            <textarea
+              id='txt'
+              autoComplete='off'
+              className={`w-full border-none bg-transparent text-gray-700 outline-none placeholder:opacity-40 group-focus:border-transparent group-focus:outline-none group-focus:ring-2 group-focus:ring-gray-200 dark:text-gray-200 ${textAlignment}`}
+            />
+          )}
           <div className='flex'>{children}</div>
         </div>
       </div>
