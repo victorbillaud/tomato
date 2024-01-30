@@ -18,7 +18,7 @@ export function UserNavBar({ items, user }: UserNavBarProps) {
       <Text variant='h3'>User preferences</Text>
       {items.map((item) => (
         <Link href={item.href} key={item.label}>
-          <Text className='cursor-pointer' variant='h4'>
+          <Text className='cursor-pointer' variant='subtitle'>
             {item.label}
           </Text>
         </Link>

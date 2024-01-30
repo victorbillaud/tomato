@@ -60,7 +60,7 @@ export function ProfileCard({ user, profile }: IProfileCardProps) {
   return (
     <div className='flex w-full flex-col rounded-md border border-stone-300 shadow-sm dark:border-stone-700'>
       <div className='flex w-full flex-row items-center justify-between border-b border-stone-300 px-4 py-4 dark:border-stone-700'>
-        <Text variant='h4'>Profile</Text>
+        <Text variant='subtitle'>Profile</Text>
         <div className='flex flex-row items-center justify-between gap-2'>
           <ResetPasswordButton user={user} supabase={supabase} />
           <Button

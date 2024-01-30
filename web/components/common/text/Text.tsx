@@ -68,14 +68,6 @@ export const Text: FunctionComponent<ITextProps> = ({
     );
   }
 
-  if (variant === 'h4') {
-    return (
-      <h4 className={classNameString} {...props}>
-        {children}
-      </h4>
-    );
-  }
-
   if (variant == 'body') {
     return (
       <p className={`mx-0 my-0 ${classNameString}`} {...props}>
