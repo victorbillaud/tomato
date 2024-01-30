@@ -6,6 +6,7 @@ import Button from "@/components/common/Button";
 import React, { useState } from "react";
 import { InputText } from "@/components/common/InputText";
 import { IconCheck, IconPencil } from "tabler-icons-react-native";
+import Switch from "@/components/common/Switch";
 
 export default function UserTab() {
 	const { user, userProfile, updateProfile, signOut } = useAuth()
@@ -106,6 +107,41 @@ export default function UserTab() {
 						? <Text variant={'body'} style={tw`ml-1`}>{user?.email}</Text>
 						: <Text variant={'caption'} style={tw`ml-1`}>-</Text>
 					}
+				</View>
+
+				{/* -------------------- SETTINGS -------------------- */}
+				<View style={tw`flex flex-col gap-1`}>
+					<Text variant={'overline'}>Settings</Text>
+					<Switch
+						text={'E-mail notifications'}
+						size={'small'}
+						disabled={updating}
+						default={userProfile?.email_notifications ?? false}
+						onChange={async value => {
+							setUpdating(true)
+							try {
+								await updateProfile({ email_notifications: value })
+							} catch (e) {
+								console.error(e)
+							}
+							setUpdating(false)
+						}}
+					/>
+					<Switch
+						text={'Notifications for new messages'}
+						size={'small'}
+						disabled={updating}
+						default={userProfile?.message_notifications ?? false}
+						onChange={async value => {
+							setUpdating(true)
+							try {
+								await updateProfile({ message_notifications: value })
+							} catch (e) {
+								console.error(e)
+							}
+							setUpdating(false)
+						}}
+					/>
 				</View>
 			</View>
 
