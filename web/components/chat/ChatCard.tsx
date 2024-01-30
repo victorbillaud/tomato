@@ -12,6 +12,7 @@ import { Text } from '../common/text';
 import { useChatContext } from './ChatContext';
 import { ChatCardSkeleton } from './Skeletons';
 import { ChatCardProps, DBItem, DBMessage, DBProfile } from './types';
+import { CustomImage } from '../common/image';
 
 export default function ChatCard({
   conversation,
@@ -66,7 +67,7 @@ export default function ChatCard({
     getItemInfo();
   }, [isOwner, conversation, supabase, itemId]);
 
-  const avatarUrl = userDetails?.avatar_url;
+  const itemImgUrl = itemInfo?.image_path;
 
   useEffect(() => {
     // get messages of this conversation only
@@ -119,12 +120,15 @@ export default function ChatCard({
       ? ' bg-zinc-100 dark:bg-zinc-800/70'
       : '';
 
-  // ! Same here, we can't get the item info when we are the finder
   const renderTag = () => {
-    if (itemInfo && itemInfo.lost) {
-      return <Tag text='lost' color='red' size='small' />;
-    } else if (itemInfo && !itemInfo.lost) {
-      return <Tag text='found' color='green' size='small' />;
+    if (isOwner && itemInfo?.lost) {
+      return <Tag text='lost' color='red' size='small' className='h-fit' />;
+    }
+    if (!isOwner) {
+      return <Tag text='scanned' color='blue' size='small' className='h-fit' />;
+    }
+    if (!itemInfo?.lost) {
+      return <Tag text='found' color='green' size='small' className='h-fit' />;
     }
   };
 
@@ -139,20 +143,24 @@ export default function ChatCard({
       className={`flex items-center gap-2 rounded-br-lg rounded-tr-lg px-4 py-3 hover:bg-zinc-100 dark:hover:bg-zinc-800/70 ${selectedStyle} `}
     >
       <div className='flex-shrink-0'>
-        {avatarUrl ? (
-          <Image
-            src={avatarUrl}
-            alt='avatar'
+        {itemImgUrl ? (
+          <CustomImage
+            src={itemImgUrl}
+            alt='item-image'
             width={36}
             height={36}
-            className='rounded-full border-[1px] border-gray-700 dark:border-white/20'
+            cover
+            rounded='full'
+            className='border-[1px] border-gray-700 dark:border-white/20'
           />
         ) : (
-          <Icon
-            name='user-circle'
-            size={40}
-            stroke={1}
-            color='dark:text-white text-black'
+          <CustomImage
+            src={'/tomato.png'}
+            alt='tomato'
+            width={36}
+            height={36}
+            cover
+            rounded='full'
           />
         )}
       </div>
