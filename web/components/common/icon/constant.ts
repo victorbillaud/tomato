@@ -51,6 +51,9 @@ import {
   IconWritingSign,
   IconWritingSignOff,
   IconX,
+  IconCalendarMonth,
+  IconBrandGithub,
+  IconHeart,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -106,6 +109,8 @@ const ICONS = {
   'map-pin': IconMapPin,
   'map-pin-exclamation': IconMapPinExclamation,
   'circle-plus': IconCirclePlus,
+  github: IconBrandGithub,
+  heart: IconHeart,
 };
 
 export default ICONS;
