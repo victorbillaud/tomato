@@ -38,9 +38,9 @@ export function ItemScanHistoryItem(props: IItemScanHistoryItemProps) {
         </Text>
       </div>
       <div className='flex w-full flex-row flex-wrap items-center justify-start gap-1 md:justify-end'>
-        {props.scan.ip_metadata['city'] && props.scan.ip_metadata['region'] && (
-          <IpTooltip scan={props.scan} />
-        )}
+        {props.scan.ip_metadata &&
+          props.scan.ip_metadata['city'] &&
+          props.scan.ip_metadata['region'] && <IpTooltip scan={props.scan} />}
         {props.scan.geo_location_metadata && (
           <LocationTooltip scan={props.scan} />
         )}
