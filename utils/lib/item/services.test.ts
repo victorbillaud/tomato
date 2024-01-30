@@ -1,7 +1,7 @@
 import { describe, test } from '@jest/globals';
 import { File } from '@web-std/file';
 import { readFileSync } from 'fs';
-import { insertQRCode } from '../qrcode/services';
+import { insertQRCode, listQRCode } from '../qrcode/services';
 import { signInFakeUser } from '../supabase/fake';
 import { getSupabase } from '../supabase/services';
 import {
@@ -17,18 +17,41 @@ import {
 
 const sp = getSupabase();
 
+beforeAll(async () => {
+  const { user } = await signInFakeUser(sp);
+  sp.auth.signOut();
+
+  let qrCodes = [];
+
+  for (let i = 0; i < 10; i++) {
+    const { data: qrCode, error } = await insertQRCode(sp, {
+      user_id: user.id,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    qrCodes.push(qrCode);
+  }
+
+  globalThis.qrCodes = qrCodes;
+});
+
+afterAll(() => {
+  delete globalThis.qrCode;
+});
+
 describe('service item module', () => {
   test('insert item object', async () => {
-    const data = await signInFakeUser(sp);
+    await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
     const { insertedItem, error } = await insertItem(sp, {
       name: 'test',
       description: 'test',
-      qrcode_id: qrCode.id,
+      qrcode_id: qrCodes[0].id,
     });
 
     expect(error).toBeNull();
@@ -42,16 +65,14 @@ describe('service item module', () => {
   });
 
   test('list item object', async () => {
-    const data = await signInFakeUser(sp);
+    await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
-    await insertItem(sp, {
+    const { insertedItem } = await insertItem(sp, {
       name: 'test',
       description: 'test',
-      qrcode_id: qrCode.id,
+      qrcode_id: qrCodes[0].id,
     });
 
     const { data: items, error } = await listItems(sp);
@@ -64,19 +85,17 @@ describe('service item module', () => {
   });
 
   test('get item from qrcode id', async () => {
-    const data = await signInFakeUser(sp);
+    await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
     const { insertedItem } = await insertItem(sp, {
       name: 'test',
       description: 'test',
-      qrcode_id: qrCode.id,
+      qrcode_id: qrCodes[0].id,
     });
 
-    const { data: item, error } = await getItemFromQrCodeId(sp, qrCode.id);
+    const { data: item, error } = await getItemFromQrCodeId(sp, qrCodes[0].id);
 
     expect(error).toBeNull();
 
@@ -89,13 +108,11 @@ describe('service item module', () => {
   });
 
   test('get item from qrcode id with no item', async () => {
-    const data = await signInFakeUser(sp);
+    await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
-    const { data: item, error } = await getItemFromQrCodeId(sp, qrCode.id);
+    const { data: item, error } = await getItemFromQrCodeId(sp, qrCodes[0].id);
 
     expect(error).toBeDefined();
 
@@ -103,16 +120,14 @@ describe('service item module', () => {
   });
 
   test('get item from id', async () => {
-    const data = await signInFakeUser(sp);
+    await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
     const { insertedItem } = await insertItem(sp, {
       name: 'test',
       description: 'test',
-      qrcode_id: qrCode.id,
+      qrcode_id: qrCodes[0].id,
     });
 
     const { data: item, error } = await getItem(sp, insertedItem.id);
@@ -128,16 +143,14 @@ describe('service item module', () => {
   });
 
   test('activate item', async () => {
-    const data = await signInFakeUser(sp);
+    await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
     const { insertedItem } = await insertItem(sp, {
       name: 'test',
       description: 'test',
-      qrcode_id: qrCode.id,
+      qrcode_id: qrCodes[0].id,
     });
 
     expect(insertedItem.activated).toBe(false);
@@ -152,16 +165,14 @@ describe('service item module', () => {
   });
 
   test('update item', async () => {
-    const data = await signInFakeUser(sp);
+    await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
     const { insertedItem } = await insertItem(sp, {
       name: 'test',
       description: 'test',
-      qrcode_id: qrCode.id,
+      qrcode_id: qrCodes[0].id,
     });
 
     expect(insertedItem.activated).toBe(false);
@@ -186,15 +197,14 @@ describe('service item module', () => {
   test('add item picture', async () => {
     const data = await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
     const { insertedItem } = await insertItem(sp, {
       name: 'test',
       description: 'test',
-      qrcode_id: qrCode.id,
+      qrcode_id: qrCodes[0].id,
     });
+
     const fileContent = readFileSync('./assets/test.jpg');
     const fileObject = new File([fileContent], 'test.png', {
       type: 'image/png',
@@ -230,17 +240,15 @@ describe('service item module', () => {
     expect(imagePath1).not.toBe(imagePath2);
   });
 
-  test("delete item", async () => {
-    const data = await signInFakeUser(sp);
+  test('delete item', async () => {
+    await signInFakeUser(sp);
 
-    const { data: qrCode } = await insertQRCode(sp, {
-      user_id: data.user.id,
-    });
+    const { data: qrCodes } = await listQRCode(sp);
 
     const { insertedItem } = await insertItem(sp, {
       name: 'test',
       description: 'test',
-      qrcode_id: qrCode.id,
+      qrcode_id: qrCodes[0].id,
     });
 
     const { error: error2 } = await deleteItem(sp, insertedItem.id);

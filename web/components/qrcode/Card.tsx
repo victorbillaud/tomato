@@ -1,16 +1,18 @@
 'use client';
-import { useRef, useState } from 'react';
 import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 type CardProps = {
   image: string;
+  children?: React.ReactNode;
 };
 
-const Card = ({ image }: CardProps) => {
+const Card = ({ image, children }: CardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const [shadowColor, setShadowColor] = useState(
-    window?.matchMedia('(prefers-color-scheme: dark)').matches
+    typeof window !== 'undefined' &&
+      window?.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'rgba(255, 255, 255, 0.20)'
       : 'rgba(0, 0, 0, 0.20)'
   );
@@ -42,17 +44,14 @@ const Card = ({ image }: CardProps) => {
 
   return (
     <div className='flex h-full w-full items-center justify-center'>
-      <div
-        onMouseMove={renderRotate}
-        onMouseLeave={clearRotate}
-        className='p-16'
-      >
+      <div onMouseMove={renderRotate} onMouseLeave={clearRotate}>
         <div
           ref={cardRef}
           className='overflow-hidden rounded-lg'
           style={{ boxShadow: `0 0 20px ${shadowColor}` }}
         >
           <Image src={image} alt='card' width={300} height={300} />
+          {children}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import Card from '@/components/Card';
 import { Icon } from '@/components/common/icon';
 import { Text } from '@/components/common/text';
+import Card from '@/components/qrcode/Card';
 
 export default async function Index() {
   return (
@@ -18,7 +18,7 @@ export default async function Index() {
             </Text>
           </div>
 
-          <div className='hidden h-full w-full items-end justify-center gap-4 sm:flex'>
+          <div className='hidden h-full w-full items-end justify-center gap-4 p-12 sm:flex'>
             <Card image='/qrcode_home.png' />
           </div>
         </div>

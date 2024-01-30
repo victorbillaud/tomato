@@ -93,9 +93,9 @@ const getButtonClass = (style: TButtonVariant) => {
   switch (style) {
     case 'primary':
       return {
-        base: 'rounded-md border border-transparent bg-primary-900 font-medium text-gray-100 shadow-sm',
+        base: 'rounded-md border border-transparent bg-primary-600 font-medium text-gray-100 shadow-sm',
         interact:
-          'hover:bg-primary-950 focus:outline-none focus:ring-2 focus:ring-primary-950 focus:ring-offset-2',
+          'hover:bg-primary-650 focus:outline-none focus:ring-2 focus:ring-primary-650 focus:ring-offset-2',
       };
     case 'secondary':
       return {

@@ -29,6 +29,7 @@ export default async function Navbar() {
       </Link>
       <div className='flex w-full flex-row items-center justify-end gap-3'>
         <NavLink href='/chat' label='Chat' icon='message' />
+        <NavLink href='/shop' label='Shop' icon="shopping-bag" />
         {user ? (
           <>
             <NavLink href='/dashboard' label='Items' icon='layout' />
