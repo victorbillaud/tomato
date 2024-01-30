@@ -28,6 +28,8 @@ import {
   IconLoader,
   IconLock,
   IconLogout,
+  IconMapPin,
+  IconMapPinExclamation,
   IconMessage2,
   IconMessageCircle,
   IconMotorbike,
@@ -47,7 +49,7 @@ import {
   IconUserQuestion,
   IconWritingSign,
   IconWritingSignOff,
-  IconX,
+  IconX
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -100,6 +102,8 @@ const ICONS = {
   'star-filled': IconStarFilled,
   'star-half-filled': IconStarHalfFilled,
   'current-location': IconCurrentLocation,
+  'map-pin': IconMapPin,
+  'map-pin-exclamation': IconMapPinExclamation
 };
 
 export default ICONS;
