@@ -38,7 +38,6 @@ export default function RootLayout({
             <Link href='/faq'>
               <Text
                 variant={'caption'}
-                weight={500}
                 className='text-center opacity-60 hover:underline'
               >
                 FAQ
@@ -47,10 +46,17 @@ export default function RootLayout({
             <Link href='/policy'>
               <Text
                 variant={'caption'}
-                weight={500}
                 className='text-center opacity-60 hover:underline'
               >
                 Privacy Policy
+              </Text>
+            </Link>
+            <Link href='/terms'>
+              <Text
+                variant={'caption'}
+                className='text-center opacity-60 hover:underline'
+              >
+                Terms
               </Text>
             </Link>
           </footer>
