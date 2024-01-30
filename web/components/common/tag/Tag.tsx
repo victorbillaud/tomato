@@ -18,9 +18,9 @@ export const Tag: FunctionComponent<ITag> = ({
   };
 
   const iconConfig = {
-    small: 20,
-    medium: 24,
-    large: 28,
+    small: 18,
+    medium: 22,
+    large: 24,
   };
 
   const containerClass = classNames(
@@ -42,7 +42,6 @@ export const Tag: FunctionComponent<ITag> = ({
           size={iconConfig[size]}
           name={icon}
           color={tagsConfig[color].iconColor}
-          className='mr-1'
         />
       )}
       {text}
