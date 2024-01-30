@@ -59,6 +59,14 @@ export default function RootLayout({
                 Terms
               </Text>
             </Link>
+            <Link href='/contact'>
+              <Text
+                variant={'caption'}
+                className='text-center opacity-60 hover:underline'
+              >
+                Contact
+              </Text>
+            </Link>
           </footer>
         </body>
       </NotificationProvider>
