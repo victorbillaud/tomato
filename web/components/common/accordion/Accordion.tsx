@@ -43,7 +43,7 @@ const AccordionItem = React.forwardRef<HTMLDivElement, IAccordionItemProps>(
   ({ children, className, ...props }, forwardedRef) => (
     <RadixAccordion.Item
       className={classNames(
-        'border border-stone-200 border-opacity-50 first:rounded-t-lg last:rounded-b-lg',
+        'border border-stone-200 bg-stone-100 dark:bg-stone-900 border-opacity-50 first:rounded-t-lg last:rounded-b-lg dark:border-stone-900',
         className
       )}
       {...props}
@@ -69,7 +69,7 @@ const AccordionTrigger = React.forwardRef<
   <RadixAccordion.Header className='flex'>
     <RadixAccordion.Trigger
       className={classNames(
-        'group flex w-full items-center justify-between border-opacity-50 bg-stone-100 px-5 py-3 text-left text-[15px] font-medium text-stone-500 last:border-0 focus:outline-none',
+        'group flex w-full items-center justify-between border-opacity-50 px-5 py-3 text-left text-[15px] font-medium text-stone-500 last:border-0 focus:outline-none',
         className
       )}
       {...props}
@@ -95,7 +95,7 @@ const AccordionContent = React.forwardRef<
 >(({ children, className, ...props }, forwardedRef) => (
   <RadixAccordion.Content
     className={classNames(
-      'text-mauve11 bg-mauve2 overflow-hidden text-[15px] data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown',
+      'text-mauve11 dark:bg-stone-800 bg-stone-50 overflow-hidden text-[15px] data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown',
       className
     )}
     {...props}

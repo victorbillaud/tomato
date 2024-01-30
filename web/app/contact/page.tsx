@@ -1,13 +1,12 @@
-import React from 'react';
-import { Button } from '@/components/common/button';
+import { SubmitButton } from '@/components/common/button';
 import { InputText } from '@/components/common/input';
+import { Text } from '@/components/common/text';
+import { WebHookBody } from '@/utils/discord/types';
 import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
 import { getUserDetails } from '@utils/lib/user/services';
 import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { WebHookBody } from '@/utils/discord/types';
-import { Text } from '@/components/common/text';
 
 const handleMessageSend = async (formData: FormData) => {
   'use server';
@@ -116,7 +115,13 @@ const ContactPage = async () => {
           placeholder='Message*'
           maxLength={500}
         />
-        <Button variant='primary' text='Send' />
+        <SubmitButton
+          text='Send message'
+          variant='primary'
+          color='green'
+          type='submit'
+          className='w-full'
+        />
       </form>
     </div>
   );
