@@ -3,16 +3,14 @@ import { createClient } from '@/utils/supabase/client';
 import { getItem } from '@utils/lib/item/services';
 import { getPublicUserDetails } from '@utils/lib/user/services';
 import dateFormat from 'dateformat';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Icon } from '../common/icon';
+import { CustomImage } from '../common/image';
 import { Tag } from '../common/tag';
 import { Text } from '../common/text';
 import { useChatContext } from './ChatContext';
 import { ChatCardSkeleton } from './Skeletons';
 import { ChatCardProps, DBItem, DBMessage, DBProfile } from './types';
-import { CustomImage } from '../common/image';
 
 export default function ChatCard({
   conversation,
@@ -166,7 +164,7 @@ export default function ChatCard({
       </div>
 
       <div className='flex-grow truncate'>
-        <Text variant={'h4'} className='truncate'>
+        <Text variant={'subtitle'} className='truncate'>
           {itemInfo?.name || 'Item found'}
         </Text>
         <div className='flex items-center'>

@@ -5,11 +5,10 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { InputTextForm } from '../common/input';
-import { Text } from '../common/text';
-import { IItemInfoProps } from './types';
 import { InputFileForm } from '../common/input/InputFileForm';
-import { Button } from '../common/button';
+import { Text } from '../common/text';
 import ItemFileButton from './ItemFileButton';
+import { IItemInfoProps } from './types';
 
 async function handleImageUpdate(
   itemId: string,
@@ -123,7 +122,7 @@ export function ItemInfo({ item }: IItemInfoProps) {
               }}
               defaultComponent={
                 <Text
-                  variant='caption'
+                  variant='body'
                   weight={500}
                   className='text-start opacity-70'
                 >
@@ -143,7 +142,7 @@ export function ItemInfo({ item }: IItemInfoProps) {
               created at
             </Text>
             <Text
-              variant='caption'
+              variant='body'
               weight={500}
               className='text-center opacity-70'
             >

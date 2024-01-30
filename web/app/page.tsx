@@ -278,7 +278,7 @@ export default async function Index() {
                     moi. J&apos;ai retrouvé mon porte-monnaie en un clin
                     d&apos;œil grâce à cette plateforme simple et efficace!
                   </Text>
-                  <Text variant='h4' className='text-right' color='text-black'>
+                  <Text variant='subtitle' className='text-right' color='text-black'>
                     Sophie. D
                   </Text>
                 </div>
@@ -300,7 +300,7 @@ export default async function Index() {
                     L&apos;interface web est super pratique, et la communauté
                     est vraiment serviable.
                   </Text>
-                  <Text variant='h4' className='text-right' color='text-black'>
+                  <Text variant='subtitle' className='text-right' color='text-black'>
                     Baptise L.
                   </Text>
                 </div>
@@ -324,7 +324,7 @@ export default async function Index() {
                     était rapide et anonyme, faisant de cette expérience un
                     plaisir.
                   </Text>
-                  <Text variant='h4' className='text-right' color='text-black'>
+                  <Text variant='subtitle' className='text-right' color='text-black'>
                     Jeanne. M
                   </Text>
                 </div>

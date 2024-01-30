@@ -15,6 +15,7 @@ import {
   IconChevronUp,
   IconCircleCheck,
   IconCircleCheckFilled,
+  IconCirclePlus,
   IconCurrentLocation,
   IconDevices,
   IconDiscountCheck,
@@ -49,7 +50,7 @@ import {
   IconUserQuestion,
   IconWritingSign,
   IconWritingSignOff,
-  IconX
+  IconX,
 } from '@tabler/icons-react';
 
 const ICONS = {
@@ -103,7 +104,8 @@ const ICONS = {
   'star-half-filled': IconStarHalfFilled,
   'current-location': IconCurrentLocation,
   'map-pin': IconMapPin,
-  'map-pin-exclamation': IconMapPinExclamation
+  'map-pin-exclamation': IconMapPinExclamation,
+  'circle-plus': IconCirclePlus,
 };
 
 export default ICONS;
