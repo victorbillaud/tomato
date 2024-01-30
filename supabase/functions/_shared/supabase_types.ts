@@ -470,6 +470,12 @@ export interface Database {
         }
         Returns: string
       }
+      get_customer_id: {
+        Args: {
+          p_id: string
+        }
+        Returns: string
+      }
       get_user_conversations_with_last_message: {
         Args: {
           user_id?: string
@@ -482,6 +488,26 @@ export interface Database {
           owner_id: string
           finder_id: string
           last_message: Json
+        }[]
+      }
+      list_stripe_prices: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          currency: string
+          unit_amount: number
+          type: string
+          lookup_key: string
+        }[]
+      }
+      list_stripe_products: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          name: string
+          description: string
+          price_id: string
+          image_url: string
         }[]
       }
       update_user_conversations_and_messages: {

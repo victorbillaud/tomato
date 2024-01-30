@@ -8,202 +8,204 @@ import { deleteScan, insertScan, listScans } from './services';
 const sp = getSupabase();
 
 beforeAll(async () => {
-    const data = await signInFakeUser(sp);
+  const { user } = await signInFakeUser(sp);
+  sp.auth.signOut();
 
-    const { data: qrCode, error: insertQrCodeError } = await insertQRCode(sp, {
-        user_id: data.user.id,
-    });
+  const { data: qrCode, error: insertQrCodeError } = await insertQRCode(sp, {
+    user_id: user.id,
+  });
 
-    const { insertedItem, error: insertItemError } = await insertItem(sp, {
-        name: 'test',
-        description: 'test',
-        qrcode_id: qrCode.id,
-    });
+  await signInFakeUser(sp);
 
-    if (insertQrCodeError) {
-        throw insertQrCodeError;
-    }
+  const { insertedItem, error: insertItemError } = await insertItem(sp, {
+    name: 'test',
+    description: 'test',
+    qrcode_id: qrCode.id,
+  });
 
-    if (insertItemError) {
-        throw insertItemError;
-    }
+  if (insertQrCodeError) {
+    throw insertQrCodeError;
+  }
 
-    globalThis.insertedItem = insertedItem;
-    globalThis.qrCode = qrCode;
-    globalThis.scansCreated = [];
+  if (insertItemError) {
+    throw insertItemError;
+  }
+
+  globalThis.insertedItem = insertedItem;
+  globalThis.qrCode = qrCode;
+  globalThis.scansCreated = [];
 });
 
 afterAll(() => {
-    delete globalThis.insertedItem;
-    delete globalThis.qrCode;
+  delete globalThis.insertedItem;
+  delete globalThis.qrCode;
 
-    globalThis.scansCreated.forEach(async (scan) => {
-        await deleteScan(sp, scan.id);
-    });
+  globalThis.scansCreated.forEach(async (scan) => {
+    await deleteScan(sp, scan.id);
+  });
 
-    sp.auth.signOut();
+  sp.auth.signOut();
 });
 
-
 describe('service scan module', () => {
-    test('insert scan object for unknown user', async () => {
-        sp.auth.signOut();
+  test('insert scan object for unknown user', async () => {
+    sp.auth.signOut();
 
-        const { data, error } = await insertScan(sp, {
-            item_id: globalThis.insertedItem.id,
-            qrcode_id: globalThis.qrCode.id,
-        });
-
-        if (error) {
-            throw error;
-        }
-
-        // Assert each property of the object.
-        expect(data).toBeDefined();
-        expect(data.id).toBeDefined();
-        expect(data.user_id).toBeNull();
-        expect(data.item_id).toBeDefined();
-        expect(data.type).toContain('non_registered_user_scan');
-
-        globalThis.scansCreated.push(data);
+    const { data, error } = await insertScan(sp, {
+      item_id: globalThis.insertedItem.id,
+      qrcode_id: globalThis.qrCode.id,
     });
 
-    test('delete scan object', async () => {
-        const { data: scan, error: insertScanError } = await insertScan(sp, {
-            item_id: globalThis.insertedItem.id,
-            qrcode_id: globalThis.qrCode.id,
-        });
+    if (error) {
+      throw error;
+    }
 
-        if (insertScanError) {
-            throw insertScanError;
-        }
+    // Assert each property of the object.
+    expect(data).toBeDefined();
+    expect(data.id).toBeDefined();
+    expect(data.user_id).toBeNull();
+    expect(data.item_id).toBeDefined();
+    expect(data.type).toContain('non_registered_user_scan');
 
-        const { error: deleteScanError } = await deleteScan(sp, scan.id);
+    globalThis.scansCreated.push(data);
+  });
 
-        if (deleteScanError) {
-            throw deleteScanError;
-        }
-
-        expect(deleteScanError).toBeNull();
+  test('delete scan object', async () => {
+    const { data: scan, error: insertScanError } = await insertScan(sp, {
+      item_id: globalThis.insertedItem.id,
+      qrcode_id: globalThis.qrCode.id,
     });
 
-    test('insert scan object for known user', async () => {
-        const data = await signInFakeUser(sp);
+    if (insertScanError) {
+      throw insertScanError;
+    }
 
-        const { data: scan, error: insertScanError } = await insertScan(sp, {
-            item_id: globalThis.insertedItem.id,
-            qrcode_id: globalThis.qrCode.id,
-        });
+    const { error: deleteScanError } = await deleteScan(sp, scan.id);
 
-        if (insertScanError) {
-            throw insertScanError;
-        }
+    if (deleteScanError) {
+      throw deleteScanError;
+    }
 
-        // Assert each property of the object.
-        expect(scan).toBeDefined();
-        expect(scan.id).toBeDefined();
-        expect(scan.user_id).toBe(data.user.id);
-        expect(scan.item_id).toBeDefined();
-        expect(scan.type).toContain("registered_user_scan");
+    expect(deleteScanError).toBeNull();
+  });
 
-        globalThis.scansCreated.push(scan);
+  test('insert scan object for known user', async () => {
+    const data = await signInFakeUser(sp);
+
+    const { data: scan, error: insertScanError } = await insertScan(sp, {
+      item_id: globalThis.insertedItem.id,
+      qrcode_id: globalThis.qrCode.id,
     });
 
-    test('insert scan with array of types', async () => {
-        await signInFakeUser(sp);
+    if (insertScanError) {
+      throw insertScanError;
+    }
 
-        const { data: scan, error: insertScanError } = await insertScan(sp, {
-            item_id: globalThis.insertedItem.id,
-            qrcode_id: globalThis.qrCode.id,
-            type: ["creation", "owner_scan"],
-        });
+    // Assert each property of the object.
+    expect(scan).toBeDefined();
+    expect(scan.id).toBeDefined();
+    expect(scan.user_id).toBe(data.user.id);
+    expect(scan.item_id).toBeDefined();
+    expect(scan.type).toContain('registered_user_scan');
 
-        if (insertScanError) {
-            throw insertScanError;
-        }
+    globalThis.scansCreated.push(scan);
+  });
 
-        // Assert each property of the object.
-        expect(scan).toBeDefined();
-        expect(scan.id).toBeDefined();
-        expect(scan.item_id).toBeDefined();
-        expect(scan.type).toContain("creation");
-        expect(scan.type).toContain("owner_scan");
-        expect(scan.type).toContain("registered_user_scan");
+  test('insert scan with array of types', async () => {
+    await signInFakeUser(sp);
 
-        globalThis.scansCreated.push(scan);
+    const { data: scan, error: insertScanError } = await insertScan(sp, {
+      item_id: globalThis.insertedItem.id,
+      qrcode_id: globalThis.qrCode.id,
+      type: ['creation', 'owner_scan'],
     });
 
-    test('insert scan with array of types with duplicates', async () => {
-        await signInFakeUser(sp);
+    if (insertScanError) {
+      throw insertScanError;
+    }
 
-        const { data: scan, error: insertScanError } = await insertScan(sp, {
-            item_id: globalThis.insertedItem.id,
-            qrcode_id: globalThis.qrCode.id,
-            type: ["creation", "owner_scan", "owner_scan"],
-        });
+    // Assert each property of the object.
+    expect(scan).toBeDefined();
+    expect(scan.id).toBeDefined();
+    expect(scan.item_id).toBeDefined();
+    expect(scan.type).toContain('creation');
+    expect(scan.type).toContain('owner_scan');
+    expect(scan.type).toContain('registered_user_scan');
 
-        // Should raise an error.
-        expect(insertScanError).toBeDefined();
+    globalThis.scansCreated.push(scan);
+  });
 
-        // Assert each property of the object.
-        expect(scan).toBeNull();
+  test('insert scan with array of types with duplicates', async () => {
+    await signInFakeUser(sp);
+
+    const { data: scan, error: insertScanError } = await insertScan(sp, {
+      item_id: globalThis.insertedItem.id,
+      qrcode_id: globalThis.qrCode.id,
+      type: ['creation', 'owner_scan', 'owner_scan'],
     });
 
-    test('insert scan with array of types with unknown user and registered user', async () => {
-        await signInFakeUser(sp);
+    // Should raise an error.
+    expect(insertScanError).toBeDefined();
 
-        const { data: scan, error: insertScanError } = await insertScan(sp, {
-            item_id: globalThis.insertedItem.id,
-            qrcode_id: globalThis.qrCode.id,
-            type: ["creation", "non_registered_user_scan"],
-        });
+    // Assert each property of the object.
+    expect(scan).toBeNull();
+  });
 
-        // Should raise an error.
-        expect(insertScanError).toBeDefined();
+  test('insert scan with array of types with unknown user and registered user', async () => {
+    await signInFakeUser(sp);
 
-        // Assert each property of the object.
-        expect(scan).toBeNull();
+    const { data: scan, error: insertScanError } = await insertScan(sp, {
+      item_id: globalThis.insertedItem.id,
+      qrcode_id: globalThis.qrCode.id,
+      type: ['creation', 'non_registered_user_scan'],
     });
 
-    test('list items scans', async () => {
-        for (let i = 0; i < 3; i++) {
-            await insertScan(sp, {
-                item_id: globalThis.insertedItem.id,
-                qrcode_id: globalThis.qrCode.id,
-            });
-        }
+    // Should raise an error.
+    expect(insertScanError).toBeDefined();
 
-        const { data, error } = await listScans(sp, globalThis.insertedItem.id);
+    // Assert each property of the object.
+    expect(scan).toBeNull();
+  });
 
-        if (error) {
-            throw error;
-        }
+  test('list items scans', async () => {
+    for (let i = 0; i < 3; i++) {
+      await insertScan(sp, {
+        item_id: globalThis.insertedItem.id,
+        qrcode_id: globalThis.qrCode.id,
+      });
+    }
 
-        // Assert each property of the object.
-        expect(data).toBeDefined();
-        expect(data.length).toBeGreaterThan(0);
+    const { data, error } = await listScans(sp, globalThis.insertedItem.id);
 
-        globalThis.scansCreated.push(...data);
-    });
+    if (error) {
+      throw error;
+    }
 
-    test('list qrcode scans', async () => {
-        for (let i = 0; i < 3; i++) {
-            await insertScan(sp, {
-                item_id: null,
-                qrcode_id: globalThis.qrCode.id,
-            });
-        }
+    // Assert each property of the object.
+    expect(data).toBeDefined();
+    expect(data.length).toBeGreaterThan(0);
 
-        const { data, error } = await listScans(sp, null, globalThis.qrCode.id);
+    globalThis.scansCreated.push(...data);
+  });
 
-        if (error) {
-            throw error;
-        }
+  test('list qrcode scans', async () => {
+    for (let i = 0; i < 3; i++) {
+      await insertScan(sp, {
+        item_id: null,
+        qrcode_id: globalThis.qrCode.id,
+      });
+    }
 
-        // Assert each property of the object.
-        expect(data).toBeDefined();
-        expect(data.length).toBeGreaterThan(0);
+    const { data, error } = await listScans(sp, null, globalThis.qrCode.id);
 
-        globalThis.scansCreated.push(...data);
-    });
+    if (error) {
+      throw error;
+    }
+
+    // Assert each property of the object.
+    expect(data).toBeDefined();
+    expect(data.length).toBeGreaterThan(0);
+
+    globalThis.scansCreated.push(...data);
+  });
 });

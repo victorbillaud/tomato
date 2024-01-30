@@ -18,11 +18,14 @@ import {
 const sp = getSupabase();
 
 beforeAll(async () => {
-  const { user: owner } = await signInFakeUser(sp);
+  const { user } = await signInFakeUser(sp);
+  sp.auth.signOut();
 
   const { data: qrCode, error: insertQrCodeError } = await insertQRCode(sp, {
-    user_id: owner.id,
+    user_id: user.id,
   });
+
+  const { user: owner } = await signInFakeUser(sp);
 
   const { insertedItem, error: insertItemError } = await insertItem(sp, {
     name: 'test',
