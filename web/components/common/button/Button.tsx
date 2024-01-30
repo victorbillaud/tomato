@@ -34,6 +34,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
     primary: 'text-gray-100',
     secondary: 'text-gray-700 dark:text-gray-100',
     tertiary: 'text-gray-700 dark:text-gray-200',
+    custom: '',
   };
 
   const buttonClasses = getButtonClass(variant);
@@ -107,6 +108,11 @@ const getButtonClass = (style: TButtonVariant) => {
         base: 'rounded-md border border-transparent bg-transparent font-medium text-gray-700 dark:text-gray-200',
         interact:
           'hover:text-gray-500 dark:hover:text-gray-500 focus:outline-none',
+      };
+    case 'custom':
+      return {
+        base: '',
+        interact: '',
       };
   }
 };
