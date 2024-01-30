@@ -3,6 +3,7 @@ import Navbar from '@/components/nav/Navbar';
 import { GeistSans } from 'geist/font';
 
 import { NotificationProvider } from '@/components/notification/NotificationContext';
+import Link from 'next/link';
 import './globals.css';
 
 const defaultUrl = process.env.VERCEL_URL
@@ -30,10 +31,19 @@ export default function RootLayout({
             {children}
           </main>
 
-          <footer className='flex w-full justify-center p-10 text-center text-xs'>
+          <footer className='flex w-full flex-row justify-center gap-5 p-10 text-center text-xs'>
             <Text variant={'caption'} className='text-center opacity-60'>
               Powered by <strong>Tomato</strong> © 2024
             </Text>
+            <Link href='/faq'>
+              <Text
+                variant={'caption'}
+                weight={500}
+                className='text-center opacity-60 hover:underline'
+              >
+                FAQ
+              </Text>
+            </Link>
           </footer>
         </body>
       </NotificationProvider>
