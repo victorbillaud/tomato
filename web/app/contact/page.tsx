@@ -1,13 +1,13 @@
+import React from 'react';
 import { Button } from '@/components/common/button';
 import { InputText } from '@/components/common/input';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
-import React from 'react';
 import { getUserDetails } from '@utils/lib/user/services';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { WebHookBody } from '@/utils/discord/types';
-import { env } from 'process';
+import { Text } from '@/components/common/text';
 
 const handleMessageSend = async (formData: FormData) => {
   'use server';
@@ -84,8 +84,10 @@ const ContactPage = async () => {
   return (
     <div className='mt-10 w-[80%] sm:w-[600px]'>
       <div className='flex flex-col gap-5 align-middle'>
-        <h1 className='text-center text-5xl dark:text-gray-200'>Contact Us</h1>
-        <h2 className='text-center text-lg dark:text-gray-200'>
+        <Text variant='h1' className='text-center text-4xl dark:text-gray-200'>
+          Contact the <span className='text-primary-600'>Tomato</span> team
+        </Text>
+        <h2 className='text-center text-xl dark:text-gray-200'>
           Ask us what you want
         </h2>
       </div>
