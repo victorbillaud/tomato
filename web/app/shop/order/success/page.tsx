@@ -18,7 +18,7 @@ export default async function OrderSuccessPage({
   console.log(session, lineItems);
 
   return (
-    <div className='flex w-full flex-col items-start justify-center gap-5 px-3'>
+    <div className='flex w-full max-w-6xl flex-1 flex-col items-start justify-start gap-20 px-3'>
       <div className='flex flex-col items-center justify-center gap-2 md:flex-row'>
         <Icon
           name='circle-check'
