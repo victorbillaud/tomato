@@ -31,6 +31,8 @@ Deno.serve(async (req) => {
   const body = await req.text();
   let receivedEvent: Stripe.Event;
   try {
+    console.log("⚡️  Webhook received:", body);
+    
     receivedEvent = await stripe.webhooks.constructEventAsync(
       body,
       signature!,
@@ -42,6 +44,8 @@ Deno.serve(async (req) => {
     console.log(`⚠️  Webhook signature verification failed.`, err.message);
     return new Response(err.message, { status: 400 });
   }
+
+  console.log("🔔  Success:", receivedEvent);
 
   if (receivedEvent.type === "checkout.session.completed") {
     // Verify if the checkout as been paid

@@ -27,7 +27,7 @@ export const Text: FunctionComponent<ITextProps> = ({
     h1: 'font-bold',
     h2: 'font-bold',
     h3: 'font-bold',
-    h4: 'font-bold',
+    h4: 'font-semibold',
     title: 'font-semibold',
     subtitle: 'font-semibold',
     body: 'font-normal',
