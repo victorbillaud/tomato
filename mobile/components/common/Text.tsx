@@ -5,7 +5,6 @@ import tw from "@/constants/tw"
 export interface ITextProps {
 	variant: 'h1' | 'h2' | 'h3' | 'h4' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline'
 	weight?: 100 | 200 | 300 | 400 | 500 | 600 | 700
-	color?: string
 	children?: ReactNode
 	style?: ViewStyle | TextStyle | (ViewStyle | TextStyle)[]
 }
@@ -17,7 +16,6 @@ export function Text(props: ITextProps) {
 		<DefaultText
 			{...props}
 			style={[
-				props.color ? tw`default` : tw`text-stone-900 dark:text-stone-100`,
 				textConfig[variant],
 				props.weight ? weightClass[props.weight] : weightVariantClass[variant],
 				variant === 'body' ? tw`mx-0 my-0` : null,
@@ -60,7 +58,7 @@ export const textConfig = {
 	subtitle: tw`text-base md:text-lg`,
 	body: tw`text-sm md:text-base`,
 	caption: tw`text-xs md:text-sm`,
-	overline: tw`text-xs capitalize`,
+	overline: tw`text-xs`,
 }
 
 /* TODO: use theme like the following example :

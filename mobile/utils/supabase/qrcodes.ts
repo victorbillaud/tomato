@@ -6,6 +6,7 @@ import { QR_CODE_SCAN_BASE_URL } from "@env";
 type ArrayElementType<T> = T extends (infer U)[] ? U : never
 export type QRCode = ArrayElementType<Awaited<ReturnType<typeof fetchQRCodes>>>
 type QRCodeInsert = Database['public']['Tables']['qrcode']['Insert']
+type QRCodeUpdate = Omit<Database['public']['Tables']['qrcode']['Update'], 'id'>
 
 export async function fetchQRCodes(supabase: SupabaseClient<Database>) {
 	const { data: { user } } = await supabase.auth.getUser()
@@ -25,17 +26,17 @@ export async function createQRCode(supabase: SupabaseClient<Database>, user_id: 
 		.select()
 		.single()
 	if (error) throw error
-	return await createQRCodeImage(supabase, data)
+	return await editQRCode(supabase, data.id, {
+		barcode_data: QR_CODE_SCAN_BASE_URL + data.id
+	})
 }
 
-async function createQRCodeImage(supabase: SupabaseClient<Database>, qrCode: QRCode) {
+export async function editQRCode(supabase: SupabaseClient<Database>, qrCodeId: string, update: QRCodeUpdate) {
 	const { data, error } = await supabase
 		.from('qrcode')
-		.update({
-			barcode_data: QR_CODE_SCAN_BASE_URL + qrCode.id
-		})
-		.eq('id', qrCode.id)
-		.select()
+		.update(update)
+		.eq('id', qrCodeId)
+		.select('*')
 		.single()
 	if (error) throw error
 	return data

@@ -21,15 +21,15 @@ export default function ItemsTab() {
 	const qrCodesFree = qrCodes.filter(qrCode => !qrCode.item_id)
 	return (
 		<View style={tw`w-full h-full p-4 flex flex-col justify-between`}>
-			<View>
-				{items.length === 0
-					? (
-						<View style={tw`flex flex-col items-center`}>
-							<Text variant={'title'}>Nothing yet</Text>
-							<Text variant={'subtitle'}>Add an item to get started</Text>
-						</View>
-					)
-					: (
+			{items.length === 0
+				? (
+					<View style={tw`h-12/13 flex flex-col items-center`}>
+						<Text variant={'title'}>Nothing yet</Text>
+						<Text variant={'subtitle'}>Add an item to get started</Text>
+					</View>
+				)
+				: (
+					<View style={tw`h-12/13`}>
 						<ScrollView contentContainerStyle={tw`gap-3`}>
 							{items.map(item => (
 								<Pressable
@@ -40,9 +40,10 @@ export default function ItemsTab() {
 								</Pressable>
 							))}
 						</ScrollView>
-					)
-				}
-			</View>
+					</View>
+				)
+			}
+
 			<View style={tw`flex flex-row justify-end items-center gap-3`}>
 				<Text variant={'subtitle'} style={tw`text-stone-500`}>{qrCodesFree.length} code{qrCodesFree.length > 1 ? 's' : ''} left</Text>
 				<Button
