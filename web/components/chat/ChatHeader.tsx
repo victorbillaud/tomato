@@ -5,6 +5,7 @@ import { Icon } from '../common/icon';
 import { Tag } from '../common/tag';
 import { Text } from '../common/text';
 import { MobileHeaderProps } from './types';
+import { CustomImage } from '../common/image';
 
 export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
   const [showLinkIcon, setShowLinkIcon] = useState<boolean>(false);
@@ -17,18 +18,31 @@ export default function ChatHeader({ currentUser, item }: MobileHeaderProps) {
   }, [currentUser, item]);
 
   const renderTag = () => {
-    if (item && item.lost) {
+    if (isOwner && item?.lost) {
       return <Tag text='lost' color='red' size='small' className='h-fit' />;
-    } else if (item && !item.lost) {
-      return <Tag text='found' color='green' size='small' className='h-fit' />;
-    } else {
+    }
+    if (!isOwner) {
       return <Tag text='scanned' color='blue' size='small' className='h-fit' />;
+    }
+    if (!item?.lost) {
+      return <Tag text='found' color='green' size='small' className='h-fit' />;
     }
   };
 
   const renderHeaderContent = () => {
     return (
       <>
+        {item.image_path ? (
+          <CustomImage
+            src={item.image_path}
+            alt='item-image'
+            width={36}
+            height={36}
+            cover
+            rounded='full'
+            className='block border-[1px] border-gray-700 dark:border-white/20 sm:hidden'
+          />
+        ) : null}
         <Text variant='h3' weight={600} className='hidden sm:block'>
           {item?.name || 'Item found'}
         </Text>
