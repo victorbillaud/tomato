@@ -91,3 +91,19 @@ export async function updateGeoLocationMetadata(
 
   return { data, error };
 }
+
+export async function getScan(
+  supabaseInstance: SupabaseClient<Database>,
+  itemId: string,
+  qrCodeId: string
+) {
+  const { data, error } = await supabaseInstance
+    .from('scan')
+    .select('*')
+    .eq('item_id', itemId)
+    .eq('qrcode_id', qrCodeId)
+    .limit(1)
+    .single();
+
+  return { data, error };
+}
