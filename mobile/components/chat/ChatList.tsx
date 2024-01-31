@@ -44,7 +44,13 @@ export function ChatList({
         return conversationsList.map((conversationCard) => {
             return (
                 <Pressable key={conversationCard.conversation.id}
-                           onPress={() => router.push({pathname:'/chat/chatId', params: {chatId: conversationCard.conversation.id}})}>
+                           onPress={() => {
+                               // @ts-ignore
+                               router.push({
+                                   pathname: '/chat/[chatId]',
+                                   params: {chatId: conversationCard.conversation.id}
+                               })
+                           }}>
                     <ChatCard
                         chatCardContent={conversationCard}
                         currentUser={currentUser as User}
