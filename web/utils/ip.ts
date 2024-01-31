@@ -1,3 +1,5 @@
+import { headers } from 'next/headers';
+
 interface IIPResponse {
   ip: string;
   hostname: string;
@@ -11,6 +13,8 @@ interface IIPResponse {
 }
 
 export const fetchLocationByIP = async () => {
+  const headersList = headers();
+
   const request = await fetch(
     `https://ipinfo.io/json?token=${process.env.IP_INFO_KEY}`
   );

@@ -5,13 +5,12 @@ import { cookies } from 'next/headers';
 import { ItemScanHistoryItem } from './ItemScanHistoryItem';
 import { TItemScanHistoryProps } from './types';
 
-
 export async function ItemScanHistory(props: TItemScanHistoryProps) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const { data: scans, error } = await listScans(
     supabase,
-    undefined,
+    props.item.id || undefined,
     props.item.qrcode_id || undefined
   );
 
