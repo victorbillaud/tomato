@@ -73,6 +73,7 @@ export async function CreationModal({ qrcodeId }: DashboardNavBarProps) {
   return (
     <Modal
       trigger={button}
+      maxWidth='md:max-w-[600px]'
       title='Create an item'
       description=' To facilitate the identification of your different items, Tomato
       automatically generates a name for each QR Code. You can select one

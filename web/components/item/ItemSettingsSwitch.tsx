@@ -1,18 +1,17 @@
 'use client';
 
 import { createClient } from '@/utils/supabase/client';
+import { updateItem } from '@utils/lib/item/services';
 import { Tables } from '@utils/lib/supabase/supabase_types';
-import { updateUserDetails } from '@utils/lib/user/services';
+import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { Switch } from '../common/switch/Switch';
 
 interface IItemSettingsProps {
-  user_id: string;
+  itemId: string;
   label: string;
   field: keyof Pick<
-    Tables<'profiles'>,
-    | 'email_notifications'
-    | 'message_notifications'
+    Tables<'item'>,
     | 'scan_show_avatar_url'
     | 'scan_show_full_name'
     | 'scan_show_item_name'
@@ -21,38 +20,36 @@ interface IItemSettingsProps {
   value: boolean;
 }
 
-export function NotificationSettingsSwitch({
-  user_id,
+export function ItemSettingsSwitch({
+  itemId,
   label,
   field,
   value,
 }: IItemSettingsProps) {
   const supabase = createClient();
-  const handleUpdateProfile = useCallback(
+  const router = useRouter();
+  const handleItemUpdate = useCallback(
     async (value: boolean) => {
-      const { user: userUpdated, error } = await updateUserDetails(
-        supabase,
-        user_id,
-        {
-          [field]: value,
-          updated_at: new Date().toISOString(),
-        }
-      );
+      const { data: itemUpdated, error } = await updateItem(supabase, itemId, {
+        [field]: value,
+      });
 
       if (error) {
         console.error(error);
       }
 
-      return userUpdated;
+      router.refresh();
+
+      return itemUpdated;
     },
-    [supabase, user_id, field, value]
+    [supabase, itemId, field, value]
   );
 
   return (
     <Switch
       label={label}
       checked={value}
-      onValueChange={async (value) => await handleUpdateProfile(value)}
+      onValueChange={async (value) => await handleItemUpdate(value)}
     />
   );
 }

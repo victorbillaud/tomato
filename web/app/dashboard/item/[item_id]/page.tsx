@@ -3,6 +3,7 @@ import { Tag } from '@/components/common/tag';
 import { Text } from '@/components/common/text';
 import { ItemInfo, ItemScanHistory, ItemStateBanner } from '@/components/item';
 import DeleteItemAlert from '@/components/item/DeleteItemAlert';
+import { ItemScanViewOptions } from '@/components/item/ItemScanViewOptions';
 import { ItemSettings } from '@/components/item/ItemSettings';
 import { QrCode } from '@/components/qrcode/QrCode';
 import { createClient } from '@/utils/supabase/server';
@@ -95,6 +96,7 @@ export default async function ItemPage(props: { params: { item_id: string } }) {
           )}
         </div>
         <ItemSettings item={item} />
+        <ItemScanViewOptions item={item} />
         {item.qrcode_id ? (
           <ItemScanHistory item={item} />
         ) : (
