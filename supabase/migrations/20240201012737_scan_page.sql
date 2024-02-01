@@ -1,4 +1,3 @@
-drop trigger if exists "on_item_scanned" on "public"."scan";
 
 alter table "public"."item" add column "scan_description" text;
 
@@ -32,9 +31,9 @@ BEGIN
   SELECT
     i.id AS id,
     CASE
-      WHEN i.scan_show_full_name THEN p.full_name
+      WHEN i.scan_show_item_name THEN i.name
       ELSE NULL
-    END AS display_name,
+    END AS name,
     i.lost AS lost,
     i.lost_at AS lost_at,
     i.user_id AS user_id,
@@ -88,8 +87,6 @@ END;
 $function$
 ;
 
-CREATE TRIGGER trigger_update_item_fields BEFORE INSERT OR UPDATE ON public.item FOR EACH ROW EXECUTE FUNCTION update_item_fields();
-
-CREATE TRIGGER on_item_scanned AFTER INSERT ON public.scan FOR EACH ROW EXECUTE FUNCTION supabase_functions.http_request('http://host.docker.internal:54321/functions/v1/handle_scan_insert', 'POST', '{"Content-type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0","x-tomato-edge-token":"Yc6nkm4k3JV6jgpkGi8lS0uSwV56+T48xBzyRxwEQ0nWQukFCRKXnjAmgX7OVgyYqY4iK9XffELGrczYqWPBgw=="}', '{}', '1000');
+CREATE TRIGGER trigger_update_item_fields AFTER INSERT ON public.item FOR EACH ROW EXECUTE FUNCTION update_item_fields();
 
 
