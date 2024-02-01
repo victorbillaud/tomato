@@ -41,7 +41,7 @@ export default async function Dashboard({
               </Text>
             ) : (
               <Text variant='body' className='text-center opacity-40'>
-                You can{"'"}t add a new item because you don{"'"}t have any QR
+                You can&atos;t add a new item because you don&atos;t have any QR
                 codes, go buy some in the{' '}
                 <Link href='/shop' className='text-primary-600'>
                   shop
