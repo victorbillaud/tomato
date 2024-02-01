@@ -5,13 +5,12 @@ import { cookies } from 'next/headers';
 import { ItemScanHistoryItem } from './ItemScanHistoryItem';
 import { TItemScanHistoryProps } from './types';
 
-
 export async function ItemScanHistory(props: TItemScanHistoryProps) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const { data: scans, error } = await listScans(
     supabase,
-    undefined,
+    props.item.id || undefined,
     props.item.qrcode_id || undefined
   );
 
@@ -26,9 +25,7 @@ export async function ItemScanHistory(props: TItemScanHistoryProps) {
   return (
     <div className='flex w-full flex-col items-center justify-start gap-3'>
       <div className={`flex w-full flex-row items-center justify-between`}>
-        <Text variant='body' weight={600}>
-          Scans history
-        </Text>
+        <Text variant='subtitle'>Scans history</Text>
       </div>
       {scans.length > 0 ? (
         <div className='w-full divide-y divide-stone-300 rounded-md border border-stone-300 dark:divide-stone-700 dark:border-stone-700'>

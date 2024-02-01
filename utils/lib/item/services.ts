@@ -88,7 +88,6 @@ export async function getItem(
   supabaseInstance: SupabaseClient<Database>,
   itemId: string
 ) {
-
   const { data, error } = await supabaseInstance
     .from('item')
     .select(
@@ -128,6 +127,7 @@ export async function updateItem(
     'id' | 'created_at' | 'user_id' | 'activated'
   >
 ) {
+  console.log(item);
   const { data, error } = await supabaseInstance
     .from('item')
     .update(item)
@@ -203,4 +203,15 @@ export async function updateItemImage(
   }
 
   return { imagePath: publicUrl, error: null };
+}
+
+export async function getPublicScanItemView(
+  supabaseInstance: SupabaseClient<Database>,
+  itemId: string
+) {
+  const { data, error } = await supabaseInstance.rpc('get_scan_item_view', {
+    item_id: itemId,
+  });
+
+  return { data, error };
 }

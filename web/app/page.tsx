@@ -9,12 +9,12 @@ export default async function Index() {
         <div className='flex w-full max-w-5xl items-center'>
           <div className='flex w-full flex-col items-start gap-16'>
             <Text variant='h1'>
-              Facile à perdre, encore plus
-              <span className='text-primary-600'> facile à rendre&nbsp;!</span>
+              Easy to lose, even
+              <span className='text-primary-600'> easier to return&nbsp;!</span>
             </Text>
             <Text variant='h1'>
-              Retrouvez vos objets égarés, et vivez la joie de rendre à
-              quelqu&apos;un son bien précieux.
+              Find yout lost objects, and live the joy of returning someone
+              their precious ones.
             </Text>
           </div>
 
@@ -28,15 +28,15 @@ export default async function Index() {
         <div className='flex w-full max-w-5xl flex-col items-center'>
           <div className='flex w-full items-center justify-center pb-12'>
             <Text variant='h1' className='text-left' color='text-white'>
-              L&apos;objectif&nbsp;?
+              What for&nbsp;?
             </Text>
           </div>
 
           <div className='flex w-full flex-col gap-8 sm:py-12'>
             <Text variant='h3' className='text-left' color='text-white'>
-              Rendre la restitution d&apos;objets si simple, que ça en devient
-              un plaisir. Aider les personnes bienveillantes à rentrer en
-              contact avec les propriétaires d&apos;objets égarés.
+              Make the return of lost objects so simple, that it becomes a
+              pleasure. Help kind people to get in touch with the owners of lost
+              objects.
             </Text>
 
             <div className='grid grid-cols-1 justify-around gap-8 sm:grid-cols-2 sm:gap-4'>
@@ -55,7 +55,7 @@ export default async function Index() {
                       className='text-center'
                       color='text-white'
                     >
-                      Objet trouvé ?
+                      Found an object ?
                     </Text>
                   </div>
                   <div className='flex items-center justify-start gap-2'>
@@ -77,7 +77,7 @@ export default async function Index() {
                       stroke={1}
                     />
                     <Text variant='h3' color='text-white'>
-                      Pas d&apos;application à télécharger
+                      No application to download
                     </Text>
                   </div>
                   <div className='flex items-center justify-start gap-2'>
@@ -88,7 +88,7 @@ export default async function Index() {
                       stroke={1}
                     />
                     <Text variant='h3' color='text-white'>
-                      Pas de compte à créer
+                      No account to create
                     </Text>
                   </div>
                   <div className='flex items-center justify-start gap-2'>
@@ -99,7 +99,7 @@ export default async function Index() {
                       stroke={1}
                     />
                     <Text variant='h3' color='text-white'>
-                      Anonyme
+                      Anonymous
                     </Text>
                   </div>
                 </div>
@@ -119,7 +119,7 @@ export default async function Index() {
                       className='text-center'
                       color='text-white'
                     >
-                      Propriétaire ?
+                      Owner ?
                     </Text>
                   </div>
                   <div className='flex items-center justify-start gap-2'>
@@ -130,7 +130,7 @@ export default async function Index() {
                       stroke={1}
                     />
                     <Text variant='h3' color='text-white'>
-                      Une application simple
+                      A simple application
                     </Text>
                   </div>
                   <div className='flex items-center justify-start gap-2'>
@@ -141,7 +141,7 @@ export default async function Index() {
                       stroke={1}
                     />
                     <Text variant='h3' color='text-white'>
-                      Une interface web complète
+                      A complete web interface
                     </Text>
                   </div>
                   <div className='flex items-center justify-start gap-2'>
@@ -152,7 +152,7 @@ export default async function Index() {
                       stroke={1}
                     />
                     <Text variant='h3' color='text-white'>
-                      Une communauté bienveillante
+                      A caring community
                     </Text>
                   </div>
                   <div className='flex items-center justify-start gap-2'>
@@ -163,7 +163,7 @@ export default async function Index() {
                       stroke={1}
                     />
                     <Text variant='h3' color='text-white'>
-                      Anonyme
+                      Anonymous
                     </Text>
                   </div>
                 </div>
@@ -177,7 +177,7 @@ export default async function Index() {
         <div className='flex max-w-6xl flex-col items-center'>
           <div className='flex w-full items-center justify-center pb-12'>
             <Text variant='h1' className='text-center'>
-              Comment ça marche&nbsp;?
+              How does it work&nbsp;?
             </Text>
           </div>
 
@@ -185,12 +185,12 @@ export default async function Index() {
             <div className='flex h-full flex-col items-center justify-between sm:gap-4 md:flex-row lg:flex-col'>
               <div className='flex flex-1 flex-col items-center gap-2 text-center'>
                 <Text variant='h3' className='text-center align-middle'>
-                  Vous{' '}
-                  <span className='text-primary-600'> trouvez un objet </span>{' '}
-                  floqué d&apos;un QRCode Tomato
+                  You{' '}
+                  <span className='text-primary-600'> found an object </span>{' '}
+                  with a Tomato QRCode
                 </Text>
                 <Text variant='subtitle' className='text-center align-middle'>
-                  Dégainez votre smartphone
+                  Pull out your smartphone
                 </Text>
               </div>
               <Icon
@@ -205,12 +205,11 @@ export default async function Index() {
             <div className='flex h-full flex-col items-center justify-between sm:gap-4 md:flex-row-reverse lg:flex-col'>
               <div className='flex flex-1 flex-col items-center gap-2 text-center'>
                 <Text variant='h3' className='text-center align-middle'>
-                  Vous{' '}
-                  <span className='text-primary-600'> scannez simplement </span>{' '}
-                  ce QRCode avec votre smartphone
+                  You <span className='text-primary-600'> simply scan </span>{' '}
+                  this QRCode with your smartphone
                 </Text>
                 <Text variant='subtitle' className='text-center align-middle'>
-                  Que vous ayez l&apos;application Tomato installée ou non
+                  Whether you have the Tomato app installed or not
                 </Text>
               </div>
               <Icon
@@ -225,12 +224,12 @@ export default async function Index() {
             <div className='flex h-full flex-col items-center justify-between sm:gap-4 md:flex-row lg:flex-col'>
               <div className='flex flex-1 flex-col items-center gap-2 text-center'>
                 <Text variant='h3' className='text-center align-middle'>
-                  Vous êtes{' '}
-                  <span className='text-primary-600'> mis en contact </span>{' '}
-                  directement avec son propriétaire
+                  You are put{' '}
+                  <span className='text-primary-600'> in direct contact </span>{' '}
+                  with its owner
                 </Text>
                 <Text variant='subtitle' className='text-center align-middle'>
-                  Sans renseigner la moindre information personnelle
+                  Without providing any personal information
                 </Text>
               </div>
               <Icon
@@ -249,7 +248,7 @@ export default async function Index() {
         <div className='flex w-full max-w-5xl flex-col items-center'>
           <div className='flex w-full items-center justify-center pb-12'>
             <Text variant='h1' className='text-left' color='text-white'>
-              Vos retours !
+              Your feedback&nbsp;!
             </Text>
           </div>
 
@@ -274,11 +273,14 @@ export default async function Index() {
                     className='flex items-center text-left'
                     color='text-black'
                   >
-                    Tomato a rendu la perte d'objets un lointain souvenir pour
-                    moi. J&apos;ai retrouvé mon porte-monnaie en un clin
-                    d&apos;œil grâce à cette plateforme simple et efficace!
+                    Tomato is a game-changer&nbsp;! Found my lost wallet in no
+                    time with this simple and effective platform. Thanks&nbsp;!
                   </Text>
-                  <Text variant='subtitle' className='text-right' color='text-black'>
+                  <Text
+                    variant='subtitle'
+                    className='text-right'
+                    color='text-black'
+                  >
                     Sophie. D
                   </Text>
                 </div>
@@ -297,10 +299,14 @@ export default async function Index() {
                     className='flex items-center text-left'
                     color='text-black'
                   >
-                    L&apos;interface web est super pratique, et la communauté
-                    est vraiment serviable.
+                    Loving Tomato&apos;s web interface and the super-helpful
+                    community. It&apos;s a breeze to use&nbsp;!
                   </Text>
-                  <Text variant='subtitle' className='text-right' color='text-black'>
+                  <Text
+                    variant='subtitle'
+                    className='text-right'
+                    color='text-black'
+                  >
                     Baptise L.
                   </Text>
                 </div>
@@ -319,12 +325,15 @@ export default async function Index() {
                     className='flex items-center text-left'
                     color='text-black'
                   >
-                    J&apos;ai utilisé Tomato pour rendre un téléphone perdu que
-                    j&apos;ai trouvé dans le métro. L&apos;ensemble du processus
-                    était rapide et anonyme, faisant de cette expérience un
-                    plaisir.
+                    Used Tomato to return a lost phone from the metro. Quick and
+                    anonymous process made it a seamless experience. I will
+                    surely use it for myself&nbsp;!
                   </Text>
-                  <Text variant='subtitle' className='text-right' color='text-black'>
+                  <Text
+                    variant='subtitle'
+                    className='text-right'
+                    color='text-black'
+                  >
                     Jeanne. M
                   </Text>
                 </div>

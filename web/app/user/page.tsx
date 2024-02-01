@@ -51,6 +51,37 @@ export default async function UserPage() {
               />
             </div>
           </Card>
+          <Card
+            title='Scan page settings'
+            details='These settings will be applied to all your items. You can override them on each item settings page.'
+          >
+            <div className='flex w-full flex-col gap-3'>
+              <NotificationSettingsSwitch
+                user_id={user?.id}
+                label='Show avatar on scan page'
+                field='scan_show_avatar_url'
+                value={profile?.scan_show_avatar_url}
+              />
+              <NotificationSettingsSwitch
+                user_id={user?.id}
+                label='Show full name on scan page'
+                field='scan_show_full_name'
+                value={profile?.scan_show_full_name}
+              />
+              <NotificationSettingsSwitch
+                user_id={user?.id}
+                label='Show item name on scan page'
+                field='scan_show_item_name'
+                value={profile?.scan_show_item_name}
+              />
+              <NotificationSettingsSwitch
+                user_id={user?.id}
+                label='Show phone on scan page'
+                field='scan_show_phone'
+                value={profile?.scan_show_phone}
+              />
+            </div>
+          </Card>
         </div>
         <div className='flex w-full flex-col gap-4 md:w-1/3'>
           <ProfilePictureUploader />
@@ -89,7 +120,7 @@ function Card({
       <div className='flex w-full flex-col p-4'>{children}</div>
       {details && (
         <div className='flex w-full flex-row items-center justify-between border-t border-stone-300 p-4 dark:border-stone-700'>
-          <Text variant='body' className='opacity-70'>
+          <Text variant='caption' className='opacity-70'>
             {details}
           </Text>
         </div>
