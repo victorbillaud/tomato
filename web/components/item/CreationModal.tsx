@@ -4,7 +4,7 @@ import { Text } from '@/components/common/text';
 import NameSelector from '@/components/qrcode/NameSelector';
 import { createClient } from '@/utils/supabase/server';
 import { insertItem } from '@utils/lib/item/services';
-import { Tables } from '@utils/lib/supabase/supabase_types';
+import { listQRCode } from '@utils/lib/qrcode/services';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Button } from '../common/button';
@@ -43,13 +43,17 @@ const insertItemAction = async (
 
 interface DashboardNavBarProps {
   qrcodeId: string | null;
-  qrCodes: Tables<'qrcode'>[];
 }
 
-export async function CreationModal({
-  qrcodeId,
-  qrCodes,
-}: DashboardNavBarProps) {
+export async function CreationModal({ qrcodeId }: DashboardNavBarProps) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const { data: qrCodes, error } = await listQRCode(supabase);
+
+  if (error || !qrCodes) {
+    throw new Error("You don't have any QR Code");
+  }
+
   const insertActionItemBinded = insertItemAction.bind(null, qrcodeId);
 
   return (
@@ -71,15 +75,13 @@ export async function CreationModal({
       <div className='flex w-full flex-col items-center justify-center gap-5'>
         <form action={insertActionItemBinded} className='w-full'>
           <div className='flex w-full flex-col items-center justify-center gap-4'>
-            {qrCodes && qrCodes.length > 0 && (
-              <NameSelector
-                values={qrCodes.map((code) => ({
-                  name: code.name,
-                  id: code.id.toString(),
-                }))}
-                initialValue={qrcodeId ?? qrCodes[0].id.toString()}
-              />
-            )}
+            <NameSelector
+              values={qrCodes.map((code) => ({
+                name: code.name,
+                id: code.id.toString(),
+              }))}
+              initialValue={qrcodeId ?? qrCodes[0].id.toString()}
+            />
             <InputText
               name='name'
               labelText='Item name'

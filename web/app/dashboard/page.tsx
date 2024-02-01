@@ -56,13 +56,10 @@ async function DashboardNavBar({ qrcodeId }: DashboardNavBarProps) {
     <div className='flex w-full flex-row items-center justify-between gap-3'>
       <div className='flex w-full flex-row items-center justify-end gap-3'>
         <Text variant='caption'>
-          <strong>{qrCodes.length > 0 ? qrCodes.length : 0}</strong> left
+          <strong>{qrCodes ? qrCodes.length : 0}</strong> left
         </Text>
         <CreationModal
-          qrcodeId={
-            qrcodeId ?? (qrCodes.length > 0 ? qrCodes[0].id.toString() : null)
-          }
-          qrCodes={qrCodes}
+          qrcodeId={qrcodeId ?? (qrCodes ? qrCodes[0].id.toString() : null)}
         />
       </div>
     </div>
