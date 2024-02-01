@@ -112,6 +112,12 @@ export interface Database {
           name: string
           notify_anyway: boolean
           qrcode_id: string | null
+          scan_description: string | null
+          scan_headline: string | null
+          scan_show_avatar_url: boolean
+          scan_show_full_name: boolean
+          scan_show_item_name: boolean
+          scan_show_phone: boolean
           user_id: string
         }
         Insert: {
@@ -125,6 +131,12 @@ export interface Database {
           name: string
           notify_anyway?: boolean
           qrcode_id?: string | null
+          scan_description?: string | null
+          scan_headline?: string | null
+          scan_show_avatar_url?: boolean
+          scan_show_full_name?: boolean
+          scan_show_item_name?: boolean
+          scan_show_phone?: boolean
           user_id: string
         }
         Update: {
@@ -138,6 +150,12 @@ export interface Database {
           name?: string
           notify_anyway?: boolean
           qrcode_id?: string | null
+          scan_description?: string | null
+          scan_headline?: string | null
+          scan_show_avatar_url?: boolean
+          scan_show_full_name?: boolean
+          scan_show_item_name?: boolean
+          scan_show_phone?: boolean
           user_id?: string
         }
         Relationships: [
@@ -269,6 +287,10 @@ export interface Database {
           id: string
           message_notifications: boolean
           phone: string | null
+          scan_show_avatar_url: boolean
+          scan_show_full_name: boolean
+          scan_show_item_name: boolean
+          scan_show_phone: boolean
           updated_at: string | null
           username: string | null
         }
@@ -279,6 +301,10 @@ export interface Database {
           id: string
           message_notifications?: boolean
           phone?: string | null
+          scan_show_avatar_url?: boolean
+          scan_show_full_name?: boolean
+          scan_show_item_name?: boolean
+          scan_show_phone?: boolean
           updated_at?: string | null
           username?: string | null
         }
@@ -289,6 +315,10 @@ export interface Database {
           id?: string
           message_notifications?: boolean
           phone?: string | null
+          scan_show_avatar_url?: boolean
+          scan_show_full_name?: boolean
+          scan_show_item_name?: boolean
+          scan_show_phone?: boolean
           updated_at?: string | null
           username?: string | null
         }
@@ -475,6 +505,25 @@ export interface Database {
           p_id: string
         }
         Returns: string
+      }
+      get_scan_item_view: {
+        Args: {
+          item_id: string
+        }
+        Returns: {
+          id: string
+          name: string
+          lost: boolean
+          lost_at: string
+          user_id: string
+          qrcode_id: string
+          image_path: string
+          scan_headline: string
+          scan_description: string
+          owner_full_name: string
+          owner_avatar_url: string
+          owner_phone: string
+        }[]
       }
       get_user_conversations_with_last_message: {
         Args: {
