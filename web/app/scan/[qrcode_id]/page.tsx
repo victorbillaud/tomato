@@ -1,123 +1,99 @@
-import { SubmitButton } from '@/components/common/button';
-import { Text } from '@/components/common/text';
-import { CookieSetter } from '@/components/scan/CookieSetter';
-import GeoLocation from '@/components/scan/GeoLocation';
-import { ItemScanView } from '@/components/scan/ItemScanView';
-import { fetchLocationByIP } from '@/utils/ip';
+import React from 'react';
 import { createClient } from '@/utils/supabase/server';
-import { getPublicScanItemView } from '@utils/lib/item/services';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { getItemFromQrCodeId } from '@utils/lib/item/services';
 import { getQRCode } from '@utils/lib/qrcode/services';
-import { getScan, insertScan } from '@utils/lib/scan/services';
+import { insertScan } from '@utils/lib/scan/services';
+import { Database, Json } from '@utils/lib/supabase/supabase_types';
 import { cookies } from 'next/headers';
-import { edgeFinderFlow } from './action';
+import { redirect } from 'next/navigation';
+import FinderPage from './FinderPage';
+import CreationPage from './CreationPage';
+import ActivationPage from './ActivationPage';
 
-export default async function Scan({
-  params,
-}: {
-  params: { qrcode_id: string };
-}) {
+export const metadata = {
+  title: 'Tomato - Scan',
+};
+
+export const handleScan = async (
+  supabase: SupabaseClient<Database>,
+  itemId: string | null,
+  qrCodeId: string,
+  scanTypes: Database['public']['Enums']['ScanType'][] = []
+) => {
+  const { error } = await insertScan(supabase, {
+    item_id: itemId,
+    qrcode_id: qrCodeId,
+    type: scanTypes,
+    ip_metadata: null,
+  });
+
+  if (error) {
+    console.error(error, { itemId, qrCodeId, scanTypes });
+    throw new Error("Couldn't insert Scan");
+  }
+};
+
+const getUserAndQrCode = async (
+  supabase: SupabaseClient<Database>,
+  qrCodeId: string
+) => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: qrCode } = await getQRCode(supabase, qrCodeId);
+  return { user, qrCode };
+};
+
+const Scan = async (props: { params: { qrcode_id: string } }) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { data: qrCode, error } = await getQRCode(supabase, params.qrcode_id);
-  let scan = null;
+  const { user, qrCode } = await getUserAndQrCode(
+    supabase,
+    props.params.qrcode_id
+  );
 
-  // Get the cookie to check if the user has already scanned the QR Code in the last 1 minute
-  const lastScanCookie = cookieStore.get('last_scan')
-    ? JSON.parse(cookieStore.get('last_scan')?.value || '')
-    : null;
-
-  // Check if the cookie exists and the time difference is not less than 1 minute
-  if (
-    lastScanCookie &&
-    new Date().getTime() - lastScanCookie.timestamp < 60000
-  ) {
-    const { data: pastScan } = await getScan(
-      supabase,
-      lastScanCookie.item_id,
-      lastScanCookie.qrcode_id
-    );
-    scan = pastScan;
-  } else {
-    const ipMetadata = await fetchLocationByIP();
-    const { data: insertedScan, error: scanInsertionError } = await insertScan(
-      supabase,
-      {
-        item_id: qrCode?.item_id,
-        qrcode_id: params.qrcode_id,
-        type: [],
-        ip_metadata: {
-          ip: ipMetadata?.ip,
-          hostname: ipMetadata?.hostname,
-          city: ipMetadata?.city,
-          region: ipMetadata?.region,
-          country: ipMetadata?.country,
-          loc: ipMetadata?.loc,
-          org: ipMetadata?.org,
-          postal: ipMetadata?.postal,
-          timezone: ipMetadata?.timezone,
-        },
-      }
-    );
-    scan = insertedScan;
+  // Finder Flow
+  if (!user || user.id !== qrCode?.user_id) {
+    return <FinderPage params={props.params} />;
   }
 
-  if (!qrCode || error) {
-    throw new Error('QR Code not found');
-  }
-
+  // Owner Flow
   if (!qrCode?.item_id) {
-    throw new Error('QR Code not linked to an item');
+    await handleScan(supabase, null, props.params.qrcode_id, [
+      'owner_scan',
+      'creation',
+    ]);
+    return <CreationPage params={props.params} />;
+  } else {
+    const { data: item, error: itemError } = await getItemFromQrCodeId(
+      supabase,
+      props.params.qrcode_id
+    );
+    if (itemError) {
+      console.error(itemError);
+      throw new Error("Couldn't fetch Item");
+    }
+
+    if (!item) {
+      await handleScan(supabase, null, props.params.qrcode_id, [
+        'owner_scan',
+        'creation',
+      ]);
+      return <CreationPage params={props.params} />;
+    }
+
+    if (item.activated) {
+      redirect(`/dashboard/item/${item.id}`);
+    } else {
+      await handleScan(supabase, item?.id, props.params.qrcode_id, [
+        'owner_scan',
+        'activation',
+      ]);
+      return <ActivationPage params={props.params} />;
+    }
   }
+};
 
-  const edgeFinderFlowWithItem = edgeFinderFlow.bind(
-    null,
-    qrCode?.item_id,
-    params.qrcode_id
-  );
-
-  // Fetch item details
-
-  const { data, error: getPublicScanItemViewError } =
-    await getPublicScanItemView(supabase, qrCode?.item_id);
-
-  if (getPublicScanItemViewError) {
-    throw getPublicScanItemViewError;
-  }
-
-  if (!data || data.length === 0) {
-    throw new Error('Item not found');
-  }
-
-  const item = data[0];
-
-  return (
-    <div className='flex w-full max-w-6xl flex-1 flex-col items-center justify-start gap-10 px-3'>
-      <CookieSetter itemId={qrCode?.item_id} qrcodeId={params.qrcode_id} />
-      {scan && <GeoLocation scanId={scan.id} />}
-      <div className='flex h-full w-full flex-col items-center justify-start gap-5'>
-        {qrCode?.item_id ? (
-          <>
-            <ItemScanView item={item} />
-            <form action={edgeFinderFlowWithItem}>
-              <SubmitButton
-                variant='primary'
-                type='submit'
-                text='Start a conversation'
-                className='w-full'
-              />
-            </form>
-          </>
-        ) : (
-          <>
-            <Text variant='body' className='text-center opacity-90'>
-              How it seems you found a QR Code... But it's not linked to an item
-              ! Try to find another one ! If you don't know{' '}
-              <strong>Tomato</strong> yet, you can check it out .
-            </Text>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+export default Scan;
