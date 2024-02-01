@@ -21,9 +21,7 @@ export const ItemScanViewOptions = async ({
   }
 
   return (
-    <div
-      className={`flex w-full flex-col items-start gap-1`}
-    >
+    <div className={`flex w-full flex-col items-start gap-1`}>
       <div className='flex w-full flex-row items-center justify-between gap-1'>
         <Text variant='subtitle'>Customize the scan page</Text>
         <Modal
@@ -37,7 +35,9 @@ export const ItemScanViewOptions = async ({
             />
           }
         >
-          <ItemScanView item={previewItem[0]} />
+          <div className='p-5'>
+            <ItemScanView item={previewItem[0]} />
+          </div>
         </Modal>
       </div>
       <div className='items-top flex w-full flex-col justify-between gap-3 py-1'>
