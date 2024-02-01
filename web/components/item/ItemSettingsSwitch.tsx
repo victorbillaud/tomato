@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/client';
 import { updateItem } from '@utils/lib/item/services';
 import { Tables } from '@utils/lib/supabase/supabase_types';
+import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { Switch } from '../common/switch/Switch';
 
@@ -26,6 +27,7 @@ export function ItemSettingsSwitch({
   value,
 }: IItemSettingsProps) {
   const supabase = createClient();
+  const router = useRouter();
   const handleItemUpdate = useCallback(
     async (value: boolean) => {
       const { data: itemUpdated, error } = await updateItem(supabase, itemId, {
@@ -35,6 +37,8 @@ export function ItemSettingsSwitch({
       if (error) {
         console.error(error);
       }
+
+      router.refresh();
 
       return itemUpdated;
     },
