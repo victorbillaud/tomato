@@ -127,7 +127,6 @@ export async function updateItem(
     'id' | 'created_at' | 'user_id' | 'activated'
   >
 ) {
-  console.log(item);
   const { data, error } = await supabaseInstance
     .from('item')
     .update(item)

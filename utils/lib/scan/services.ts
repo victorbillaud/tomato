@@ -16,10 +16,13 @@ export async function insertScan(
     ? 'registered_user_scan'
     : 'non_registered_user_scan';
 
+  const types = scan.type ? [...scan.type, userType] : [userType];
+  if (scan.type?.includes('owner_scan')) types.pop();
+
   const scanToInsert: Database['public']['Tables']['scan']['Insert'] = {
     ...scan,
     user_id: user?.id,
-    type: scan.type ? [...scan.type, userType] : [userType],
+    type: types,
   };
 
   const { data, error } = await supabaseInstance
