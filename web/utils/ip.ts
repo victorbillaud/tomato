@@ -10,9 +10,9 @@ interface IIPResponse {
   timezone: string;
 }
 
-export const fetchLocationByIP = async () => {
+export const fetchLocationByIP = async (ip: string) => {
   const request = await fetch(
-    `https://ipinfo.io/json?token=${process.env.IP_INFO_KEY}`
+    `https://ipinfo.io/${ip}/json?token=${process.env.IP_INFO_KEY}`
   );
 
   const response: IIPResponse = await request.json();

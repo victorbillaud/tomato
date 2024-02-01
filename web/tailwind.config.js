@@ -20,6 +20,7 @@ module.exports = {
           900: '#861717', // sent msg
           950: '#490606',
         },
+        'tomato-green': '#3C7E42',
       },
       keyframes: {
         slideDown: {
