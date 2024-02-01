@@ -22,7 +22,7 @@ export const ItemScanViewOptions = async ({
 
   return (
     <div
-      className={`flex w-full flex-row-reverse items-start gap-1 md:flex-col md:justify-start`}
+      className={`flex w-full flex-col items-start gap-1`}
     >
       <div className='flex w-full flex-row items-center justify-between gap-1'>
         <Text variant='subtitle'>Customize the scan page</Text>
