@@ -37,7 +37,7 @@ async function handleImageUpdate(
   redirect(`/dashboard/item/${itemId}`);
 }
 
-async function handleUpdate(formData: FormData) {
+export async function handleUpdate(formData: FormData) {
   'use server';
 
   const cookieStore = cookies();
@@ -123,8 +123,8 @@ export function ItemInfo({ item }: IItemInfoProps) {
               defaultComponent={
                 <Text
                   variant='body'
-                  weight={500}
-                  className='text-start opacity-70'
+                  weight={400}
+                  className='text-start opacity-90'
                 >
                   {item.description}
                 </Text>
@@ -141,11 +141,7 @@ export function ItemInfo({ item }: IItemInfoProps) {
             >
               created at
             </Text>
-            <Text
-              variant='body'
-              weight={500}
-              className='text-center opacity-70'
-            >
+            <Text variant='body' weight={400} className='text-start opacity-90'>
               {dateFormat(item.created_at, masks.default)}
             </Text>
           </div>

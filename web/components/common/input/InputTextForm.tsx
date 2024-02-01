@@ -11,6 +11,7 @@ interface IInputTextFormProps extends IInputTextProps {
   defaultComponent: React.ReactNode;
   defaultValue?: string;
   hiddenValues?: Record<string, string>;
+  width?: string;
   callback?: ((formData: FormData) => void) | string;
 }
 
@@ -18,6 +19,7 @@ export function InputTextForm({
   callback,
   defaultComponent,
   defaultValue,
+  width,
   ...props
 }: IInputTextFormProps) {
   const [isEditing, setIsEditing, setIsEdited] = useToggle(false);
@@ -38,7 +40,9 @@ export function InputTextForm({
   }, [setIsEdited]);
 
   return (
-    <div className='group flex flex-row items-center justify-start gap-1'>
+    <div
+      className={`group ${width} flex flex-row items-center justify-start gap-1`}
+    >
       {isEditing ? (
         <form className='w-full' action={callback} onSubmit={setIsEdited}>
           <InputText

@@ -15,6 +15,10 @@ export interface IItemInfoProps {
   item: ItemType;
 }
 
+export interface IItemScanViewOptionsProps {
+  item: ItemType;
+}
+
 export interface IItemSettingsProps {
   item: ItemType;
 }
