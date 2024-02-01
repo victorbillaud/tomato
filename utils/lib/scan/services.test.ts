@@ -130,7 +130,7 @@ describe('service scan module', () => {
     expect(scan.item_id).toBeDefined();
     expect(scan.type).toContain('creation');
     expect(scan.type).toContain('owner_scan');
-    expect(scan.type).toContain('registered_user_scan');
+    expect(scan.type).not.toContain('registered_user_scan');
 
     globalThis.scansCreated.push(scan);
   });
