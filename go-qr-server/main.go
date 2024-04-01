@@ -23,7 +23,7 @@ const (
 	titleFontSize  = 20.0
 	bottomFontSize = 20.0
 	margin         = 10
-	bottomText     = "Scan me !"
+	bottomText     = "If found, please scan the QR code to return to owner"
 	padding        = 20 // Padding for the QR code
 	outerPadding   = 15 // Padding for the whole sticker
 )
@@ -112,8 +112,8 @@ func generateQRCodewithOverlay(title, bottomText, url string) (*image.RGBA, erro
 	dc := gg.NewContextForRGBA(img)
 
 	// Draw a full red background for the sticker
-	redBackgroundRadius := 25.0             // This sets the radius for the rounded corners
-	dc.SetColor(color.RGBA{255, 0, 0, 255}) // Set the color for the rounded rectangle
+	redBackgroundRadius := 25.0               // This sets the radius for the rounded corners
+	dc.SetColor(color.RGBA{238, 30, 19, 255}) // Set the color for the rounded rectangle
 	dc.DrawRoundedRectangle(0, 0, float64(stickerWidth), float64(stickerHeight), redBackgroundRadius)
 	dc.Fill()
 
@@ -177,15 +177,24 @@ func Resize(img image.Image, width, height int) image.Image {
 }
 
 func addTextOverlay(dc *gg.Context, title, bottomText string, width, height int) {
-	// Draw the title text below the QR code
-	drawText(dc, title, titleFontSize, padding+qrCodeSize/2, padding+qrCodeSize+bannerHeight+margin, color.White)
+	// Draw a rectangle as the banner background with the width of the sitcker minus the outer padding
+	dc.SetColor(color.RGBA{249, 172, 168, 255})
+	dc.DrawRoundedRectangle(outerPadding, qrCodeSize+padding+bannerHeight+margin-5, float64(width-2*outerPadding), bannerHeight, 10)
+	dc.Fill()
 
-	// Draw the "Scan me" text below the title
-	drawText(dc, bottomText, bottomFontSize, padding+qrCodeSize/2, padding+qrCodeSize+bannerHeight+2*titleFontSize+2*margin, color.White)
+	// Draw the title text in the center of the banner
+	// Calculate the position to center the text within the banner
+	// The text is centered horizontally and vertically
+
+	drawText(dc, title, titleFontSize, float64(width)/2, float64(qrCodeSize+padding+bannerHeight+25), color.RGBA{238, 30, 19, 255}, fontPath)
+
+	// Draw the "Scan me" text below the title aligned to the center
+	drawText(dc, bottomText, bottomFontSize, float64(width)/2, float64(qrCodeSize+padding+bannerHeight+2*titleFontSize+margin+25), color.White, boldFontPath)
+
 }
 
 // drawText draws text on the image
-func drawText(dc *gg.Context, text string, fontSize float64, x, y float64, color color.Color) {
+func drawText(dc *gg.Context, text string, fontSize float64, x, y float64, color color.Color, fontPath string) {
 	if err := dc.LoadFontFace(fontPath, fontSize); err != nil {
 		fmt.Printf("Failed to load font face: %v\n", err)
 		return
