@@ -14,7 +14,9 @@ import (
 )
 
 const (
+	logoPath       = "./logo_small.png"
 	fontPath       = "./GeistVF.ttf"
+	boldFontPath   = "./Geist-SemiBold.ttf"
 	qrCodeSize     = 256
 	bannerHeight   = 40
 	titleFontSize  = 20.0
@@ -74,13 +76,14 @@ func generateQRCodewithOverlay(title, bottomText, url string) (*image.RGBA, erro
 
 	img := image.NewRGBA(image.Rect(0, 0, qrCodeSize, qrCodeSize+2*bannerHeight))
 	dc := gg.NewContextForRGBA(img)
+	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 
 	// Position QR code with banner spaces
 	draw.Draw(img, qrCode.Bounds().Add(image.Pt(0, bannerHeight)), qrCode, image.ZP, draw.Over)
 
 	// Draw logo
-	if err := drawLogo(dc, "./logo_small.png"); err != nil {
+	if err := drawLogo(dc, logoPath); err != nil {
 		return nil, err
 	}
 
@@ -113,11 +116,33 @@ func drawLogo(dc *gg.Context, logoPath string) error {
 }
 
 func addTextOverlay(dc *gg.Context, title, bottomText string) {
-	// Draw the title text at the top
-	drawText(dc, title, titleFontSize, bannerHeight/2, image.Point{X: qrCodeSize / 2, Y: 0}, color.Black)
+	// Draw the title text at the top with a foreground rectangle as background
+	drawTextForeground(dc, title, titleFontSize, bannerHeight, image.Point{X: qrCodeSize / 2, Y: 0}, color.RGBA{255, 224, 224, 255}, color.RGBA{250, 57, 57, 255})
 
 	// Draw the bottom text at the bottom
 	drawText(dc, bottomText, bottomFontSize, bannerHeight/2, image.Point{X: qrCodeSize / 2, Y: qrCodeSize + bannerHeight}, color.Black)
+}
+
+func drawTextForeground(dc *gg.Context, text string, fontSize float64, height int, anchor image.Point, backgroundColor, textColor color.Color) {
+	if err := dc.LoadFontFace(boldFontPath, fontSize); err != nil {
+		fmt.Printf("Failed to load font face: %v\n", err)
+		return
+	}
+
+	// Measure text width to calculate background size
+	textWidth, textHeight := dc.MeasureString(text)
+	// Define margin around the text within the background
+	margin := 10.0
+	padding := 7.0 // Padding inside the rectangle for the text vertical alignment
+
+	// Set color and draw rounded rectangle for the background, radius should be perfect circle
+	dc.SetColor(backgroundColor)
+	dc.DrawRoundedRectangle(float64(anchor.X)-textWidth/2-margin, float64(anchor.Y+(height/2))-(textHeight/2)-padding, textWidth+2*margin, textHeight+2*padding, (textHeight+2*padding)/2)
+	dc.Fill()
+
+	// Now draw the text over the background
+	dc.SetColor(textColor)
+	dc.DrawStringAnchored(text, float64(anchor.X), float64(anchor.Y)+(float64(height)/2), 0.5, 0.5)
 }
 
 // drawText draws text on the image
