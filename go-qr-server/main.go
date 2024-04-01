@@ -26,6 +26,7 @@ const (
 )
 
 func main() {
+	http.HandleFunc("/generate-sticker", generateStickerHandler)
 	http.HandleFunc("/generate", generateHandler)
 
 	fmt.Println("Server is starting on port 3000...")
@@ -36,6 +37,33 @@ func main() {
 }
 
 func generateHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	url := r.URL.Query().Get("url")
+	if url == "" {
+		http.Error(w, "URL parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	// Just generate a QR code
+	img, err := createQRCode(url)
+	if err != nil {
+		http.Error(w, "Failed to generate QR code image", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "image/png")
+
+	// Encode and write the final image to the response
+	if err := png.Encode(w, img); err != nil {
+		http.Error(w, "Failed to encode final image", http.StatusInternalServerError)
+	}
+}
+
+func generateStickerHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -74,13 +102,13 @@ func generateQRCodewithOverlay(title, bottomText, url string) (*image.RGBA, erro
 		return nil, err
 	}
 
-	img := image.NewRGBA(image.Rect(0, 0, qrCodeSize, qrCodeSize+2*bannerHeight))
+	img := image.NewRGBA(image.Rect(0, 0, qrCodeSize+(margin*2), qrCodeSize+2*bannerHeight))
 	dc := gg.NewContextForRGBA(img)
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 
-	// Position QR code with banner spaces
-	draw.Draw(img, qrCode.Bounds().Add(image.Pt(0, bannerHeight)), qrCode, image.ZP, draw.Over)
+	// Position QR code with banner spaces and left right margin
+	draw.Draw(img, image.Rect(margin, bannerHeight, qrCodeSize+margin, qrCodeSize+bannerHeight), qrCode, image.Point{X: 0, Y: 0}, draw.Src)
 
 	// Draw logo
 	if err := drawLogo(dc, logoPath); err != nil {
