@@ -16,10 +16,11 @@ import (
 const (
 	fontPath       = "./GeistVF.ttf"
 	qrCodeSize     = 256
-	bannerHeight   = 50
+	bannerHeight   = 40
 	titleFontSize  = 20.0
 	bottomFontSize = 20.0
-	margin         = 10
+	margin         = 5
+	bottomText     = "Scan me !"
 )
 
 func main() {
@@ -42,61 +43,81 @@ func generateHandler(w http.ResponseWriter, r *http.Request) {
 	if title == "" {
 		title = "Your Title Here"
 	}
-
-	bottomText := "Scan me !"
-
 	url := r.URL.Query().Get("url")
 	if url == "" {
 		http.Error(w, "URL parameter is required", http.StatusBadRequest)
 		return
 	}
 
-	qrCode, err := qrcode.New(url, qrcode.Medium)
+	// Generate QR Code with title and logo
+	img, err := generateQRCodewithOverlay(title, bottomText, url)
 	if err != nil {
-		http.Error(w, "Failed to generate QR code", http.StatusInternalServerError)
+		http.Error(w, "Failed to generate QR code image", http.StatusInternalServerError)
 		return
-	}
-
-	qrCode.DisableBorder = true
-
-	// Create a new image with bannerHeight added to the height for the title and bottom text
-	img := image.NewRGBA(image.Rect(0, 0, qrCodeSize, qrCodeSize+2*bannerHeight))
-
-	dc := gg.NewContextForRGBA(img)
-	// dc.SetRGB(1, 1, 1)
-	dc.Clear()
-
-	qrImage := qrCode.Image(qrCodeSize)
-
-	draw.Draw(img, qrImage.Bounds().Add(image.Pt(0, bannerHeight)), qrImage, image.ZP, draw.Over)
-
-	// Load and draw the logo
-	logoImage, err := loadLogoImage("./logo_small.png")
-	if err != nil {
-		http.Error(w, "Failed to load logo", http.StatusInternalServerError)
-		return
-	}
-	logoSize := float64(qrCodeSize) * 0.2
-	logoX := float64(qrCodeSize)/2 - logoSize/2
-	logoY := float64(qrCodeSize)/2 - logoSize/2
-	dc.DrawImageAnchored(logoImage, int(logoX+logoSize/2), int(logoY+logoSize/2)+bannerHeight, 0.5, 0.5)
-
-	// Draw the title text at the top
-	drawText(dc, title, titleFontSize, bannerHeight/2, image.Point{X: qrCodeSize / 2, Y: 0}, color.Black)
-
-	// Draw the bottom text at the bottom
-	if bottomText != "" {
-		drawText(dc, bottomText, bottomFontSize, bannerHeight/2, image.Point{X: qrCodeSize / 2, Y: qrCodeSize + bannerHeight}, color.Black)
 	}
 
 	// Set the content type
 	w.Header().Set("Content-Type", "image/png")
 
 	// Encode and write the final image to the response
-	err = png.Encode(w, img)
-	if err != nil {
+	if err := png.Encode(w, img); err != nil {
 		http.Error(w, "Failed to encode final image", http.StatusInternalServerError)
 	}
+}
+
+// generateQRCodewithOverlay creates a QR code and draws title, bottom text, and a logo on it
+func generateQRCodewithOverlay(title, bottomText, url string) (*image.RGBA, error) {
+	qrCode, err := createQRCode(url)
+	if err != nil {
+		return nil, err
+	}
+
+	img := image.NewRGBA(image.Rect(0, 0, qrCodeSize, qrCodeSize+2*bannerHeight))
+	dc := gg.NewContextForRGBA(img)
+	dc.Clear()
+
+	// Position QR code with banner spaces
+	draw.Draw(img, qrCode.Bounds().Add(image.Pt(0, bannerHeight)), qrCode, image.ZP, draw.Over)
+
+	// Draw logo
+	if err := drawLogo(dc, "./logo_small.png"); err != nil {
+		return nil, err
+	}
+
+	// Add title and bottom text
+	addTextOverlay(dc, title, bottomText)
+
+	return img, nil
+}
+
+func createQRCode(url string) (image.Image, error) {
+	qrCode, err := qrcode.New(url, qrcode.Medium)
+	if err != nil {
+		return nil, err
+	}
+
+	qrCode.DisableBorder = true
+	return qrCode.Image(qrCodeSize), nil
+}
+
+func drawLogo(dc *gg.Context, logoPath string) error {
+	logoImage, err := loadLogoImage(logoPath)
+	if err != nil {
+		return err
+	}
+	logoSize := float64(qrCodeSize) * 0.2
+	logoX := float64(qrCodeSize)/2 - logoSize/2
+	logoY := float64(qrCodeSize)/2 - logoSize/2
+	dc.DrawImageAnchored(logoImage, int(logoX+logoSize/2), int(logoY+logoSize/2)+bannerHeight, 0.5, 0.5)
+	return nil
+}
+
+func addTextOverlay(dc *gg.Context, title, bottomText string) {
+	// Draw the title text at the top
+	drawText(dc, title, titleFontSize, bannerHeight/2, image.Point{X: qrCodeSize / 2, Y: 0}, color.Black)
+
+	// Draw the bottom text at the bottom
+	drawText(dc, bottomText, bottomFontSize, bannerHeight/2, image.Point{X: qrCodeSize / 2, Y: qrCodeSize + bannerHeight}, color.Black)
 }
 
 // drawText draws text on the image
