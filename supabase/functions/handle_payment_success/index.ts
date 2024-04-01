@@ -109,7 +109,7 @@ async function handleQrCodeBuy(userId: string, numberOfQRCodes: number) {
     user_id: userId,
     type: "system",
     title: `You bought ${numberOfQRCodes} QR Code(s)`,
-    link: "/dashboard/item/create",
+    link: "/dashboard",
     metadata: {
       data
     },
