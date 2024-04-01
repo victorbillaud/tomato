@@ -9,12 +9,14 @@ import { CustomImage } from '../common/image';
 
 interface QrCodeProps {
   url: string;
+  name: string;
   size?: number;
   download?: boolean;
 }
 
 export const QrCode: React.FC<QrCodeProps> = ({
   url,
+  name,
   size = 250,
   download = false,
 }) => {
@@ -22,11 +24,11 @@ export const QrCode: React.FC<QrCodeProps> = ({
 
   useEffect(() => {
     async function generate() {
-      const qrCode = await generateQRCode(url);
+      const qrCode = await generateQRCode(url, name);
       setQrCodeUrl(qrCode);
     }
     generate();
-  }, [url]);
+  }, [url, name]);
 
   return (
     <div className='flex flex-col items-center justify-center'>
@@ -36,7 +38,7 @@ export const QrCode: React.FC<QrCodeProps> = ({
             src={qrCodeUrl}
             alt='QR Code'
             width={size}
-            height={size}
+            height={size + 50}
             className='rounded-md shadow-md'
           />
         ) : (
