@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/fogleman/gg"
+	"github.com/nfnt/resize"
 	"github.com/skip2/go-qrcode"
 )
 
@@ -17,12 +18,14 @@ const (
 	logoPath       = "./logo_small.png"
 	fontPath       = "./GeistVF.ttf"
 	boldFontPath   = "./Geist-SemiBold.ttf"
-	qrCodeSize     = 256
+	qrCodeSize     = 512
 	bannerHeight   = 40
 	titleFontSize  = 20.0
 	bottomFontSize = 20.0
-	margin         = 5
+	margin         = 10
 	bottomText     = "Scan me !"
+	padding        = 20 // Padding for the QR code
+	outerPadding   = 15 // Padding for the whole sticker
 )
 
 func main() {
@@ -101,38 +104,48 @@ func generateQRCodewithOverlay(title, bottomText, url string) (*image.RGBA, erro
 		return nil, err
 	}
 
-	img := image.NewRGBA(image.Rect(0, 0, qrCodeSize, qrCodeSize+2*bannerHeight))
+	// Adjust calculations for the sticker dimensions to include the outer padding
+	stickerWidth := qrCodeSize + 2*padding + 2*outerPadding
+	stickerHeight := qrCodeSize + 2*padding + bannerHeight + 2*titleFontSize + 3*margin + 2*outerPadding
+
+	img := image.NewRGBA(image.Rect(0, 0, stickerWidth, int(stickerHeight)))
 	dc := gg.NewContextForRGBA(img)
-	// dc.SetRGB(1, 1, 1)
-	dc.Clear()
 
-	// Draw a rounded rectangle as the border around the whole image
-	drawRoundedRectangle(dc, image.Rect(0, 0, qrCodeSize, qrCodeSize+2*bannerHeight), 10, 5, color.Black)
+	// Draw a full red background for the sticker
+	redBackgroundRadius := 25.0             // This sets the radius for the rounded corners
+	dc.SetColor(color.RGBA{255, 0, 0, 255}) // Set the color for the rounded rectangle
+	dc.DrawRoundedRectangle(0, 0, float64(stickerWidth), float64(stickerHeight), redBackgroundRadius)
+	dc.Fill()
 
-	// Position QR code with banner spaces and left right margin
-	draw.Draw(img, image.Rect(0, bannerHeight, qrCodeSize, qrCodeSize+bannerHeight), qrCode, image.Point{X: 0, Y: 0}, draw.Src)
+	// Calculate the position to center the QR code within the sticker, considering the outer padding
+	qrCodeX := (stickerWidth - qrCodeSize) / 2
+	qrCodeY := (stickerHeight - qrCodeSize - bannerHeight - 2*padding - 2*outerPadding) / 2
+
+	// Draw a white rectangle as the background for the QR code with padding
+	whiteRectX := qrCodeX - padding
+	whiteRectY := qrCodeY - padding
+	whiteRectWidth := qrCodeSize + 2*padding
+	whiteRectHeight := qrCodeSize + 2*padding
+	drawRoundedRectangle(dc, image.Rect(whiteRectX, int(whiteRectY), whiteRectX+whiteRectWidth, int(whiteRectY)+whiteRectHeight), 20, color.White)
+
+	// Draw QR code onto the white rectangle with padding
+	draw.Draw(img, image.Rect(qrCodeX, int(qrCodeY), qrCodeX+qrCodeSize, int(qrCodeY)+qrCodeSize), qrCode, image.Point{X: 0, Y: 0}, draw.Src)
 
 	// Draw logo
-	if err := drawLogo(dc, logoPath); err != nil {
+	if err := drawLogo(dc, logoPath, 125, 125, stickerWidth); err != nil {
 		return nil, err
 	}
 
-	// Add title and bottom text
-	addTextOverlay(dc, title, bottomText)
+	// Add title and bottom text below the QR code, adjusted for outer padding
+	addTextOverlay(dc, title, bottomText, stickerWidth, int(stickerHeight))
 
 	return img, nil
 }
 
-func drawRoundedRectangle(dc *gg.Context, rect image.Rectangle, radius, borderWidth float64, borderColor color.Color) {
-	// Draw the outer rectangle with the specified border width and color
-	dc.SetColor(borderColor)
+// drawRoundedRectangle draws a rounded rectangle with the specified parameters
+func drawRoundedRectangle(dc *gg.Context, rect image.Rectangle, radius float64, color color.Color) {
+	dc.SetColor(color)
 	dc.DrawRoundedRectangle(float64(rect.Min.X), float64(rect.Min.Y), float64(rect.Dx()), float64(rect.Dy()), radius)
-	dc.SetLineWidth(borderWidth)
-	dc.Stroke()
-
-	// Draw the inner rectangle to fill the border area with the background color
-	dc.SetColor(color.White) // Change to your background color
-	dc.DrawRoundedRectangle(float64(rect.Min.X)+borderWidth, float64(rect.Min.Y)+borderWidth, float64(rect.Dx())-2*borderWidth, float64(rect.Dy())-2*borderWidth, radius-borderWidth)
 	dc.Fill()
 }
 
@@ -146,57 +159,40 @@ func createQRCode(url string) (image.Image, error) {
 	return qrCode.Image(qrCodeSize), nil
 }
 
-func drawLogo(dc *gg.Context, logoPath string) error {
+func drawLogo(dc *gg.Context, logoPath string, width, height int, stickerWidth int) error {
 	logoImage, err := loadLogoImage(logoPath)
 	if err != nil {
 		return err
 	}
-	logoSize := float64(qrCodeSize) * 0.2
-	logoX := float64(qrCodeSize)/2 - logoSize/2
-	logoY := float64(qrCodeSize)/2 - logoSize/2
-	dc.DrawImageAnchored(logoImage, int(logoX+logoSize/2), int(logoY+logoSize/2)+bannerHeight, 0.5, 0.5)
+
+	logoWidth := float64(stickerWidth) * 0.2
+	logoX := (float64(stickerWidth) - logoWidth) / 2
+	dc.DrawImage(Resize(logoImage, width, height), int(logoX), qrCodeSize/2-height/2+bannerHeight)
 	return nil
 }
 
-func addTextOverlay(dc *gg.Context, title, bottomText string) {
-	// Draw the title text at the top with a foreground rectangle as background
-	drawTextForeground(dc, title, titleFontSize, bannerHeight, image.Point{X: qrCodeSize / 2, Y: 0}, color.RGBA{255, 224, 224, 255}, color.RGBA{239, 32, 19, 255})
-
-	// Draw the bottom text at the bottom
-	drawText(dc, bottomText, bottomFontSize, bannerHeight/2, image.Point{X: qrCodeSize / 2, Y: qrCodeSize + bannerHeight}, color.Black)
+// Resize resizes an image to the specified width and height
+func Resize(img image.Image, width, height int) image.Image {
+	return resize.Resize(uint(width), uint(height), img, resize.Lanczos3)
 }
 
-func drawTextForeground(dc *gg.Context, text string, fontSize float64, height int, anchor image.Point, backgroundColor, textColor color.Color) {
-	if err := dc.LoadFontFace(boldFontPath, fontSize); err != nil {
-		fmt.Printf("Failed to load font face: %v\n", err)
-		return
-	}
+func addTextOverlay(dc *gg.Context, title, bottomText string, width, height int) {
+	// Draw the title text below the QR code
+	drawText(dc, title, titleFontSize, padding+qrCodeSize/2, padding+qrCodeSize+bannerHeight+margin, color.White)
 
-	// Measure text width to calculate background size
-	textWidth, textHeight := dc.MeasureString(text)
-	// Define margin around the text within the background
-	margin := 10.0
-	padding := 7.0 // Padding inside the rectangle for the text vertical alignment
-
-	// Set color and draw rounded rectangle for the background, radius should be perfect circle
-	dc.SetColor(backgroundColor)
-	dc.DrawRoundedRectangle(float64(anchor.X)-textWidth/2-margin, float64(anchor.Y+(height/2))-(textHeight/2)-padding, textWidth+2*margin, textHeight+2*padding, (textHeight+2*padding)/2)
-	dc.Fill()
-
-	// Now draw the text over the background
-	dc.SetColor(textColor)
-	dc.DrawStringAnchored(text, float64(anchor.X), float64(anchor.Y)+(float64(height)/2), 0.5, 0.5)
+	// Draw the "Scan me" text below the title
+	drawText(dc, bottomText, bottomFontSize, padding+qrCodeSize/2, padding+qrCodeSize+bannerHeight+2*titleFontSize+2*margin, color.White)
 }
 
 // drawText draws text on the image
-func drawText(dc *gg.Context, text string, fontSize float64, height int, anchor image.Point, color color.Color) {
+func drawText(dc *gg.Context, text string, fontSize float64, x, y float64, color color.Color) {
 	if err := dc.LoadFontFace(fontPath, fontSize); err != nil {
 		fmt.Printf("Failed to load font face: %v\n", err)
 		return
 	}
 
 	dc.SetColor(color)
-	dc.DrawStringAnchored(text, float64(anchor.X), float64(anchor.Y+height), 0.5, 0.5)
+	dc.DrawStringAnchored(text, x, y, 0.5, 0.5)
 }
 
 // loadLogoImage loads an image from the given path
