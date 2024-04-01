@@ -32,8 +32,8 @@ func main() {
 	http.HandleFunc("/generate-sticker", generateStickerHandler)
 	http.HandleFunc("/generate", generateHandler)
 
-	fmt.Println("Server is starting on port 3000...")
-	err := http.ListenAndServe(":3000", nil)
+	fmt.Println("Server is starting on port 8000...")
+	err := http.ListenAndServe(":8000", nil)
 	if err != nil {
 		fmt.Printf("Error starting server: %s\n", err)
 	}
@@ -54,6 +54,7 @@ func generateHandler(w http.ResponseWriter, r *http.Request) {
 	// Just generate a QR code
 	img, err := createQRCode(url)
 	if err != nil {
+		println(err)
 		http.Error(w, "Failed to generate QR code image", http.StatusInternalServerError)
 		return
 	}
@@ -85,6 +86,7 @@ func generateStickerHandler(w http.ResponseWriter, r *http.Request) {
 	// Generate QR Code with title and logo
 	img, err := generateQRCodewithOverlay(title, bottomText, url)
 	if err != nil {
+		println(err.Error())
 		http.Error(w, "Failed to generate QR code image", http.StatusInternalServerError)
 		return
 	}
