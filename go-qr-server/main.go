@@ -95,20 +95,22 @@ func generateStickerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// generateQRCodewithOverlay creates a QR code and draws title, bottom text, and a logo on it
 func generateQRCodewithOverlay(title, bottomText, url string) (*image.RGBA, error) {
 	qrCode, err := createQRCode(url)
 	if err != nil {
 		return nil, err
 	}
 
-	img := image.NewRGBA(image.Rect(0, 0, qrCodeSize+(margin*2), qrCodeSize+2*bannerHeight))
+	img := image.NewRGBA(image.Rect(0, 0, qrCodeSize, qrCodeSize+2*bannerHeight))
 	dc := gg.NewContextForRGBA(img)
-	dc.SetRGB(1, 1, 1)
+	// dc.SetRGB(1, 1, 1)
 	dc.Clear()
 
+	// Draw a rounded rectangle as the border around the whole image
+	drawRoundedRectangle(dc, image.Rect(0, 0, qrCodeSize, qrCodeSize+2*bannerHeight), 10, 5, color.Black)
+
 	// Position QR code with banner spaces and left right margin
-	draw.Draw(img, image.Rect(margin, bannerHeight, qrCodeSize+margin, qrCodeSize+bannerHeight), qrCode, image.Point{X: 0, Y: 0}, draw.Src)
+	draw.Draw(img, image.Rect(0, bannerHeight, qrCodeSize, qrCodeSize+bannerHeight), qrCode, image.Point{X: 0, Y: 0}, draw.Src)
 
 	// Draw logo
 	if err := drawLogo(dc, logoPath); err != nil {
@@ -119,6 +121,19 @@ func generateQRCodewithOverlay(title, bottomText, url string) (*image.RGBA, erro
 	addTextOverlay(dc, title, bottomText)
 
 	return img, nil
+}
+
+func drawRoundedRectangle(dc *gg.Context, rect image.Rectangle, radius, borderWidth float64, borderColor color.Color) {
+	// Draw the outer rectangle with the specified border width and color
+	dc.SetColor(borderColor)
+	dc.DrawRoundedRectangle(float64(rect.Min.X), float64(rect.Min.Y), float64(rect.Dx()), float64(rect.Dy()), radius)
+	dc.SetLineWidth(borderWidth)
+	dc.Stroke()
+
+	// Draw the inner rectangle to fill the border area with the background color
+	dc.SetColor(color.White) // Change to your background color
+	dc.DrawRoundedRectangle(float64(rect.Min.X)+borderWidth, float64(rect.Min.Y)+borderWidth, float64(rect.Dx())-2*borderWidth, float64(rect.Dy())-2*borderWidth, radius-borderWidth)
+	dc.Fill()
 }
 
 func createQRCode(url string) (image.Image, error) {
@@ -145,7 +160,7 @@ func drawLogo(dc *gg.Context, logoPath string) error {
 
 func addTextOverlay(dc *gg.Context, title, bottomText string) {
 	// Draw the title text at the top with a foreground rectangle as background
-	drawTextForeground(dc, title, titleFontSize, bannerHeight, image.Point{X: qrCodeSize / 2, Y: 0}, color.RGBA{255, 224, 224, 255}, color.RGBA{250, 57, 57, 255})
+	drawTextForeground(dc, title, titleFontSize, bannerHeight, image.Point{X: qrCodeSize / 2, Y: 0}, color.RGBA{255, 224, 224, 255}, color.RGBA{239, 32, 19, 255})
 
 	// Draw the bottom text at the bottom
 	drawText(dc, bottomText, bottomFontSize, bannerHeight/2, image.Point{X: qrCodeSize / 2, Y: qrCodeSize + bannerHeight}, color.Black)
